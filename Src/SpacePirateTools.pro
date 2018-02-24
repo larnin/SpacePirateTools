@@ -15,12 +15,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
-    qsfmlcanvas.cpp
+    UI/fileexplorer.cpp \
+    UI/mainwindow.cpp \
+    UI/qsfmlcanvas.cpp \
+    ProjectInfos/projectinfos.cpp \
+    ProjectInfos/filelist.cpp \
+    ProjectInfos/assettype.cpp
 
 HEADERS += \
-        mainwindow.h \
-    qsfmlcanvas.h
+    UI/fileexplorer.h \
+    UI/mainwindow.h \
+    UI/qsfmlcanvas.h \
+    ProjectInfos/projectinfos.h \
+    ProjectInfos/filelist.h \
+    ProjectInfos/assettype.h
 
 CONFIG += c++14
 
