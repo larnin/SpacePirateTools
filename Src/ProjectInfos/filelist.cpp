@@ -17,9 +17,10 @@ std::vector<QString> FileList::keys() const
 
 const std::vector<QString> & FileList::files(const QString & key) const
 {
+    static const std::vector<QString> defaultValue;
     auto value = m_files.find(key);
     if(value == m_files.end())
-        return std::vector<QString>();
+        return defaultValue;
     return value->second;
 }
 
@@ -43,5 +44,5 @@ void FileList::createListFile(const QString &directory)
     }
 
     for(const auto & e : dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
-        m_files.emplace(e.baseName(), fileList(e.absoluteDir()));
+        m_files.emplace(e.baseName(), fileList(e.absoluteFilePath()));
 }

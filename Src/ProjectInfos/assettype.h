@@ -11,9 +11,11 @@ enum class AssetType
     Animator,
     Scene,
     Max = Scene,
+    Unknow = Max+1,
 };
 
 QString assetTypeToString(AssetType type);
 QString assetTypeExtension(AssetType type);
+AssetType stringToAssetType(const QString & s);
 
 #endif // ASSETTYPE_H

@@ -16,6 +16,9 @@ public:
 signals:
     void openRessource(QString /*ressourceDirName*/);
 
+public slots:
+    void onItemDoubleClicked(QTreeWidgetItem *item, int column);
+
 private:
     void updateTree();
 

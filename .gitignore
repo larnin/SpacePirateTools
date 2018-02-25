@@ -2,6 +2,7 @@
 
 /Libs
 /build*
+/TestProject/
 
 *.slo
 *.lo

@@ -1,5 +1,5 @@
-#include "mainwindow.h"
-#include "fileexplorer.h"
+#include "UI/mainwindow.h"
+#include "UI/fileexplorer.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])

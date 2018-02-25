@@ -40,3 +40,12 @@ QString assetTypeExtension(AssetType type)
     assert(false && "Unknow assetType");
     return "";
 }
+
+AssetType stringToAssetType(const QString & s)
+{
+    auto str = s.toLower().trimmed();
+    for(unsigned int i(0) ; i < static_cast<unsigned int>(AssetType::Max) ; i++)
+        if(str == assetTypeToString(static_cast<AssetType>(i)))
+            return static_cast<AssetType>(i);
+    return AssetType::Unknow;
+}
