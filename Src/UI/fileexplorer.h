@@ -1,6 +1,7 @@
 #ifndef FILEEXPLORER_H
 #define FILEEXPLORER_H
 
+#include "ProjectInfos/assettype.h"
 #include <QWidget>
 #include <QTreeWidget>
 #include <QString>
@@ -14,7 +15,7 @@ public:
     virtual ~FileExplorer() = default;
 
 signals:
-    void openRessource(QString /*ressourceDirName*/);
+    void openRessource(AssetType, QString /*ressourceDirName*/);
 
 public slots:
     void onItemDoubleClicked(QTreeWidgetItem *item, int column);

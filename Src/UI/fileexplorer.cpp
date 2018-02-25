@@ -57,5 +57,5 @@ void FileExplorer::onItemDoubleClicked(QTreeWidgetItem *item, int column)
     auto type = stringToAssetType(dir);
     if(type == AssetType::Unknow)
         return;
-    emit openRessource(dir + "/" + item->text(0) + "." + assetTypeExtension(type));
+    emit openRessource(type, dir + "/" + item->text(0) + "." + assetTypeExtension(type));
 }
