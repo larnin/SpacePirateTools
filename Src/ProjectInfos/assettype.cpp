@@ -15,6 +15,8 @@ QString assetTypeToString(AssetType type)
         return "Scene";
     case AssetType::Tileset:
         return "Tileset";
+    default:
+        break;
     }
 
     assert(false && "Unknow assetType");
@@ -35,6 +37,8 @@ QString assetTypeExtension(AssetType type)
         return "scene";
     case AssetType::Tileset:
         return "tile";
+    default:
+        break;
     }
 
     assert(false && "Unknow assetType");

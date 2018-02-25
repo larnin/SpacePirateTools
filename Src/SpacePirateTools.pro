@@ -20,7 +20,8 @@ SOURCES += \
     UI/qsfmlcanvas.cpp \
     ProjectInfos/projectinfos.cpp \
     ProjectInfos/filelist.cpp \
-    ProjectInfos/assettype.cpp
+    ProjectInfos/assettype.cpp \
+    Events/Event.inl
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -28,7 +29,10 @@ HEADERS += \
     UI/qsfmlcanvas.h \
     ProjectInfos/projectinfos.h \
     ProjectInfos/filelist.h \
-    ProjectInfos/assettype.h
+    ProjectInfos/assettype.h \
+    Events/Event.h \
+    Events/Args/openressourceevent.h \
+    Events/Args/projectloadedevent.h
 
 CONFIG += c++14
 

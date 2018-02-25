@@ -1,10 +1,12 @@
 #include "fileexplorer.h"
 #include "ProjectInfos/assettype.h"
 #include "ProjectInfos/projectinfos.h"
+#include "Events/Args/openressourceevent.h"
 #include <QVBoxLayout>
 
 FileExplorer::FileExplorer(QWidget *parent)
     : QWidget(parent)
+    , m_projectLoadedHolder(Event<ProjectLoadedEvent>::connect([this](auto v){onProjectLoaded(v);}))
 {
     m_tree = new QTreeWidget();
     m_tree->setHeaderHidden(true);
@@ -57,5 +59,10 @@ void FileExplorer::onItemDoubleClicked(QTreeWidgetItem *item, int column)
     auto type = stringToAssetType(dir);
     if(type == AssetType::Unknow)
         return;
-    emit openRessource(type, dir + "/" + item->text(0) + "." + assetTypeExtension(type));
+    Event<OpenRessourceEvent>::send({type, dir + "/" + item->text(0) + "." + assetTypeExtension(type)});
+}
+
+void FileExplorer::onProjectLoaded(const ProjectLoadedEvent &)
+{
+    updateTree();
 }
