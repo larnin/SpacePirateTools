@@ -21,7 +21,8 @@ SOURCES += \
     ProjectInfos/projectinfos.cpp \
     ProjectInfos/filelist.cpp \
     ProjectInfos/assettype.cpp \
-    Events/Event.inl
+    Events/Event.inl \
+    ProjectInfos/configs.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -32,7 +33,10 @@ HEADERS += \
     ProjectInfos/assettype.h \
     Events/Event.h \
     Events/Args/openressourceevent.h \
-    Events/Args/projectloadedevent.h
+    Events/Args/projectloadedevent.h \
+    ProjectInfos/configs.h \
+    Events/Args/clearevent.h \
+    Events/Args/saveevent.h
 
 CONFIG += c++14
 

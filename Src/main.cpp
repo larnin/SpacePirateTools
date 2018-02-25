@@ -1,12 +1,17 @@
 #include "UI/mainwindow.h"
-#include "UI/fileexplorer.h"
+#include "ProjectInfos/configs.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    FileExplorer w;
+    MainWindow w;
     w.show();
 
-    return a.exec();
+    auto returnValue(a.exec());
+
+    if(returnValue == 0)
+        Configs::instance().save();
+
+    return returnValue;
 }
