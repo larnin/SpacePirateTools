@@ -5,6 +5,8 @@
 #include "Events/Args/projectloadedevent.h"
 #include "Events/Args/clearevent.h"
 #include "Events/Args/saveevent.h"
+#include "dock.h"
+#include "fileexplorer.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -15,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     createMenus();
+    createDocks();
 }
 
 void MainWindow::createMenus()
@@ -62,6 +65,12 @@ void MainWindow::createMenus()
     connect(selectModeAction, SIGNAL(toggled(bool)), this, SLOT(onSelectMode(bool)));
 
     connect(showExplorer, SIGNAL(triggered(bool)), this, SLOT(onShowExplorer()));
+}
+
+void MainWindow::createDocks()
+{
+    m_explorerDock = new Dock<FileExplorer>("Explorer", false);
+    addDockWidget(Qt::LeftDockWidgetArea, m_explorerDock);
 }
 
 void MainWindow::addRecentFile(QMenu* menu)
@@ -153,7 +162,9 @@ void MainWindow::onSelectMode(bool /*mode*/)
 
 void MainWindow::onShowExplorer()
 {
-
+    if(!m_explorerDock->isHidden())
+        m_explorerDock->setFocus();
+    m_explorerDock->show();
 }
 
 void MainWindow::openProject(const QString & dir)
@@ -166,3 +177,4 @@ void MainWindow::openProject(const QString & dir)
     if(ProjectInfos::instance().projectLoaded())
         Event<ProjectLoadedEvent>::send({});
 }
+

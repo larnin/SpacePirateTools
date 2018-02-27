@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QDockWidget>
 #include <QMainWindow>
 
 class MainWindow : public QMainWindow
@@ -11,7 +12,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
 
 public slots:
-    void createMenus();
     void addRecentFile(QMenu* menu);
 
     void onNew();
@@ -30,7 +30,11 @@ public slots:
     void onShowExplorer();
 
 private:
+    void createMenus();
+    void createDocks();
     void openProject(const QString & dir);
+
+    QDockWidget* m_explorerDock;
 };
 
 #endif // MAINWINDOW_H

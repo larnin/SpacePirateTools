@@ -36,7 +36,8 @@ HEADERS += \
     Events/Args/projectloadedevent.h \
     ProjectInfos/configs.h \
     Events/Args/clearevent.h \
-    Events/Args/saveevent.h
+    Events/Args/saveevent.h \
+    UI/dock.h
 
 CONFIG += c++14
 
