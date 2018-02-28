@@ -37,3 +37,8 @@ std::vector<QString> ProjectInfos::fileInfos(AssetType type) const
 
     return validFiles;
 }
+
+void ProjectInfos::reloadFileList()
+{
+    m_fileList = FileList(m_projectDirectory);
+}

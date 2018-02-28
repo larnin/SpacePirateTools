@@ -37,7 +37,9 @@ HEADERS += \
     ProjectInfos/configs.h \
     Events/Args/clearevent.h \
     Events/Args/saveevent.h \
-    UI/dock.h
+    UI/dock.h \
+    Events/Args/renamedfileevent.h \
+    Events/Args/removedfileevent.h
 
 CONFIG += c++14
 

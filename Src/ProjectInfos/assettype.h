@@ -17,5 +17,7 @@ enum class AssetType
 QString assetTypeToString(AssetType type);
 QString assetTypeExtension(AssetType type);
 AssetType stringToAssetType(const QString & s);
+AssetType extensionToAssetType(const QString & s);
+bool assetCanBeCreated(AssetType type);
 
 #endif // ASSETTYPE_H
