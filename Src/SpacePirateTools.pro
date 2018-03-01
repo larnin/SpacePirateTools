@@ -22,7 +22,10 @@ SOURCES += \
     ProjectInfos/filelist.cpp \
     ProjectInfos/assettype.cpp \
     Events/Event.inl \
-    ProjectInfos/configs.cpp
+    ProjectInfos/configs.cpp \
+    UI/Animation/centralanimationwidget.cpp \
+    UI/Animation/animationsinfos.cpp \
+    Animation/animationdata.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -39,7 +42,11 @@ HEADERS += \
     Events/Args/saveevent.h \
     UI/dock.h \
     Events/Args/renamedfileevent.h \
-    Events/Args/removedfileevent.h
+    Events/Args/removedfileevent.h \
+    UI/Animation/centralanimationwidget.h \
+    UI/Animation/animationsinfos.h \
+    Animation/animationdata.h \
+    UI/linewidget.h
 
 CONFIG += c++14
 

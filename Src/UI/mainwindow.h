@@ -3,6 +3,9 @@
 
 #include <QDockWidget>
 #include <QMainWindow>
+#include <vector>
+#include "Events/Event.h"
+#include "Events/Args/openressourceevent.h"
 
 class MainWindow : public QMainWindow
 {
@@ -28,13 +31,21 @@ public slots:
     void onSelectMode(bool mode);
 
     void onShowExplorer();
+    void onShowAssetDocks();
 
 private:
     void createMenus();
     void createDocks();
     void openProject(const QString & dir);
 
+    void onOpenRessource(const OpenRessourceEvent & e);
+    void clearDocks();
+
+
     QDockWidget* m_explorerDock;
+    std::vector<QDockWidget*> m_assetDocks;
+
+    EventHolder<OpenRessourceEvent> m_openRessourceHolder;
 };
 
 #endif // MAINWINDOW_H

@@ -14,7 +14,7 @@
 #include <QDebug>
 FileExplorer::FileExplorer(QWidget *parent)
     : QWidget(parent)
-    , m_projectLoadedHolder(Event<ProjectLoadedEvent>::connect([this](auto v){onProjectLoaded(v);}))
+    , m_projectLoadedHolder(Event<ProjectLoadedEvent>::connect([this](const auto & v){onProjectLoaded(v);}))
 {
     m_tree = new QTreeWidget();
     m_tree->setHeaderHidden(true);
@@ -246,7 +246,8 @@ void FileExplorer::import()
     ProjectInfos::instance().reloadFileList();
     updateTree();
 
-    Event<OpenRessourceEvent>::send({assetType, assetfullName});
+    if(assetCanBeCreated(assetType))
+        Event<OpenRessourceEvent>::send({assetType, assetfullName});
 }
 
 QString FileExplorer::getFullName(QTreeWidgetItem *item)

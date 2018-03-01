@@ -7,6 +7,7 @@
 #include "Events/Args/saveevent.h"
 #include "dock.h"
 #include "fileexplorer.h"
+#include "UI/Animation/animationsinfos.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -15,9 +16,12 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , m_openRessourceHolder(Event<OpenRessourceEvent>::connect([this](const auto & e){onOpenRessource(e);}))
 {
     createMenus();
     createDocks();
+
+    setCentralWidget(new QWidget());
 }
 
 void MainWindow::createMenus()
@@ -51,6 +55,7 @@ void MainWindow::createMenus()
 
     QMenu *windowMenu = menuBar()->addMenu("&Fenetre");
         auto showExplorer = windowMenu->addAction("Afficher l'explorer");
+        auto showAssetDocks = windowMenu->addAction("Reafficher les docks");
 
     connect(newAction, SIGNAL(triggered(bool)), this, SLOT(onNew()));
     connect(loadAction, SIGNAL(triggered(bool)), this, SLOT(onLoad()));
@@ -65,12 +70,15 @@ void MainWindow::createMenus()
     connect(selectModeAction, SIGNAL(toggled(bool)), this, SLOT(onSelectMode(bool)));
 
     connect(showExplorer, SIGNAL(triggered(bool)), this, SLOT(onShowExplorer()));
+    connect(showAssetDocks, SIGNAL(triggered(bool)), this, SLOT(onShowAssetDocks()));
 }
 
 void MainWindow::createDocks()
 {
     m_explorerDock = new Dock<FileExplorer>("Explorer", false);
     addDockWidget(Qt::LeftDockWidgetArea, m_explorerDock);
+
+    addDockWidget(Qt::RightDockWidgetArea, new Dock<AnimationsInfos>(new AnimationsInfos(""), "Animations", false));
 }
 
 void MainWindow::addRecentFile(QMenu* menu)
@@ -167,6 +175,13 @@ void MainWindow::onShowExplorer()
     m_explorerDock->show();
 }
 
+void MainWindow::onShowAssetDocks()
+{
+    for(auto d : m_assetDocks)
+        if(d->isHidden())
+            d->show();
+}
+
 void MainWindow::openProject(const QString & dir)
 {
     onSave();
@@ -176,5 +191,20 @@ void MainWindow::openProject(const QString & dir)
     ProjectInfos::instance().loadProject(dir);
     if(ProjectInfos::instance().projectLoaded())
         Event<ProjectLoadedEvent>::send({});
+}
+
+
+void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
+{
+    clearDocks();
+
+
+}
+
+void MainWindow::clearDocks()
+{
+    for(auto d : m_assetDocks)
+        d->close();
+    m_assetDocks.clear();
 }
 
