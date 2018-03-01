@@ -38,6 +38,9 @@ private:
     void createDocks();
     void openProject(const QString & dir);
 
+    void closeCurrentWidget();
+    void openAnimation(const QString & filename);
+
     void onOpenRessource(const OpenRessourceEvent & e);
     void clearDocks();
 

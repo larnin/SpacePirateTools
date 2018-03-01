@@ -8,11 +8,14 @@
 #include "dock.h"
 #include "fileexplorer.h"
 #include "UI/Animation/animationsinfos.h"
+#include "UI/Animation/centralanimationwidget.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDir>
+
+const QString defaultName = "Best editor ever";
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -21,7 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
     createMenus();
     createDocks();
 
-    setCentralWidget(new QWidget());
+    closeCurrentWidget();
+
+    resize(800, 600);
 }
 
 void MainWindow::createMenus()
@@ -77,8 +82,6 @@ void MainWindow::createDocks()
 {
     m_explorerDock = new Dock<FileExplorer>("Explorer", false);
     addDockWidget(Qt::LeftDockWidgetArea, m_explorerDock);
-
-    addDockWidget(Qt::RightDockWidgetArea, new Dock<AnimationsInfos>(new AnimationsInfos(""), "Animations", false));
 }
 
 void MainWindow::addRecentFile(QMenu* menu)
@@ -198,7 +201,49 @@ void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
 {
     clearDocks();
 
+    setWindowTitle(e.ressourceDirName);
 
+    auto fullName = ProjectInfos::instance().projectDirectory() + "/" + e.ressourceDirName;
+
+    switch(e.assetType)
+    {
+    case AssetType::Animation:
+        openAnimation(fullName);
+        break;
+    case AssetType::Animator:
+
+        break;
+    case AssetType::Scene:
+
+        break;
+    case AssetType::Tileset:
+
+        break;
+    default:
+        closeCurrentWidget();
+        break;
+    }
+}
+
+void MainWindow::closeCurrentWidget()
+{
+    clearDocks();
+
+    QWidget * w = new QWidget();
+    w->setStyleSheet("background-color:black;");
+
+    setCentralWidget(w);
+
+    setWindowTitle(defaultName);
+}
+
+void MainWindow::openAnimation(const QString & filename)
+{
+    AnimationsInfos *a = new AnimationsInfos(filename);
+    CentralAnimationWidget *animWidget = new CentralAnimationWidget(a);
+    setCentralWidget(animWidget);
+    m_assetDocks.push_back(new Dock<AnimationsInfos>(a, "Animation", false));
+    addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.front());
 }
 
 void MainWindow::clearDocks()

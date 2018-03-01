@@ -17,9 +17,20 @@ class CentralAnimationWidget;
 
 class AnimationsInfos : public QWidget
 {
+    Q_OBJECT
+
     friend class CentralAnimationWidget;
 public:
     AnimationsInfos( const QString & assetName, QWidget * parent = nullptr);
+
+    inline const AnimationData & getAnimationData() const { return m_datas;}
+    inline int getCurrentFrameIndex() const {return m_currentFrameIndex;}
+
+public slots:
+    void onFrameSelected(int index);
+    void onFrameValueChanged();
+    void onRightClick(QPoint point);
+    void onImageSelected(int index);
 
 private:
     inline void setCentralAnimationWidget(CentralAnimationWidget * w){ m_centralWidget = w; }
@@ -28,6 +39,13 @@ private:
     void onRename(const RenamedFileEvent & e);
 
     void initializeWidgets();
+
+    void blockFrameSignals(bool blocked);
+
+    void updateFrameList();
+    void updateFrameData();
+    void updateDatas();
+    void updateImageList();
 
     CentralAnimationWidget * m_centralWidget;
 
@@ -51,6 +69,8 @@ private:
     QSpinBox* m_rectHeight;
 
     QGroupBox* m_frameDatasBox;
+
+    int m_currentFrameIndex;
 
 };
 

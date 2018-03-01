@@ -9,7 +9,7 @@
 struct Frame
 {
     sf::IntRect rect;
-    sf::Vector2f offset;
+    sf::Vector2i offset;
     float time;
 };
 
@@ -28,6 +28,8 @@ public:
     using std::vector<Frame>::erase;
     using std::vector<Frame>::emplace_back;
     using std::vector<Frame>::clear;
+    using std::vector<Frame>::operator [];
+    using std::vector<Frame>::size;
 
     void save(const QString & fileName) const;
 

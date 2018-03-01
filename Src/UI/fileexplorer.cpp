@@ -24,7 +24,6 @@ FileExplorer::FileExplorer(QWidget *parent)
 
     setLayout(layout);
 
-
     m_tree->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClick(QPoint)));
 
