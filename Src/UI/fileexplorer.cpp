@@ -4,6 +4,7 @@
 #include "Events/Args/openressourceevent.h"
 #include "Events/Args/renamedfileevent.h"
 #include "Events/Args/removedfileevent.h"
+#include "Events/Args/addedfileevent.h"
 #include <QVBoxLayout>
 #include <QMessageBox>
 #include <QInputDialog>
@@ -69,7 +70,8 @@ void FileExplorer::onItemDoubleClicked(QTreeWidgetItem *item, int column)
         return;
     auto dir = parent->text(0);
     auto type = stringToAssetType(dir);
-    if(type == AssetType::Unknow)
+
+    if(type == AssetType::Unknow || !assetCanBeCreated(type))
         return;
     Event<OpenRessourceEvent>::send({type, dir + "/" + item->text(0) + "." + assetTypeExtension(type)});
 }
@@ -203,6 +205,7 @@ void FileExplorer::add(AssetType type)
     ProjectInfos::instance().reloadFileList();
     updateTree();
 
+    Event<AddedFileEvent>::send({fullName});
     Event<OpenRessourceEvent>::send({type, fullName});
 }
 
@@ -245,6 +248,7 @@ void FileExplorer::import()
     ProjectInfos::instance().reloadFileList();
     updateTree();
 
+    Event<AddedFileEvent>::send({fullName});
     if(assetCanBeCreated(assetType))
         Event<OpenRessourceEvent>::send({assetType, assetfullName});
 }

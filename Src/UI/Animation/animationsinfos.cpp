@@ -1,6 +1,7 @@
 #include "animationsinfos.h"
 #include "UI/linewidget.h"
 #include "ProjectInfos/projectinfos.h"
+#include "UI/Animation/centralanimationwidget.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -14,6 +15,7 @@ AnimationsInfos::AnimationsInfos(const QString &assetName, QWidget *parent)
     , m_assetName(assetName)
     , saveHolder(Event<SaveEvent>::connect([this](const auto & e){onSave(e);}))
     , renameHolder(Event<RenamedFileEvent>::connect([this](const auto & e){onRename(e);}))
+    , removedHolder(Event<RemovedFileEvent>::connect([this](const auto & e){onRemove(e);}))
     , m_currentFrameIndex(-1)
 {
     initializeWidgets();
@@ -30,6 +32,17 @@ void AnimationsInfos::onRename(const RenamedFileEvent & e)
 {
     if(m_assetName == e.oldName)
         m_assetName = e.newName;
+    updateImageList();
+}
+
+void AnimationsInfos::onRemove(const RemovedFileEvent &)
+{
+    updateImageList();
+}
+
+void AnimationsInfos:: onAdd(const AddedFileEvent &)
+{
+    updateImageList();
 }
 
 void AnimationsInfos::initializeWidgets()
@@ -135,6 +148,7 @@ void AnimationsInfos::onImageSelected(int index)
     if(index <= 0)
         m_datas.imageName = "";
     else m_datas.imageName = m_texture->currentText();
+    m_centralWidget->updateTexture(m_datas.imageName);
 }
 
 void AnimationsInfos::blockFrameSignals(bool blocked)
@@ -276,7 +290,11 @@ void AnimationsInfos::updateImageList()
 
     m_texture->setCurrentText(m_datas.imageName);
     if(m_texture->currentIndex() < 0)
+    {
         m_texture->setCurrentIndex(0);
+        m_datas.imageName = "";
+        m_centralWidget->updateTexture(m_datas.imageName);
+    }
 
     m_texture->blockSignals(false);
 }

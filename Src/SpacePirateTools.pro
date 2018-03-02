@@ -46,7 +46,8 @@ HEADERS += \
     UI/Animation/centralanimationwidget.h \
     UI/Animation/animationsinfos.h \
     Animation/animationdata.h \
-    UI/linewidget.h
+    UI/linewidget.h \
+    Events/Args/addedfileevent.h
 
 CONFIG += c++14
 

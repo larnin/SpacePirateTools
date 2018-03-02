@@ -5,6 +5,8 @@
 #include "Events/Event.h"
 #include "Events/Args/saveevent.h"
 #include "Events/Args/renamedfileevent.h"
+#include "Events/Args/removedfileevent.h"
+#include "Events/Args/addedfileevent.h"
 #include <QWidget>
 #include <QString>
 #include <QListWidget>
@@ -37,6 +39,8 @@ private:
 
     void onSave(const SaveEvent &);
     void onRename(const RenamedFileEvent & e);
+    void onRemove(const RemovedFileEvent &);
+    void onAdd(const AddedFileEvent &);
 
     void initializeWidgets();
 
@@ -54,6 +58,7 @@ private:
 
     EventHolder<SaveEvent> saveHolder;
     EventHolder<RenamedFileEvent> renameHolder;
+    EventHolder<RemovedFileEvent> removedHolder;
 
     QComboBox* m_texture;
     QListWidget* m_frameList;
