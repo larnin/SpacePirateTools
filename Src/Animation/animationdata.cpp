@@ -21,7 +21,7 @@ void AnimationData::save(const QString & fileName) const
          QJsonObject frame;
          frame.insert("left", f.rect.left);
          frame.insert("top", f.rect.top);
-         frame.insert("widht", f.rect.width);
+         frame.insert("width", f.rect.width);
          frame.insert("height", f.rect.height);
          frame.insert("x", f.offset.x);
          frame.insert("y", f.offset.y);
@@ -75,6 +75,7 @@ void AnimationData::load(const QString & fileName)
         f.rect.top = frame["top"].toInt();
         f.rect.width = frame["width"].toInt();
         f.rect.height = frame["height"].toInt();
+        f.time = frame["time"].toDouble();
 
         push_back(f);
     }

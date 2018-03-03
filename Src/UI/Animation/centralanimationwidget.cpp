@@ -14,7 +14,9 @@ constexpr unsigned int defaultZoomLevel(2);
 const sf::Color borderColor(sf::Color::Cyan);
 const sf::Color selectedColor(sf::Color::Green);
 const sf::Color offsetColor(sf::Color::Yellow);
-const sf::Color vertexColor(sf::Color::Blue);
+const sf::Color selectedOffsetColor(sf::Color(128, 255, 0));
+const sf::Color vertexColor(sf::Color::Cyan);
+const sf::Color selectedVertexColor(sf::Color::Green);
 
 CentralAnimationWidget::CentralAnimationWidget(AnimationsInfos *infos, QWidget *parent)
     : QSFMLCanvas(20, parent)
@@ -47,8 +49,6 @@ void CentralAnimationWidget::drawFrames()
     const auto & data = m_animationInfos->getAnimationData();
     int currentIndex = m_animationInfos->getCurrentFrameIndex();
     sf::VertexArray vertexs(sf::Lines, data.size() * 8);
-    for(unsigned int i(0) ; i < data.size() * 8 ; i++)
-        vertexs[i].color = vertexColor;
 
     for(unsigned int i(0) ; i < data.size() ; i++)
     {
@@ -62,6 +62,9 @@ void CentralAnimationWidget::drawFrames()
         vertexs[i*8+5].position = sf::Vector2f(f.rect.left, f.rect.top + f.rect.height);
         vertexs[i*8+6].position = sf::Vector2f(f.rect.left, f.rect.top + f.rect.height);
         vertexs[i*8+7].position = sf::Vector2f(f.rect.left, f.rect.top);
+
+        for(int j(0) ; j < 8 ; j++)
+            vertexs[i*8 + j].color = int(i) == currentIndex ? selectedVertexColor : vertexColor;
 
         sf::Color currentColor(int(i) == currentIndex ? selectedColor : borderColor);
 
@@ -83,7 +86,7 @@ void CentralAnimationWidget::drawFrames()
         drawFunc(sf::Vector2f(f.rect.left + f.rect.width - m_framesTextures[Right].getSize().x, f.rect.top + (f.rect.height - m_framesTextures[Right].getSize().y) / 2.0f), m_framesTextures[Right], currentColor);
         drawFunc(sf::Vector2f(f.rect.left + (f.rect.width - m_framesTextures[Down].getSize().x) / 2.0f, f.rect.top + f.rect.height - m_framesTextures[Down].getSize().y), m_framesTextures[Down], currentColor);
 
-        drawFunc(sf::Vector2f(f.rect.left, f.rect.top) + sf::Vector2f(f.offset) - sf::Vector2f(m_framesTextures[Origine].getSize()/2u), m_framesTextures[Origine], offsetColor);
+        drawFunc(sf::Vector2f(f.rect.left, f.rect.top) + sf::Vector2f(f.offset) - sf::Vector2f(m_framesTextures[Origine].getSize()/2u), m_framesTextures[Origine], int(i) == currentIndex ? selectedOffsetColor : offsetColor);
     }
 
     RenderWindow::draw(vertexs);
@@ -162,7 +165,7 @@ void CentralAnimationWidget::mouseMoveEvent(QMouseEvent * event)
 
     dragObject(m_drag, newPos);
 }
-#include <iostream>
+
 void CentralAnimationWidget::dragObject(DragType drag, sf::Vector2i current)
 {
     if(m_currentDragFrame >= m_animationInfos->getAnimationData().size())
@@ -173,7 +176,6 @@ void CentralAnimationWidget::dragObject(DragType drag, sf::Vector2i current)
     auto move = newPos - oldPos;
 
     Frame f(m_frameStartDrag);
-    std::cout << f.offset.x << " " << f.offset.y << "//" << f.rect.left << " " << f.rect.top << " " << f.rect.width << " " << f.rect.height << std::endl;
 
     switch(drag)
     {
@@ -258,7 +260,6 @@ void CentralAnimationWidget::dragObject(DragType drag, sf::Vector2i current)
     case DragType::Center:
         f.rect.left += move.x;
         f.rect.top += move.y;
-        f.offset -= move;
         break;
     default:
         break;

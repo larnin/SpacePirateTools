@@ -27,6 +27,11 @@ AnimationsInfos::AnimationsInfos(const QString &assetName, QWidget *parent)
     updateImageList();
 }
 
+AnimationsInfos::~AnimationsInfos()
+{
+    m_datas.save(m_assetName);
+}
+
 void AnimationsInfos::onSave(const SaveEvent &)
 {
     m_datas.save(m_assetName);

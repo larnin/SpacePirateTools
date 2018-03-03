@@ -249,7 +249,10 @@ void MainWindow::openAnimation(const QString & filename)
 void MainWindow::clearDocks()
 {
     for(auto d : m_assetDocks)
+    {
+        d->setAttribute(Qt::WA_DeleteOnClose, true);
         d->close();
+    }
     m_assetDocks.clear();
 }
 

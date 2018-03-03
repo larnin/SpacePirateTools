@@ -16,6 +16,7 @@
 #include <QComboBox>
 #include <QGroupBox>
 #include <QPushButton>
+#include <iostream>
 
 class CentralAnimationWidget;
 
@@ -26,6 +27,7 @@ class AnimationsInfos : public QWidget
     friend class CentralAnimationWidget;
 public:
     AnimationsInfos( const QString & assetName, QWidget * parent = nullptr);
+    ~AnimationsInfos();
 
     inline const AnimationData & getAnimationData() const { return m_datas;}
     inline int getCurrentFrameIndex() const {return m_currentFrameIndex;}
