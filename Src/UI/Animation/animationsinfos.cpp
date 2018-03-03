@@ -116,6 +116,14 @@ void AnimationsInfos::initializeWidgets()
     frameLayout->addLayout(rectSizeLayout);
     m_frameDatasBox->setLayout(frameLayout);
 
+    m_preview = new AnimationPreview(this);
+    m_preview->setFixedSize(100, 100);
+    QGroupBox* previewBox = new QGroupBox("Preview");
+    QHBoxLayout* previewLayout = new QHBoxLayout();
+    previewLayout->addWidget(m_preview);
+    previewBox->setLayout(previewLayout);
+    previewBox->setFixedSize(previewBox->minimumSizeHint());
+
     QVBoxLayout* principalLayout = new QVBoxLayout();
     principalLayout->addLayout(colorLayout);
     principalLayout->addWidget(new LineWidget(LineOrientation::Horizontal));
@@ -124,6 +132,7 @@ void AnimationsInfos::initializeWidgets()
     principalLayout->addWidget(new QLabel("Frames"));
     principalLayout->addWidget(m_frameList);
     principalLayout->addWidget(m_frameDatasBox);
+    principalLayout->addWidget(previewBox, 0, Qt::AlignHCenter);
 
     setLayout(principalLayout);
 
@@ -164,6 +173,7 @@ void AnimationsInfos::onImageSelected(int index)
         m_datas.imageName = "";
     else m_datas.imageName = m_texture->currentText();
     m_centralWidget->updateTexture(m_datas.imageName);
+    m_preview->updateTexture(m_datas.imageName);
 }
 
 void AnimationsInfos::onColorButtonClicked()
@@ -321,6 +331,7 @@ void AnimationsInfos::updateImageList()
         m_texture->setCurrentIndex(0);
         m_datas.imageName = "";
         m_centralWidget->updateTexture(m_datas.imageName);
+        m_preview->updateTexture(m_datas.imageName);
     }
 
     m_texture->blockSignals(false);

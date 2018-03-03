@@ -25,7 +25,8 @@ SOURCES += \
     ProjectInfos/configs.cpp \
     UI/Animation/centralanimationwidget.cpp \
     UI/Animation/animationsinfos.cpp \
-    Animation/animationdata.cpp
+    Animation/animationdata.cpp \
+    UI/Animation/animationpreview.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -47,7 +48,8 @@ HEADERS += \
     UI/Animation/animationsinfos.h \
     Animation/animationdata.h \
     UI/linewidget.h \
-    Events/Args/addedfileevent.h
+    Events/Args/addedfileevent.h \
+    UI/Animation/animationpreview.h
 
 CONFIG += c++14
 

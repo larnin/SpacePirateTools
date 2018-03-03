@@ -30,6 +30,7 @@ public:
     using std::vector<Frame>::clear;
     using std::vector<Frame>::operator [];
     using std::vector<Frame>::size;
+    using std::vector<Frame>::empty;
 
     void save(const QString & fileName) const;
 

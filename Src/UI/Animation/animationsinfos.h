@@ -7,6 +7,7 @@
 #include "Events/Args/renamedfileevent.h"
 #include "Events/Args/removedfileevent.h"
 #include "Events/Args/addedfileevent.h"
+#include "animationpreview.h"
 #include <QWidget>
 #include <QString>
 #include <QListWidget>
@@ -80,6 +81,8 @@ private:
     QSpinBox* m_rectHeight;
 
     QGroupBox* m_frameDatasBox;
+
+    AnimationPreview* m_preview;
 
     int m_currentFrameIndex;
 
