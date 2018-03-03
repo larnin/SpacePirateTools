@@ -27,6 +27,7 @@ public:
 
     inline const AnimationData & getAnimationData() const { return m_datas;}
     inline int getCurrentFrameIndex() const {return m_currentFrameIndex;}
+    void setFrame(unsigned int index, const Frame & value);
 
 public slots:
     void onFrameSelected(int index);

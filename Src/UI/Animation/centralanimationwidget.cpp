@@ -148,19 +148,127 @@ void CentralAnimationWidget::mouseMoveEvent(QMouseEvent * event)
         return;
 
     float z(zoom());
-    sf::Vector2f newPos(event->x(), event->y());
+    sf::Vector2i newPos(event->x(), event->y());
     auto delta = newPos - m_mouseOldPos;
     m_mouseOldPos = newPos;
 
-    switch(m_drag)
+    if(m_drag == DragType::Screen)
     {
-    case DragType::Screen:
-        m_center -= sf::Vector2f(delta / z);
+        m_center -= sf::Vector2f(delta) / z;
         rebuildView();
+        return;
+    }
+
+    dragObject(m_drag, newPos);
+}
+#include <iostream>
+void CentralAnimationWidget::dragObject(DragType drag, sf::Vector2i current)
+{
+    if(m_currentDragFrame >= m_animationInfos->getAnimationData().size())
+        return;
+
+    sf::Vector2i oldPos(RenderWindow::mapPixelToCoords(m_mouseStartPos));
+    sf::Vector2i newPos(RenderWindow::mapPixelToCoords(current));
+    auto move = newPos - oldPos;
+
+    Frame f(m_frameStartDrag);
+    std::cout << f.offset.x << " " << f.offset.y << "//" << f.rect.left << " " << f.rect.top << " " << f.rect.width << " " << f.rect.height << std::endl;
+
+    switch(drag)
+    {
+    case DragType::Origine:
+        f.offset += move;
+        break;
+    case DragType::Left:
+        f.rect.left += move.x;
+        f.rect.width -= move.x;
+        f.offset.x -= move.x;
+        break;
+    case DragType::Right:
+        f.rect.width += move.x;
+        if(f.rect.width < 1)
+        {
+            f.rect.left += f.rect.width - 1;
+            f.offset.x -= f.rect.width - 1;
+            f.rect.width = 1;
+        }
+        break;
+    case DragType::Top:
+        f.rect.top += move.y;
+        f.rect.height -= move.y;
+        f.offset.y -= move.y;
+        break;
+    case DragType::Down:
+        f.rect.height += move.y;
+        if(f.rect.height < 1)
+        {
+            f.rect.top += f.rect.height - 1;
+            f.offset.y -= f.rect.height - 1;
+            f.rect.height = 1;
+        }
+        break;
+    case DragType::TopLeft:
+        f.rect.left += move.x;
+        f.rect.top += move.y;
+        f.rect.width -= move.x;
+        f.rect.height -= move.y;
+        f.offset -= move;
+        break;
+    case DragType::TopRight:
+        f.rect.top += move.y;
+        f.rect.height -= move.y;
+        f.offset.y -= move.y;
+        f.rect.width += move.x;
+        if(f.rect.width < 1)
+        {
+            f.rect.left += f.rect.width - 1;
+            f.offset.x -= f.rect.width - 1;
+            f.rect.width = 1;
+        }
+        break;
+    case DragType::DownLeft:
+        f.rect.height += move.y;
+        if(f.rect.height < 1)
+        {
+            f.rect.top += f.rect.height - 1;
+            f.offset.y -= f.rect.height - 1;
+            f.rect.height = 1;
+        }
+        f.rect.left += move.x;
+        f.rect.width -= move.x;
+        f.offset.x -= move.x;
+        break;
+    case DragType::DownRight:
+        f.rect.height += move.y;
+        if(f.rect.height < 1)
+        {
+            f.rect.top += f.rect.height - 1;
+            f.offset.y -= f.rect.height - 1;
+            f.rect.height = 1;
+        }
+        f.rect.width += move.x;
+        if(f.rect.width < 1)
+        {
+            f.rect.left += f.rect.width - 1;
+            f.offset.x -= f.rect.width - 1;
+            f.rect.width = 1;
+        }
+        break;
+    case DragType::Center:
+        f.rect.left += move.x;
+        f.rect.top += move.y;
+        f.offset -= move;
         break;
     default:
         break;
     }
+
+    if(f.rect.width < 1)
+        f.rect.width = 1;
+    if(f.rect.height < 1)
+        f.rect.height = 1;
+
+    m_animationInfos->setFrame(m_currentDragFrame, f);
 }
 
 void CentralAnimationWidget::mousePressEvent(QMouseEvent * event)
@@ -168,10 +276,55 @@ void CentralAnimationWidget::mousePressEvent(QMouseEvent * event)
     if(m_drag != DragType::None)
         return;
 
-    m_mouseOldPos = sf::Vector2f(event->x(), event->y());
+    m_mouseOldPos = sf::Vector2i(event->x(), event->y());
+    m_mouseStartPos = m_mouseOldPos;
 
     if(event->button() == Qt::RightButton)
         m_drag = DragType::Screen;
+    if(event->button() == Qt::LeftButton)
+    {
+        sf::Vector2i pos(RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y())));
+        const auto & data = m_animationInfos->getAnimationData();
+
+        for(unsigned int i(0) ; i < data.size() ; i++)
+        {
+            const Frame & f(data[i]);
+
+            m_currentDragFrame = i;
+            m_frameStartDrag = data[i];
+
+            if(sf::IntRect(sf::Vector2i(f.rect.left, f.rect.top) + f.offset - sf::Vector2i(m_framesTextures[Origine].getSize() / 2u), sf::Vector2i(m_framesTextures[Origine].getSize())).contains(pos))
+            {
+                m_drag = DragType::Origine;
+                break;
+            }
+
+            if(!f.rect.contains(pos))
+                continue;
+
+            auto inRectPos = pos - sf::Vector2i(f.rect.left, f.rect.top);
+
+            if(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(m_framesTextures[TopLeft].getSize())).contains(inRectPos))
+                m_drag = DragType::TopLeft;
+            else if(sf::IntRect(sf::Vector2i(f.rect.width - m_framesTextures[TopRight].getSize().x, 0), sf::Vector2i(m_framesTextures[TopRight].getSize())).contains(inRectPos))
+                m_drag = DragType::TopRight;
+            else if(sf::IntRect(sf::Vector2i(0, f.rect.height - m_framesTextures[DownLeft].getSize().x), sf::Vector2i(m_framesTextures[DownLeft].getSize())).contains(inRectPos))
+                m_drag = DragType::DownLeft;
+            else if(sf::IntRect(sf::Vector2i(f.rect.width - m_framesTextures[DownRight].getSize().x, f.rect.height - m_framesTextures[DownRight].getSize().y), sf::Vector2i(m_framesTextures[DownRight].getSize())).contains(inRectPos))
+                m_drag = DragType::DownRight;
+            else if(sf::IntRect(0, 0, m_framesTextures[Left].getSize().x, f.rect.height).contains(inRectPos))
+                m_drag = DragType::Left;
+            else if(sf::IntRect(f.rect.width - m_framesTextures[Right].getSize().x, 0, m_framesTextures[Right].getSize().x, f.rect.height).contains(inRectPos))
+                m_drag = DragType::Right;
+            else if(sf::IntRect(0, 0, f.rect.width, m_framesTextures[Top].getSize().y).contains(inRectPos))
+                m_drag = DragType::Top;
+            else if(sf::IntRect(0, f.rect.height - m_framesTextures[Down].getSize().y, f.rect.width, m_framesTextures[Down].getSize().y).contains(inRectPos))
+                m_drag = DragType::Down;
+            else m_drag = DragType::Center;
+
+            break;
+        }
+    }
 }
 
 void CentralAnimationWidget::mouseReleaseEvent(QMouseEvent *)

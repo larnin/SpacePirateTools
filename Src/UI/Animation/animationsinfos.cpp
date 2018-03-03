@@ -298,3 +298,11 @@ void AnimationsInfos::updateImageList()
 
     m_texture->blockSignals(false);
 }
+
+void AnimationsInfos::setFrame(unsigned int index, const Frame & value)
+{
+    if(index >= m_datas.size())
+        return;
+    m_datas[index] = value;
+    updateFrameData();
+}

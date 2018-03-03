@@ -21,7 +21,8 @@ class CentralAnimationWidget : public QSFMLCanvas
         TopLeft,
         TopRight,
         DownLeft,
-        DownRight
+        DownRight,
+        Center,
     };
 
     enum TextureIndex
@@ -34,7 +35,7 @@ class CentralAnimationWidget : public QSFMLCanvas
         TopLeft,
         TopRight,
         DownLeft,
-        DownRight
+        DownRight,
     };
 
 public:
@@ -59,13 +60,17 @@ private:
 
     void rebuildView();
 
+    void dragObject(DragType drag, sf::Vector2i current);
+
     AnimationsInfos * m_animationInfos;
     sf::Texture m_texture;
     bool m_textureEnabled;
     unsigned int m_zoomLevel;
     sf::Vector2f m_center;
     DragType m_drag;
-    sf::Vector2f m_mouseOldPos;
+    sf::Vector2i m_mouseOldPos;
+    sf::Vector2i m_mouseStartPos;
+    Frame m_frameStartDrag;
     unsigned int m_currentDragFrame;
     std::vector<sf::Texture> m_framesTextures;
 
