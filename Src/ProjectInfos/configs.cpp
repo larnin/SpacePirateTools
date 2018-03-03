@@ -12,7 +12,8 @@ const QString configsFilename("configs.json");
 Configs Configs::m_instance;
 
 Configs::Configs()
-    : m_projectLoadedHolder(Event<ProjectLoadedEvent>::connect([this](const auto & e){onProjectLoaded(e);}))
+    :  animationBackgroundColor(sf::Color::Black)
+    , m_projectLoadedHolder(Event<ProjectLoadedEvent>::connect([this](const auto & e){onProjectLoaded(e);}))
 {
     load();
 }
@@ -31,6 +32,12 @@ void Configs::save()
         projects.append(p);
 
     obj.insert("LastProjects", projects);
+
+    QJsonObject animColor;
+    animColor.insert("r", int(animationBackgroundColor.r));
+    animColor.insert("g", int(animationBackgroundColor.g));
+    animColor.insert("b", int(animationBackgroundColor.b));
+    obj.insert("AnimationBackgroundColor", animColor);
 
     QFile file(configsFilename);
     if(!file.open(QIODevice::WriteOnly))
@@ -58,10 +65,21 @@ void Configs::load()
         return;
 
     QJsonObject obj(doc.object());
+
     auto projects = obj.find("LastProjects");
     if(projects != obj.end() && projects->isArray())
         for(const auto & item : projects->toArray())
             m_datas.lastProjects.push_back(item.toString());
+
+    auto animColor = obj.find("AnimationBackgroundColor");
+    if(animColor != obj.end() && animColor->isObject())
+    {
+        const auto & objColor = animColor->toObject();
+        animationBackgroundColor.r = objColor["r"].toInt();
+        animationBackgroundColor.g = objColor["g"].toInt();
+        animationBackgroundColor.b = objColor["b"].toInt();
+        animationBackgroundColor.a = 255;
+    }
 }
 
 void Configs::onProjectLoaded(ProjectLoadedEvent)

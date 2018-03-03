@@ -14,6 +14,7 @@
 #include <QDoubleSpinBox>
 #include <QComboBox>
 #include <QGroupBox>
+#include <QPushButton>
 
 class CentralAnimationWidget;
 
@@ -34,6 +35,7 @@ public slots:
     void onFrameValueChanged();
     void onRightClick(QPoint point);
     void onImageSelected(int index);
+    void onColorButtonClicked();
 
 private:
     inline void setCentralAnimationWidget(CentralAnimationWidget * w){ m_centralWidget = w; }
@@ -51,6 +53,7 @@ private:
     void updateFrameData();
     void updateDatas();
     void updateImageList();
+    void updateButtonColor();
 
     CentralAnimationWidget * m_centralWidget;
 
@@ -60,6 +63,8 @@ private:
     EventHolder<SaveEvent> saveHolder;
     EventHolder<RenamedFileEvent> renameHolder;
     EventHolder<RemovedFileEvent> removedHolder;
+
+    QPushButton* m_colorButton;
 
     QComboBox* m_texture;
     QListWidget* m_frameList;

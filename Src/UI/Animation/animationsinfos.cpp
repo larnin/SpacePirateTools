@@ -1,12 +1,16 @@
 #include "animationsinfos.h"
 #include "UI/linewidget.h"
 #include "ProjectInfos/projectinfos.h"
+#include "ProjectInfos/configs.h"
 #include "UI/Animation/centralanimationwidget.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMenu>
 #include <QAction>
+#include <QIcon>
+#include <QPixmap>
+#include <QColorDialog>
 
 AnimationsInfos::AnimationsInfos(const QString &assetName, QWidget *parent)
     : QWidget(parent)
@@ -47,6 +51,13 @@ void AnimationsInfos:: onAdd(const AddedFileEvent &)
 
 void AnimationsInfos::initializeWidgets()
 {
+    m_colorButton = new QPushButton("");
+    m_colorButton->setFixedSize(30, 30);
+    updateButtonColor();
+    QHBoxLayout* colorLayout = new QHBoxLayout();
+    colorLayout->addWidget(new QLabel("Couleur de fond :"));
+    colorLayout->addWidget(m_colorButton);
+
     m_texture = new QComboBox();
     QHBoxLayout* textureLayout = new QHBoxLayout();
     textureLayout->addWidget(new QLabel("Texture :"));
@@ -106,6 +117,8 @@ void AnimationsInfos::initializeWidgets()
     m_frameDatasBox->setLayout(frameLayout);
 
     QVBoxLayout* principalLayout = new QVBoxLayout();
+    principalLayout->addLayout(colorLayout);
+    principalLayout->addWidget(new LineWidget(LineOrientation::Horizontal));
     principalLayout->addLayout(textureLayout);
     principalLayout->addSpacing(5);
     principalLayout->addWidget(new QLabel("Frames"));
@@ -113,6 +126,8 @@ void AnimationsInfos::initializeWidgets()
     principalLayout->addWidget(m_frameDatasBox);
 
     setLayout(principalLayout);
+
+    connect(m_colorButton, SIGNAL(clicked(bool)), this, SLOT(onColorButtonClicked()));
 
     connect(m_texture, SIGNAL(currentIndexChanged(int)), this, SLOT(onImageSelected(int)));
 
@@ -149,6 +164,18 @@ void AnimationsInfos::onImageSelected(int index)
         m_datas.imageName = "";
     else m_datas.imageName = m_texture->currentText();
     m_centralWidget->updateTexture(m_datas.imageName);
+}
+
+void AnimationsInfos::onColorButtonClicked()
+{
+    auto c(Configs::instance().animationBackgroundColor);
+    auto color = QColorDialog::getColor(QColor(c.r, c.g, c.b), this, "Changer la couleur de fond");
+    if(!color.isValid())
+        return;
+
+    Configs::instance().animationBackgroundColor = sf::Color(color.red(), color.green(), color.blue());
+
+    updateButtonColor();
 }
 
 void AnimationsInfos::blockFrameSignals(bool blocked)
@@ -305,4 +332,13 @@ void AnimationsInfos::setFrame(unsigned int index, const Frame & value)
         return;
     m_datas[index] = value;
     updateFrameData();
+}
+
+void AnimationsInfos::updateButtonColor()
+{
+    constexpr int size(30);
+    QPixmap map(size, size);
+    auto color = Configs::instance().animationBackgroundColor;
+    map.fill(QColor(color.r, color.g, color.b));
+    m_colorButton->setIcon(QIcon(map));
 }

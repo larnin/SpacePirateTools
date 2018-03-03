@@ -4,6 +4,7 @@
 #include "Events/Event.h"
 #include "Events/Args/projectloadedevent.h"
 #include <QString>
+#include <SFML/Graphics/Color.hpp>
 #include <vector>
 
 struct ConfigsDatas
@@ -20,6 +21,8 @@ public:
     inline const std::vector<QString> & lastProjects() const {return m_datas.lastProjects;}
 
     static Configs & instance();
+
+    sf::Color animationBackgroundColor;
 
 private:
     void load();

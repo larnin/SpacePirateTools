@@ -1,6 +1,7 @@
 #include "centralanimationwidget.h"
 #include "ProjectInfos/assettype.h"
 #include "ProjectInfos/projectinfos.h"
+#include "ProjectInfos/configs.h"
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -30,7 +31,7 @@ CentralAnimationWidget::CentralAnimationWidget(AnimationsInfos *infos, QWidget *
 
 void CentralAnimationWidget::OnUpdate()
 {
-    RenderWindow::clear();
+    RenderWindow::clear(Configs::instance().animationBackgroundColor);
 
     if(m_textureEnabled)
     {
