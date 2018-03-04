@@ -5,6 +5,7 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QResizeEvent>
+#include <QCursor>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
@@ -29,6 +30,8 @@ CentralAnimationWidget::CentralAnimationWidget(AnimationsInfos *infos, QWidget *
     m_animationInfos->setCentralAnimationWidget(this);
     updateTexture(infos->getAnimationData().imageName);
     initializeFramesTextures();
+
+    setMouseTracking(true);
 }
 
 void CentralAnimationWidget::OnUpdate()
@@ -134,8 +137,6 @@ float CentralAnimationWidget::zoom()
     return zoomLevels()[m_zoomLevel];
 }
 
-#include <QDebug>
-
 void CentralAnimationWidget::wheelEvent(QWheelEvent * event)
 {
     if(event->angleDelta().y() > 0 && m_zoomLevel > 0)
@@ -148,6 +149,7 @@ void CentralAnimationWidget::wheelEvent(QWheelEvent * event)
 
 void CentralAnimationWidget::mouseMoveEvent(QMouseEvent * event)
 {
+    showDragCursor(sf::Vector2i(RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()))));
     if(m_drag == DragType::None)
         return;
 
@@ -164,6 +166,53 @@ void CentralAnimationWidget::mouseMoveEvent(QMouseEvent * event)
     }
 
     dragObject(m_drag, newPos);
+}
+
+void CentralAnimationWidget::showDragCursor(const sf::Vector2i & pos)
+{
+    auto drag = m_drag;
+    if(drag == DragType::None)
+    {
+        for(const auto & f : m_animationInfos->getAnimationData())
+        {
+            auto d(dragTypeZone(f, pos));
+            if(d < drag)
+                drag = d;
+        }
+    }
+
+    Qt::CursorShape shape;
+
+    switch(drag)
+    {
+    case DragType::Origine:
+    case DragType::Center:
+        shape = Qt::SizeAllCursor;
+        break;
+    case DragType::Left:
+    case DragType::Right:
+        shape = Qt::SizeHorCursor;
+        break;
+    case DragType::Top:
+    case DragType::Down:
+        shape = Qt::SizeVerCursor;
+        break;
+    case DragType::TopLeft:
+    case DragType::DownRight:
+        shape = Qt::SizeFDiagCursor;
+        break;
+    case DragType::TopRight:
+    case DragType::DownLeft:
+        shape = Qt::SizeBDiagCursor;
+        break;
+    default:
+        shape = Qt::ArrowCursor;
+        break;
+    }
+
+    //if(shape != cursor().shape())
+    unsetCursor();
+    setCursor(shape);
 }
 
 void CentralAnimationWidget::dragObject(DragType drag, sf::Vector2i current)
@@ -288,45 +337,49 @@ void CentralAnimationWidget::mousePressEvent(QMouseEvent * event)
         sf::Vector2i pos(RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y())));
         const auto & data = m_animationInfos->getAnimationData();
 
+        m_drag = DragType::None;
+
         for(unsigned int i(0) ; i < data.size() ; i++)
         {
             const Frame & f(data[i]);
 
-            m_currentDragFrame = i;
-            m_frameStartDrag = data[i];
-
-            if(sf::IntRect(sf::Vector2i(f.rect.left, f.rect.top) + f.offset - sf::Vector2i(m_framesTextures[Origine].getSize() / 2u), sf::Vector2i(m_framesTextures[Origine].getSize())).contains(pos))
+            auto drag = dragTypeZone(f, pos);
+            if(m_drag > drag)
             {
-                m_drag = DragType::Origine;
-                break;
+                m_currentDragFrame = i;
+                m_frameStartDrag = data[i];
+                m_drag = drag;
             }
-
-            if(!f.rect.contains(pos))
-                continue;
-
-            auto inRectPos = pos - sf::Vector2i(f.rect.left, f.rect.top);
-
-            if(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(m_framesTextures[TopLeft].getSize())).contains(inRectPos))
-                m_drag = DragType::TopLeft;
-            else if(sf::IntRect(sf::Vector2i(f.rect.width - m_framesTextures[TopRight].getSize().x, 0), sf::Vector2i(m_framesTextures[TopRight].getSize())).contains(inRectPos))
-                m_drag = DragType::TopRight;
-            else if(sf::IntRect(sf::Vector2i(0, f.rect.height - m_framesTextures[DownLeft].getSize().x), sf::Vector2i(m_framesTextures[DownLeft].getSize())).contains(inRectPos))
-                m_drag = DragType::DownLeft;
-            else if(sf::IntRect(sf::Vector2i(f.rect.width - m_framesTextures[DownRight].getSize().x, f.rect.height - m_framesTextures[DownRight].getSize().y), sf::Vector2i(m_framesTextures[DownRight].getSize())).contains(inRectPos))
-                m_drag = DragType::DownRight;
-            else if(sf::IntRect(0, 0, m_framesTextures[Left].getSize().x, f.rect.height).contains(inRectPos))
-                m_drag = DragType::Left;
-            else if(sf::IntRect(f.rect.width - m_framesTextures[Right].getSize().x, 0, m_framesTextures[Right].getSize().x, f.rect.height).contains(inRectPos))
-                m_drag = DragType::Right;
-            else if(sf::IntRect(0, 0, f.rect.width, m_framesTextures[Top].getSize().y).contains(inRectPos))
-                m_drag = DragType::Top;
-            else if(sf::IntRect(0, f.rect.height - m_framesTextures[Down].getSize().y, f.rect.width, m_framesTextures[Down].getSize().y).contains(inRectPos))
-                m_drag = DragType::Down;
-            else m_drag = DragType::Center;
-
-            break;
         }
     }
+}
+
+CentralAnimationWidget::DragType CentralAnimationWidget::dragTypeZone(const Frame & f, const sf::Vector2i & pos)
+{
+    if(sf::IntRect(sf::Vector2i(f.rect.left, f.rect.top) + f.offset - sf::Vector2i(m_framesTextures[Origine].getSize() / 2u), sf::Vector2i(m_framesTextures[Origine].getSize())).contains(pos))
+        return DragType::Origine;
+
+    auto inRectPos = pos - sf::Vector2i(f.rect.left, f.rect.top);
+
+    if(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(m_framesTextures[TopLeft].getSize())).contains(inRectPos))
+        return DragType::TopLeft;
+    if(sf::IntRect(sf::Vector2i(f.rect.width - m_framesTextures[TopRight].getSize().x, 0), sf::Vector2i(m_framesTextures[TopRight].getSize())).contains(inRectPos))
+        return DragType::TopRight;
+    if(sf::IntRect(sf::Vector2i(0, f.rect.height - m_framesTextures[DownLeft].getSize().x), sf::Vector2i(m_framesTextures[DownLeft].getSize())).contains(inRectPos))
+        return DragType::DownLeft;
+    else if(sf::IntRect(sf::Vector2i(f.rect.width - m_framesTextures[DownRight].getSize().x, f.rect.height - m_framesTextures[DownRight].getSize().y), sf::Vector2i(m_framesTextures[DownRight].getSize())).contains(inRectPos))
+        return DragType::DownRight;
+    else if(sf::IntRect(0, 0, m_framesTextures[Left].getSize().x, f.rect.height).contains(inRectPos))
+        return DragType::Left;
+    else if(sf::IntRect(f.rect.width - m_framesTextures[Right].getSize().x, 0, m_framesTextures[Right].getSize().x, f.rect.height).contains(inRectPos))
+        return DragType::Right;
+    else if(sf::IntRect(0, 0, f.rect.width, m_framesTextures[Top].getSize().y).contains(inRectPos))
+        return DragType::Top;
+    else if(sf::IntRect(0, f.rect.height - m_framesTextures[Down].getSize().y, f.rect.width, m_framesTextures[Down].getSize().y).contains(inRectPos))
+        return DragType::Down;
+    if(f.rect.contains(pos))
+        return DragType::Center;
+    return DragType::None;
 }
 
 void CentralAnimationWidget::mouseReleaseEvent(QMouseEvent *)

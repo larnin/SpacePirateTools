@@ -11,7 +11,6 @@ class CentralAnimationWidget : public QSFMLCanvas
 {
     enum class DragType
     {
-        None,
         Screen,
         Origine,
         Left,
@@ -23,6 +22,7 @@ class CentralAnimationWidget : public QSFMLCanvas
         DownLeft,
         DownRight,
         Center,
+        None,
     };
 
     enum TextureIndex
@@ -62,6 +62,10 @@ private:
 
     void dragObject(DragType drag, sf::Vector2i current);
 
+    DragType dragTypeZone(const Frame & f, const sf::Vector2i & pos);
+
+    void showDragCursor(const sf::Vector2i &pos);
+
     AnimationsInfos * m_animationInfos;
     sf::Texture m_texture;
     bool m_textureEnabled;
@@ -73,7 +77,6 @@ private:
     Frame m_frameStartDrag;
     unsigned int m_currentDragFrame;
     std::vector<sf::Texture> m_framesTextures;
-
 };
 
 #endif // CENTRALANIMATIONWIDGET_H
