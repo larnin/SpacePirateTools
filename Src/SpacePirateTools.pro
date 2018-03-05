@@ -26,7 +26,11 @@ SOURCES += \
     UI/Animation/centralanimationwidget.cpp \
     UI/Animation/animationsinfos.cpp \
     Animation/animationdata.cpp \
-    UI/Animation/animationpreview.cpp
+    UI/Animation/animationpreview.cpp \
+    Animator/animatordata.cpp \
+    Animator/animatorstate.cpp \
+    Animator/animatortransition.cpp \
+    Animator/Conditions/basecondition.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -49,7 +53,11 @@ HEADERS += \
     Animation/animationdata.h \
     UI/linewidget.h \
     Events/Args/addedfileevent.h \
-    UI/Animation/animationpreview.h
+    UI/Animation/animationpreview.h \
+    Animator/animatordata.h \
+    Animator/animatorstate.h \
+    Animator/animatortransition.h \
+    Animator/Conditions/basecondition.h
 
 CONFIG += c++14
 
