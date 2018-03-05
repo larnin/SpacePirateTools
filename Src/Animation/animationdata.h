@@ -35,6 +35,7 @@ public:
     void save(const QString & fileName) const;
 
     QString imageName;
+    bool loop;
 
 private:
     void load(const QString & fileName);

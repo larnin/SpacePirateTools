@@ -12,7 +12,6 @@
 #include <QMenu>
 #include <QFile>
 
-#include <QDebug>
 FileExplorer::FileExplorer(QWidget *parent)
     : QWidget(parent)
     , m_projectLoadedHolder(Event<ProjectLoadedEvent>::connect([this](const auto & v){onProjectLoaded(v);}))
@@ -129,8 +128,6 @@ void FileExplorer::onRightClick(QPoint point)
         add(stringToAssetType(action->text()));
     }
 }
-
-#include <QDebug>
 
 void FileExplorer::rename(QTreeWidgetItem *item)
 {

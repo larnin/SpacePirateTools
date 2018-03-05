@@ -6,6 +6,7 @@
 #include <QJsonArray>
 
 AnimationData::AnimationData(const QString & fileName)
+    : loop(false)
 {
     load(fileName);
 }
@@ -14,6 +15,7 @@ void AnimationData::save(const QString & fileName) const
 {
      QJsonObject obj;
      obj.insert("image", imageName);
+     obj.insert("loop", loop);
 
      QJsonArray frames;
      for(const auto & f : *this)
@@ -58,6 +60,7 @@ void AnimationData::load(const QString & fileName)
     QJsonObject obj(doc.object());
 
     imageName = obj["image"].toString();
+    loop = obj["loop"].toBool();
 
     auto frames = obj.find("frames");
     if(frames == obj.end() || !frames->isArray())

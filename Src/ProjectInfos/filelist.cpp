@@ -1,6 +1,5 @@
 #include "filelist.h"
 #include <QDir>
-#include <QDebug>
 
 FileList::FileList(const QString &directory)
 {
@@ -38,10 +37,7 @@ void FileList::createListFile(const QString &directory)
 
     QDir dir(directory);
     if(!dir.exists())
-    {
-        qDebug() << "The path `" << directory << "` doesn't exist";
         return;
-    }
 
     for(const auto & e : dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
         m_files.emplace(e.baseName(), fileList(e.absoluteFilePath()));

@@ -16,6 +16,7 @@
 #include <QComboBox>
 #include <QGroupBox>
 #include <QPushButton>
+#include <QCheckBox>
 #include <iostream>
 
 class CentralAnimationWidget;
@@ -35,6 +36,7 @@ public:
 
 public slots:
     void onFrameSelected(int index);
+    void onLoopChecked(bool value);
     void onFrameValueChanged();
     void onRightClick(QPoint point);
     void onImageSelected(int index);
@@ -70,6 +72,8 @@ private:
     QPushButton* m_colorButton;
 
     QComboBox* m_texture;
+
+    QCheckBox* m_loopCheckbox;
     QListWidget* m_frameList;
 
     QDoubleSpinBox* m_time;

@@ -68,6 +68,8 @@ void AnimationsInfos::initializeWidgets()
     textureLayout->addWidget(new QLabel("Texture :"));
     textureLayout->addWidget(m_texture, 1);
 
+    m_loopCheckbox = new QCheckBox(" Boucle");
+
     m_frameList = new QListWidget();
 
     m_time = new QDoubleSpinBox();
@@ -134,6 +136,7 @@ void AnimationsInfos::initializeWidgets()
     principalLayout->addWidget(new LineWidget(LineOrientation::Horizontal));
     principalLayout->addLayout(textureLayout);
     principalLayout->addSpacing(5);
+    principalLayout->addWidget(m_loopCheckbox);
     principalLayout->addWidget(new QLabel("Frames"));
     principalLayout->addWidget(m_frameList);
     principalLayout->addWidget(m_frameDatasBox);
@@ -144,6 +147,8 @@ void AnimationsInfos::initializeWidgets()
     connect(m_colorButton, SIGNAL(clicked(bool)), this, SLOT(onColorButtonClicked()));
 
     connect(m_texture, SIGNAL(currentIndexChanged(int)), this, SLOT(onImageSelected(int)));
+
+    connect(m_loopCheckbox, SIGNAL(clicked(bool)), this, SLOT(onLoopChecked(bool)));
 
     connect(m_frameList, SIGNAL(currentRowChanged(int)), this, SLOT(onFrameSelected(int)));
 
@@ -164,6 +169,11 @@ void AnimationsInfos::onFrameSelected(int index)
     m_currentFrameIndex = index;
 
     updateFrameData();
+}
+
+void AnimationsInfos::onLoopChecked(bool value)
+{
+    m_datas.loop = value;
 }
 
 void AnimationsInfos::onFrameValueChanged()
