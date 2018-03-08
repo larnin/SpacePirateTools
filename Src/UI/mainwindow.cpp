@@ -9,6 +9,7 @@
 #include "fileexplorer.h"
 #include "UI/Animation/animationsinfos.h"
 #include "UI/Animation/centralanimationwidget.h"
+#include "UI/Animator/animatorinfos.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -82,6 +83,8 @@ void MainWindow::createDocks()
 {
     m_explorerDock = new Dock<FileExplorer>("Explorer", false);
     addDockWidget(Qt::LeftDockWidgetArea, m_explorerDock);
+    AnimatorInfos* i = new AnimatorInfos("");
+    addDockWidget(Qt::RightDockWidgetArea, new Dock<AnimatorInfos>(i, "Animator", true));
 }
 
 void MainWindow::addRecentFile(QMenu* menu)

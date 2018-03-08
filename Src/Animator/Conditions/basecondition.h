@@ -3,12 +3,28 @@
 
 #include <QWidget>
 #include <QJsonObject>
+#include <QString>
 #include <memory>
 
 enum class ConditionType
 {
-
+    And,
+    Or,
+    XOr,
+    Not,
+    AnimationFinished,
+    PropertyMore,
+    PropertyLess,
+    PropertyMoreEqual,
+    PropertyLessEqual,
+    PropertyEqual,
+    PropertyInequal,
+    PropertyBetween,
+    PropertyOutside,
+    MAX = PropertyOutside,
 };
+
+QString ConditionTypeToString(ConditionType type);
 
 class BaseCondition
 {
