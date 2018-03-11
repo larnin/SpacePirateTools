@@ -58,13 +58,12 @@ void AnimatorInfos::initializeWidgets()
 
     m_transitions = new QListWidget();
 
-    m_conditionType = new QComboBox();
-    QHBoxLayout* conditionTypeLayout = new QHBoxLayout();
-    conditionTypeLayout->addWidget(new QLabel("Condition type :"));
-    conditionTypeLayout->addWidget(m_conditionType, 1);
-
-    m_conditionHolder = new QFrame();
-    m_conditionHolder->setFrameShape(QFrame::StyledPanel);
+    m_condition = new QLineEdit();
+    QHBoxLayout* conditionLayout = new QHBoxLayout();
+    conditionLayout->addWidget(new QLabel("Condition :"));
+    conditionLayout->addWidget(m_condition);
+    m_transitionGroup = new QGroupBox();
+    m_transitionGroup->setLayout(conditionLayout);
 
     QVBoxLayout * layout = new QVBoxLayout();
     layout->addWidget(new QLabel("States"));
@@ -73,12 +72,10 @@ void AnimatorInfos::initializeWidgets()
     layout->addSpacing(5);
     layout->addWidget(new QLabel("Transitions"));
     layout->addWidget(m_transitions);
-    layout->addLayout(conditionTypeLayout);
-    layout->addWidget(m_conditionHolder, 1);
+    layout->addWidget(m_transitionGroup);
 
     setLayout(layout);
 }
-
 
 void AnimatorInfos::updateAnimationList()
 {
@@ -129,7 +126,10 @@ void AnimatorInfos::updateTransitionList()
     m_transitionsInfos.clear();
 
     if(m_currentStateIndex < 0 || m_currentStateIndex >= m_states->count())
+    {
+        updateTransitionInfos();
         return;
+    }
 
     for(unsigned int i(0) ; i < m_datas.transitions.size() ; i++)
     {
@@ -161,12 +161,34 @@ void AnimatorInfos::updateTransitionList()
         }
     }
 
+    m_transitions->setCurrentRow(m_currentTransitionIndex);
+
     m_transitions->blockSignals(false);
+
+    updateTransitionInfos();
 }
 
 void AnimatorInfos::updateTransitionInfos()
 {
+    if(m_currentStateIndex < 0 || m_currentStateIndex >= m_states->count() || m_currentTransitionIndex < 0 || m_currentStateIndex >= m_transitions->count())
+    {
+        m_transitionGroup->setEnabled(false);
+        m_transitionGroup->setTitle("   ");
+        return;
+    }
 
+    const AnimatorTransition & t = m_datas.transitions[m_currentStateIndex];
+    m_transitionGroup->setEnabled(true);
+
+    m_condition->blockSignals(true);
+
+    const TransitionInfos & tI = m_transitionsInfos[m_currentTransitionIndex];
+    const AnimatorState & s = m_datas.states[tI.from ? m_datas.transitions[tI.index].previousState : m_datas.transitions[tI.index].nextState];
+
+    m_transitionGroup->setTitle((tI.from ? "From " : "To ") + s.stateName);
+    m_condition->setText(t.condition);
+
+    m_condition->blockSignals(false);
 }
 
 void AnimatorInfos::blockStateSignals(bool block)

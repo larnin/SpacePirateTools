@@ -11,7 +11,7 @@ AnimatorTransition::AnimatorTransition(const QJsonObject & obj)
 {
     previousState = obj["previous"].toInt();
     nextState = obj["next"].toInt();
-    condition = BaseCondition::load(obj["condition"].toObject());
+    condition = obj["condition"].toString();
 }
 
 QJsonObject AnimatorTransition::save() const
@@ -19,7 +19,7 @@ QJsonObject AnimatorTransition::save() const
     QJsonObject obj;
     obj.insert("previous", int(previousState));
     obj.insert("next", int(nextState));
-    obj.insert("condition", condition->save());
+    obj.insert("condition", condition);
 
     return obj;
 }

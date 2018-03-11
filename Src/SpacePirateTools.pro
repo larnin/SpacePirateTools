@@ -30,7 +30,6 @@ SOURCES += \
     Animator/animatordata.cpp \
     Animator/animatorstate.cpp \
     Animator/animatortransition.cpp \
-    Animator/Conditions/basecondition.cpp \
     UI/Animator/animatorinfos.cpp
 
 HEADERS += \
@@ -58,7 +57,6 @@ HEADERS += \
     Animator/animatordata.h \
     Animator/animatorstate.h \
     Animator/animatortransition.h \
-    Animator/Conditions/basecondition.h \
     UI/Animator/animatorinfos.h
 
 CONFIG += c++14

@@ -62,8 +62,8 @@ private:
 
     QListWidget* m_transitions;
 
-    QComboBox* m_conditionType;
-    QFrame* m_conditionHolder;
+    QGroupBox* m_transitionGroup;
+    QLineEdit* m_condition;
 
     EventHolder<SaveEvent> saveHolder;
     EventHolder<RenamedFileEvent> renameHolder;
