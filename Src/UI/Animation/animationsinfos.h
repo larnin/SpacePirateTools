@@ -68,6 +68,7 @@ private:
     EventHolder<SaveEvent> saveHolder;
     EventHolder<RenamedFileEvent> renameHolder;
     EventHolder<RemovedFileEvent> removedHolder;
+    EventHolder<AddedFileEvent> addedHolder;
 
     QPushButton* m_colorButton;
 

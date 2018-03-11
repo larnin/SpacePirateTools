@@ -6,7 +6,6 @@
 
 struct AnimatorState
 {
-public:
     AnimatorState();
     AnimatorState(const QJsonObject & obj);
     QString stateName;

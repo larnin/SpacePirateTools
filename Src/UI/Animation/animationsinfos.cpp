@@ -20,6 +20,7 @@ AnimationsInfos::AnimationsInfos(const QString &assetName, QWidget *parent)
     , saveHolder(Event<SaveEvent>::connect([this](const auto & e){onSave(e);}))
     , renameHolder(Event<RenamedFileEvent>::connect([this](const auto & e){onRename(e);}))
     , removedHolder(Event<RemovedFileEvent>::connect([this](const auto & e){onRemove(e);}))
+    , addedHolder(Event<AddedFileEvent>::connect([this](const auto & e){onAdd(e);}))
     , m_currentFrameIndex(-1)
 {
     initializeWidgets();

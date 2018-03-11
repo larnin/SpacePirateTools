@@ -7,7 +7,6 @@
 
 struct AnimatorTransition
 {
-public:
     AnimatorTransition(unsigned int _previousState, unsigned int _nextState);
     AnimatorTransition(const QJsonObject & obj);
     AnimatorTransition(AnimatorTransition &&) noexcept = default;

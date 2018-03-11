@@ -83,8 +83,6 @@ void MainWindow::createDocks()
 {
     m_explorerDock = new Dock<FileExplorer>("Explorer", false);
     addDockWidget(Qt::LeftDockWidgetArea, m_explorerDock);
-    AnimatorInfos* i = new AnimatorInfos("");
-    addDockWidget(Qt::RightDockWidgetArea, new Dock<AnimatorInfos>(i, "Animator", true));
 }
 
 void MainWindow::addRecentFile(QMenu* menu)
@@ -214,7 +212,7 @@ void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
         openAnimation(fullName);
         break;
     case AssetType::Animator:
-
+        openAnimator(fullName);
         break;
     case AssetType::Scene:
 
@@ -246,7 +244,16 @@ void MainWindow::openAnimation(const QString & filename)
     CentralAnimationWidget *animWidget = new CentralAnimationWidget(a);
     setCentralWidget(animWidget);
     m_assetDocks.push_back(new Dock<AnimationsInfos>(a, "Animation", false));
-    addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.front());
+    addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
+}
+
+
+void MainWindow::openAnimator(const QString & filename)
+{
+    AnimatorInfos *a = new AnimatorInfos(filename);
+
+    m_assetDocks.push_back(new Dock<AnimatorInfos>(a, "Animator", false));
+    addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
 }
 
 void MainWindow::clearDocks()
