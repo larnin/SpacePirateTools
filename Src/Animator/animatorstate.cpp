@@ -17,6 +17,15 @@ AnimatorState::AnimatorState(const QJsonObject &obj)
     yFliped = obj["yFliped"].toBool();
 }
 
+AnimatorState::AnimatorState(const QString & _stateName, const QString & _animation, bool _xFliped, bool _yfliped)
+    : stateName(_stateName)
+    , animation(_animation)
+    , xFliped(_xFliped)
+    , yFliped(_yfliped)
+{
+
+}
+
 QJsonObject AnimatorState::save() const
 {
     QJsonObject obj;
@@ -27,3 +36,4 @@ QJsonObject AnimatorState::save() const
 
     return obj;
 }
+

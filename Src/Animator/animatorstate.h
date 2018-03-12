@@ -8,6 +8,7 @@ struct AnimatorState
 {
     AnimatorState();
     AnimatorState(const QJsonObject & obj);
+    AnimatorState(const QString & _stateName, const QString & _animation = "", bool _xFliped = false, bool _yfliped = false);
     QString stateName;
     QString animation;
     bool xFliped;

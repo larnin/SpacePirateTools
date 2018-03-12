@@ -1,8 +1,9 @@
 #include "animatortransition.h"
 
-AnimatorTransition::AnimatorTransition(unsigned int _previousState, unsigned int _nextState)
+AnimatorTransition::AnimatorTransition(unsigned int _previousState, unsigned int _nextState, const QString &_condition)
     : previousState(_previousState)
     , nextState(_nextState)
+    , condition(_condition)
 {
 
 }

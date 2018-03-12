@@ -1,13 +1,12 @@
 #ifndef ANIMATORTRANSITION_H
 #define ANIMATORTRANSITION_H
 
-#include "Conditions/basecondition.h"
 #include <QJsonObject>
 #include <QString>
 
 struct AnimatorTransition
 {
-    AnimatorTransition(unsigned int _previousState, unsigned int _nextState);
+    AnimatorTransition(unsigned int _previousState, unsigned int _nextState, const QString & _condition = "");
     AnimatorTransition(const QJsonObject & obj);
 
     QJsonObject save() const;

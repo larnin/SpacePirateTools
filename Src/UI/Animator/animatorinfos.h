@@ -30,7 +30,21 @@ public:
     ~AnimatorInfos();
 
     inline const AnimatorData & getAnimatorData() const { return m_datas;}
+    inline int getSelectedStateID() const { return m_currentStateIndex;}
+    inline int getSelectedTransitionID() const { return m_currentTransitionIndex;}
+
+    void addState();
+    void addTransition(unsigned int previous, unsigned int next);
+    void selectState(unsigned int index);
+    void selectTransition(unsigned int index);
+
 public slots:
+    void onRightClickStates(QPoint point);
+    void onRightClickTransitions(QPoint point);
+    void onStateSelected(int index);
+    void onTransitionSelected(int index);
+    void onStateValueChanged();
+    void onConditionChanged();
 
 private:
     void initializeWidgets();
@@ -48,6 +62,9 @@ private:
     void onRename(const RenamedFileEvent & e);
     void onRemove(const RemovedFileEvent &);
     void onAdd(const AddedFileEvent &);
+
+    void removeState(unsigned int index);
+    void duplicateState(unsigned int index);
 
     AnimatorData m_datas;
     QString m_assetName;
