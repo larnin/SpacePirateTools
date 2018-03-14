@@ -30,7 +30,8 @@ SOURCES += \
     Animator/animatordata.cpp \
     Animator/animatorstate.cpp \
     Animator/animatortransition.cpp \
-    UI/Animator/animatorinfos.cpp
+    UI/Animator/animatorinfos.cpp \
+    UI/Animator/centralanimatorwidget.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -57,7 +58,8 @@ HEADERS += \
     Animator/animatordata.h \
     Animator/animatorstate.h \
     Animator/animatortransition.h \
-    UI/Animator/animatorinfos.h
+    UI/Animator/animatorinfos.h \
+    UI/Animator/centralanimatorwidget.h
 
 CONFIG += c++14
 

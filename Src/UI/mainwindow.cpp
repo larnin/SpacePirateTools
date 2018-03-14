@@ -10,6 +10,7 @@
 #include "UI/Animation/animationsinfos.h"
 #include "UI/Animation/centralanimationwidget.h"
 #include "UI/Animator/animatorinfos.h"
+#include "UI/Animator/centralanimatorwidget.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -251,7 +252,8 @@ void MainWindow::openAnimation(const QString & filename)
 void MainWindow::openAnimator(const QString & filename)
 {
     AnimatorInfos *a = new AnimatorInfos(filename);
-
+    CentralAnimatorWidget *animWidget = new CentralAnimatorWidget(a);
+    setCentralWidget(animWidget);
     m_assetDocks.push_back(new Dock<AnimatorInfos>(a, "Animator", false));
     addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
 }
