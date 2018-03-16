@@ -4,6 +4,7 @@
 #include "UI/qsfmlcanvas.h"
 #include "animatorinfos.h"
 #include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/Font.hpp>
 
 class CentralAnimatorWidget : public QSFMLCanvas
 {
@@ -33,12 +34,16 @@ public slots:
 private:
     void rebuildView();
     sf::VertexArray drawGrid() const;
+    void drawTransitions();
+    void drawStates();
 
     AnimatorInfos *m_infos;
 
     DragType m_drag;
     sf::Vector2i m_mouseOldPos;
     sf::Vector2f m_center;
+
+    sf::Font m_font;
 };
 
 #endif // CENTRALANIMATORWIDGET_H

@@ -59,7 +59,8 @@ HEADERS += \
     Animator/animatorstate.h \
     Animator/animatortransition.h \
     UI/Animator/animatorinfos.h \
-    UI/Animator/centralanimatorwidget.h
+    UI/Animator/centralanimatorwidget.h \
+    vect2convert.h
 
 CONFIG += c++14
 

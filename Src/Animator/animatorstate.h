@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QJsonObject>
+#include <SFML/Graphics/Rect.hpp>
 
 struct AnimatorState
 {
@@ -13,6 +14,7 @@ struct AnimatorState
     QString animation;
     bool xFliped;
     bool yFliped;
+    sf::IntRect rect;
 
     QJsonObject save() const;
 

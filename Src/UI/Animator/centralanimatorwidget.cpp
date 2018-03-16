@@ -1,7 +1,10 @@
 #include "centralanimatorwidget.h"
+#include "vect2convert.h"
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <SFML/Graphics/Rect.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 const sf::Color backgroundColor(60, 60, 60);
 const sf::Color smallLineColor(45, 45, 45);
@@ -12,12 +15,19 @@ const sf::Color boxFillColor(180, 180, 180);
 const sf::Color boxStartFillColor(255, 180, 130);
 const sf::Color boxBorderColor(sf::Color::Black);
 const sf::Color boxSelectedBorderColor(0, 255, 0);
+const sf::Color transitionColor(sf::Color::White);
+const sf::Color transitionSelectedColor(0, 255, 0);
 constexpr unsigned int boxBoder(1);
 constexpr unsigned int boxSelectedBorder(2);
 constexpr int step(25);
 constexpr int bigStep(10);
 constexpr float crossSize(25);
 constexpr float borderDelta(8);
+constexpr float transitionOffset(5);
+constexpr float arrowSize(10);
+constexpr unsigned int characterSize(25);
+constexpr int textMarge(15);
+constexpr int textHeight(50);
 
 CentralAnimatorWidget::CentralAnimatorWidget(AnimatorInfos *infos, QWidget *parent)
     : QSFMLCanvas(20, parent)
@@ -25,6 +35,7 @@ CentralAnimatorWidget::CentralAnimatorWidget(AnimatorInfos *infos, QWidget *pare
     , m_drag(DragType::None)
     , m_center(0, 0)
 {
+    m_font.loadFromFile("calibrib.ttf");
     rebuildView();
 }
 
@@ -33,6 +44,9 @@ void CentralAnimatorWidget::OnUpdate()
     RenderWindow::clear(backgroundColor);
 
     RenderWindow::draw(drawGrid());
+
+    drawTransitions();
+    drawStates();
 }
 
 void CentralAnimatorWidget::mouseMoveEvent(QMouseEvent * event)
@@ -153,4 +167,92 @@ sf::VertexArray CentralAnimatorWidget::drawGrid() const
     }
 
     return array;
+}
+
+void CentralAnimatorWidget::drawTransitions()
+{
+    sf::VertexArray array(sf::Lines);
+
+    const auto & transitions = m_infos->getAnimatorData().transitions;
+    const auto & states = m_infos->getAnimatorData().states;
+
+    for(unsigned int i(0) ; i < transitions.size() ; i++)
+    {
+        sf::Color color = i == m_infos->getSelectedTransitionID() ? transitionSelectedColor : transitionColor;
+
+        bool haveOtherTransition(false);
+        for(unsigned int j(0) ; j < transitions.size() ; j++)
+        {
+            if(transitions[i].previousState == transitions[j].nextState && transitions[i].nextState == transitions[j].previousState)
+            {
+                haveOtherTransition = true;
+                break;
+            }
+        }
+
+        const AnimatorState & startState = states[transitions[i].previousState];
+        const AnimatorState & endState = states[transitions[i].nextState];
+
+        sf::Vector2f start(startState.rect.left + startState.rect.width / 2, startState.rect.top + startState.rect.height / 2);
+        sf::Vector2f end(endState.rect.left + endState.rect.width / 2, endState.rect.top + endState.rect.height / 2);
+
+        if(haveOtherTransition)
+        {
+            sf::Vector2f dir = ortho(normalize(end - start)) * transitionOffset;
+            start += dir;
+            end += dir;
+        }
+
+        array.append(sf::Vertex(start, color));
+        array.append(sf::Vertex(end, color));
+
+        sf::Vector2f center = (start + end) / 2.0f;
+
+        float a = angle(end - start);
+        int nbPoints(3);
+        for(int i(0) ; i < nbPoints; i++)
+        {
+            array.append(sf::Vertex(center + toVect(arrowSize, a + 3.14159 * 2 / nbPoints * i), color));
+            array.append(sf::Vertex(center + toVect(arrowSize, a + 3.14159 * 2 / nbPoints * (i + 1)), color));
+        }
+    }
+
+    RenderWindow::draw(array);
+}
+
+void CentralAnimatorWidget::drawStates()
+{
+    for(unsigned int i(0) ; i < m_infos->getAnimatorData().states.size() ; i++)
+    {
+        AnimatorState & s = m_infos->getAnimatorData().states[i];
+
+        sf::Text text(s.stateName.toStdString(), m_font, characterSize);
+        text.setFillColor(textColor);
+        s.rect.width = int((text.getGlobalBounds().width + 2 * textMarge + step) / step) * step;
+        s.rect.height = textHeight;
+
+        sf::RectangleShape shape(sf::Vector2f(s.rect.width, s.rect.height));
+        shape.setPosition(s.rect.left, s.rect.top);
+
+        if(i == m_infos->getAnimatorData().startIndex)
+            shape.setFillColor(boxStartFillColor);
+        else shape.setFillColor(boxFillColor);
+
+        if(m_infos->getSelectedStateID() == int(i))
+        {
+            shape.setOutlineColor(boxSelectedBorderColor);
+            shape.setOutlineThickness(boxSelectedBorder);
+        }
+        else
+        {
+            shape.setOutlineColor(boxBorderColor);
+            shape.setOutlineThickness(boxBoder);
+        }
+
+        RenderWindow::draw(shape);
+
+        auto bound = text.getGlobalBounds();
+        text.setPosition(-bound.left + s.rect.left + (s.rect.width - bound.width) / 2, -bound.top + s.rect.top + (s.rect.height - bound.height) / 2);
+        RenderWindow::draw(text);
+    }
 }

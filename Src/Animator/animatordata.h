@@ -16,6 +16,7 @@ public:
 
     std::vector<AnimatorState> states;
     std::vector<AnimatorTransition> transitions;
+    unsigned int startIndex;
 
 private:
     void load(const QString & fileName);

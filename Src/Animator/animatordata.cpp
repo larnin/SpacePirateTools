@@ -6,6 +6,7 @@
 #include <QJsonArray>
 
 AnimatorData::AnimatorData(const QString & fileName)
+    : startIndex(0)
 {
     load(fileName);
 }
@@ -13,6 +14,7 @@ AnimatorData::AnimatorData(const QString & fileName)
 void AnimatorData::save(const QString & fileName) const
 {
     QJsonObject obj;
+    obj.insert("start", int(startIndex));
 
     QJsonArray statesArray;
     for(const auto & s : states)
@@ -51,6 +53,8 @@ void AnimatorData::load(const QString & fileName)
         return;
 
     QJsonObject obj(doc.object());
+
+    startIndex = obj["start"].toInt();
 
     auto statesIt = obj.find("states");
     if(statesIt != obj.end() && statesIt->isArray())

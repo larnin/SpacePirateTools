@@ -29,7 +29,7 @@ public:
     AnimatorInfos(const QString &assetName, QWidget * parent = nullptr);
     ~AnimatorInfos();
 
-    inline const AnimatorData & getAnimatorData() const { return m_datas;}
+    inline AnimatorData & getAnimatorData() { return m_datas;}
     inline int getSelectedStateID() const { return m_currentStateIndex;}
     inline int getSelectedTransitionID() const { return m_currentTransitionIndex;}
 
