@@ -36,6 +36,10 @@ private:
     sf::VertexArray drawGrid() const;
     void drawTransitions();
     void drawStates();
+    void drawCurrentTransition();
+    void drawTransition(sf::VertexArray & array, const sf::Vector2f &start, const sf::Vector2f &end, const sf::Color & color);
+
+    void onLeftClick(const sf::Vector2i &pos);
 
     AnimatorInfos *m_infos;
 
@@ -44,6 +48,8 @@ private:
     sf::Vector2f m_center;
 
     sf::Font m_font;
+
+    unsigned int m_dragState;
 };
 
 #endif // CENTRALANIMATORWIDGET_H

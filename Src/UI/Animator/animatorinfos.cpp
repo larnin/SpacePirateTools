@@ -1,6 +1,7 @@
 #include "animatorinfos.h"
 #include "ProjectInfos/projectinfos.h"
 #include "ProjectInfos/assettype.h"
+#include "vect2convert.h"
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -9,6 +10,9 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <algorithm>
+
+constexpr float radius(20);
+constexpr float moveOffset(25);
 
 AnimatorInfos::AnimatorInfos(const QString & assetName, QWidget *parent)
     : QWidget(parent)
@@ -94,6 +98,13 @@ void AnimatorInfos::initializeWidgets()
     connect(m_yFlipped, SIGNAL(clicked(bool)), this, SLOT(onStateValueChanged()));
 
     connect(m_condition, SIGNAL(editingFinished()), this, SLOT(onConditionChanged()));
+}
+
+int AnimatorInfos::getSelectedTransitionID() const
+{
+    if(m_currentTransitionIndex == -1)
+        return -1;
+    return m_transitionsInfos[m_currentTransitionIndex].index;
 }
 
 void AnimatorInfos::updateAnimationList()
@@ -191,7 +202,7 @@ void AnimatorInfos::updateTransitionList()
                 continue;
             const auto & state = m_datas.states[t.nextState];
 
-            m_transitions->addItem("From " + state.stateName);
+            m_transitions->addItem("To " + state.stateName);
             m_transitionsInfos.push_back({i, false});
         }
     }
@@ -205,7 +216,7 @@ void AnimatorInfos::updateTransitionList()
 
 void AnimatorInfos::updateTransitionInfos()
 {
-    if(m_currentStateIndex < 0 || m_currentStateIndex >= m_states->count() || m_currentTransitionIndex < 0 || m_currentStateIndex >= m_transitions->count())
+    if(m_currentStateIndex < 0 || m_currentStateIndex >= m_states->count() || m_currentTransitionIndex < 0 || m_currentTransitionIndex >= m_transitions->count())
     {
         m_transitionGroup->setEnabled(false);
         m_transitionGroup->setTitle("   ");
@@ -266,12 +277,14 @@ void AnimatorInfos::onRightClickStates(QPoint point)
     QMenu menu;
     QAction *aDel(nullptr);
     QAction *aDuplicate(nullptr);
+    QAction *aSetDefault(nullptr);
     QAction *aAdd(menu.addAction("Ajouter"));
 
     if(m_currentStateIndex >= 0 && m_currentStateIndex < int(m_datas.states.size()))
     {
         aDel = menu.addAction("Supprimer");
         aDuplicate = menu.addAction("Dupliquer");
+        aSetDefault = menu.addAction("Etat par defaut");
     }
 
     QAction* action = menu.exec(globalPos);
@@ -297,6 +310,9 @@ void AnimatorInfos::onRightClickStates(QPoint point)
 
     if(action == aAdd)
         addState();
+
+    if(action == aSetDefault)
+        m_datas.startIndex = m_currentStateIndex;
 }
 
 void AnimatorInfos::onRightClickTransitions(QPoint point)
@@ -325,6 +341,7 @@ void AnimatorInfos::onRightClickTransitions(QPoint point)
 void AnimatorInfos::onStateSelected(int index)
 {
     m_currentStateIndex = index;
+    m_currentTransitionIndex = -1;
     updateStateData();
     updateTransitionList();
 }
@@ -332,6 +349,10 @@ void AnimatorInfos::onStateSelected(int index)
 void AnimatorInfos::onTransitionSelected(int index)
 {
     m_currentTransitionIndex = index;
+    if(m_currentStateIndex < 0 || m_currentStateIndex >= m_states->count() || m_currentTransitionIndex < 0 || m_currentTransitionIndex >= m_transitions->count())
+        m_transitionGroup->setEnabled(true);
+    else m_transitionGroup->setEnabled(false);
+
     updateTransitionInfos();
 }
 
@@ -379,6 +400,11 @@ void AnimatorInfos::removeState(unsigned int index)
         if(t.nextState > index)
             t.nextState --;
     }
+
+    if(m_datas.startIndex == index)
+        m_datas.startIndex = 0;
+    else if(m_datas.startIndex > index)
+        m_datas.startIndex--;
 }
 
 void AnimatorInfos::duplicateState(unsigned int index)
@@ -402,20 +428,27 @@ void AnimatorInfos::duplicateState(unsigned int index)
     }
 }
 
-void AnimatorInfos::addState()
+void AnimatorInfos::addState(const sf::Vector2f &pos)
 {
-
     bool ok = true;
     QString result = QInputDialog::getText(this, "Nouveau state", "Entrez le nom du nouvel etat", QLineEdit::Normal, "", &ok);
     if(!ok || result.isEmpty())
         return;
 
-    m_datas.states.push_back(AnimatorState(result));
+    AnimatorState state(result);
+    auto pos2 = getFirstFreePosition(pos);
+    state.rect.left = pos2.x;
+    state.rect.top = pos2.y;
+
+    m_datas.states.push_back(state);
     updateStateList();
 }
 
 void AnimatorInfos::addTransition(unsigned int previous, unsigned int next)
 {
+    if(std::find_if(m_datas.transitions.begin(), m_datas.transitions.end(), [previous, next](const auto & t){return t.previousState == previous && t.nextState == next;}) != m_datas.transitions.end())
+        return;
+
     m_datas.transitions.push_back(AnimatorTransition(previous, next));
     updateTransitionList();
 }
@@ -430,4 +463,23 @@ void AnimatorInfos::selectTransition(unsigned int index)
 {
     m_transitions->setCurrentRow(index);
     onTransitionSelected(index);
+}
+
+void AnimatorInfos::delState(unsigned int index)
+{
+    auto & s = m_datas.states[m_currentStateIndex].stateName;
+    int result = QMessageBox::question(this, "Supprimer state", "Voulez vous suprimer l'etat " + s + " ?");
+    if(result == QMessageBox::Yes)
+    {
+        removeState(index);
+        updateStateList();
+    }
+}
+
+sf::Vector2f AnimatorInfos::getFirstFreePosition(const sf::Vector2f & pos)
+{
+    for(const AnimatorState & s : m_datas.states)
+        if(norm(pos - sf::Vector2f(s.rect.left, s.rect.top)) < radius)
+            return getFirstFreePosition(pos + sf::Vector2f(moveOffset, moveOffset));
+    return pos;
 }

@@ -31,10 +31,11 @@ public:
 
     inline AnimatorData & getAnimatorData() { return m_datas;}
     inline int getSelectedStateID() const { return m_currentStateIndex;}
-    inline int getSelectedTransitionID() const { return m_currentTransitionIndex;}
+    int getSelectedTransitionID() const;
 
-    void addState();
+    void addState(const sf::Vector2f & pos = sf::Vector2f(0, 0));
     void addTransition(unsigned int previous, unsigned int next);
+    void delState(unsigned int index);
     void selectState(unsigned int index);
     void selectTransition(unsigned int index);
 
@@ -65,6 +66,7 @@ private:
 
     void removeState(unsigned int index);
     void duplicateState(unsigned int index);
+    sf::Vector2f getFirstFreePosition(const sf::Vector2f & pos);
 
     AnimatorData m_datas;
     QString m_assetName;

@@ -330,7 +330,7 @@ void CentralAnimationWidget::mousePressEvent(QMouseEvent * event)
     m_mouseOldPos = sf::Vector2i(event->x(), event->y());
     m_mouseStartPos = m_mouseOldPos;
 
-    if(event->button() == Qt::RightButton)
+    if(event->button() == Qt::MiddleButton)
         m_drag = DragType::Screen;
     if(event->button() == Qt::LeftButton)
     {

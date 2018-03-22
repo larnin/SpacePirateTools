@@ -2,6 +2,8 @@
 #include "vect2convert.h"
 #include <QMouseEvent>
 #include <QResizeEvent>
+#include <QMenu>
+#include <QAction>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -34,9 +36,15 @@ CentralAnimatorWidget::CentralAnimatorWidget(AnimatorInfos *infos, QWidget *pare
     , m_infos(infos)
     , m_drag(DragType::None)
     , m_center(0, 0)
+    , m_dragState(0)
 {
     m_font.loadFromFile("calibrib.ttf");
     rebuildView();
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClick(QPoint)));
+
+    setMouseTracking(true);
 }
 
 void CentralAnimatorWidget::OnUpdate()
@@ -44,6 +52,9 @@ void CentralAnimatorWidget::OnUpdate()
     RenderWindow::clear(backgroundColor);
 
     RenderWindow::draw(drawGrid());
+
+    if(m_drag == DragType::Transition)
+        drawCurrentTransition();
 
     drawTransitions();
     drawStates();
@@ -64,16 +75,25 @@ void CentralAnimatorWidget::mouseMoveEvent(QMouseEvent * event)
         rebuildView();
         return;
     }
+    else if(m_drag == DragType::State)
+    {
+        AnimatorState & s(m_infos->getAnimatorData().states[m_dragState]);
+        s.rect.left += delta.x;
+        s.rect.top += delta.y;
+    }
 }
 
 void CentralAnimatorWidget::mousePressEvent(QMouseEvent * event)
 {
+    m_mouseOldPos = sf::Vector2i(event->x(), event->y());
+
+    if(event->button() == Qt::LeftButton)
+        onLeftClick(sf::Vector2i(event->x(), event->y()));
+
     if(m_drag != DragType::None)
         return;
 
-    m_mouseOldPos = sf::Vector2i(event->x(), event->y());
-
-    if(event->button() == Qt::RightButton)
+    if(event->button() == Qt::MiddleButton)
         m_drag = DragType::Screen;
 }
 
@@ -91,7 +111,51 @@ void CentralAnimatorWidget::resizeEvent(QResizeEvent * event)
 
 void CentralAnimatorWidget::onRightClick(QPoint point)
 {
+    sf::Vector2i realPos(RenderWindow::mapPixelToCoords(sf::Vector2i(point.x(), point.y())));
+    int stateIndex = -1;
+    for(unsigned int i(0) ; i < m_infos->getAnimatorData().states.size() ; i++)
+    {
+        const AnimatorState & s(m_infos->getAnimatorData().states[i]);
 
+        if(s.rect.contains(realPos))
+            stateIndex = i;
+    }
+
+    QMenu menu;
+    QAction *aDel(nullptr);
+    QAction *aDefault(nullptr);
+    QAction *aAddTransition(nullptr);
+    QAction *aAddState(menu.addAction("Ajouter un etat"));
+
+    if(stateIndex >= 0)
+    {
+        aDel = menu.addAction("Supprimer");
+        aAddTransition = menu.addAction("Ajouter une transition");
+        aDefault = menu.addAction("Etat par defaut");
+    }
+
+    QAction* action = menu.exec(point + QWidget::mapToGlobal(QPoint(0, 0)));
+    if(action == nullptr)
+        return;
+
+    if(action == aDel)
+        m_infos->delState(stateIndex);
+
+    if(action == aDefault)
+    {
+        m_infos->getAnimatorData().startIndex = stateIndex;
+    }
+
+    if(action == aAddTransition)
+    {
+        m_dragState = stateIndex;
+        m_drag = DragType::Transition;
+    }
+
+    if(action == aAddState)
+    {
+        m_infos->addState(sf::Vector2f(realPos));
+    }
 }
 
 void  CentralAnimatorWidget::rebuildView()
@@ -178,7 +242,7 @@ void CentralAnimatorWidget::drawTransitions()
 
     for(unsigned int i(0) ; i < transitions.size() ; i++)
     {
-        sf::Color color = i == m_infos->getSelectedTransitionID() ? transitionSelectedColor : transitionColor;
+        sf::Color color = int(i) == m_infos->getSelectedTransitionID() ? transitionSelectedColor : transitionColor;
 
         bool haveOtherTransition(false);
         for(unsigned int j(0) ; j < transitions.size() ; j++)
@@ -203,18 +267,7 @@ void CentralAnimatorWidget::drawTransitions()
             end += dir;
         }
 
-        array.append(sf::Vertex(start, color));
-        array.append(sf::Vertex(end, color));
-
-        sf::Vector2f center = (start + end) / 2.0f;
-
-        float a = angle(end - start);
-        int nbPoints(3);
-        for(int i(0) ; i < nbPoints; i++)
-        {
-            array.append(sf::Vertex(center + toVect(arrowSize, a + 3.14159 * 2 / nbPoints * i), color));
-            array.append(sf::Vertex(center + toVect(arrowSize, a + 3.14159 * 2 / nbPoints * (i + 1)), color));
-        }
+        drawTransition(array, start, end, color);
     }
 
     RenderWindow::draw(array);
@@ -255,4 +308,73 @@ void CentralAnimatorWidget::drawStates()
         text.setPosition(-bound.left + s.rect.left + (s.rect.width - bound.width) / 2, -bound.top + s.rect.top + (s.rect.height - bound.height) / 2);
         RenderWindow::draw(text);
     }
+}
+
+void CentralAnimatorWidget::drawCurrentTransition()
+{
+    const AnimatorState & state = m_infos->getAnimatorData().states[m_dragState];
+    sf::Vector2f start(state.rect.left + state.rect.width / 2, state.rect.top + state.rect.height / 2);
+    sf::VertexArray array(sf::Lines);
+    drawTransition(array, start, RenderWindow::mapPixelToCoords(m_mouseOldPos), transitionColor);
+    RenderWindow::draw(array);
+}
+
+void CentralAnimatorWidget::drawTransition(sf::VertexArray & array, const sf::Vector2f & start, const sf::Vector2f & end, const sf::Color &color)
+{
+    array.append(sf::Vertex(start, color));
+    array.append(sf::Vertex(end, color));
+
+    sf::Vector2f center = (start + end) / 2.0f;
+
+    float a = angle(end - start);
+    int nbPoints(3);
+    for(int i(0) ; i < nbPoints; i++)
+    {
+        array.append(sf::Vertex(center + toVect(arrowSize, a + 3.14159 * 2 / nbPoints * i), color));
+        array.append(sf::Vertex(center + toVect(arrowSize, a + 3.14159 * 2 / nbPoints * (i + 1)), color));
+    }
+}
+
+#include <QDebug>
+void CentralAnimatorWidget::onLeftClick(const sf::Vector2i & pos)
+{
+    sf::Vector2i realPos(RenderWindow::mapPixelToCoords(pos));
+
+    if(m_drag == DragType::Transition)
+    {
+        m_drag = DragType::None;
+
+        int newState = -1;
+        for(unsigned int i(0) ; i < m_infos->getAnimatorData().states.size() ; i++)
+        {
+            if(i == m_dragState)
+                continue;
+
+            const AnimatorState & s(m_infos->getAnimatorData().states[i]);
+
+            if(s.rect.contains(realPos))
+                newState = i;
+        }
+        if(newState >= 0)
+            m_infos->addTransition(m_dragState, newState);
+
+        return;
+    }
+
+    for(unsigned int i(0) ; i < m_infos->getAnimatorData().states.size() ; i++)
+    {
+        const AnimatorState & s(m_infos->getAnimatorData().states[i]);
+
+        if(s.rect.contains(realPos))
+        {
+            m_dragState = i;
+            m_drag = DragType::State;
+            m_infos->selectState(i);
+        }
+    }
+
+    if(m_drag == DragType::State)
+        return;
+
+    //select transition;
 }
