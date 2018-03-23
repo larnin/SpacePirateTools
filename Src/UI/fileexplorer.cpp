@@ -101,7 +101,7 @@ void FileExplorer::onRightClick(QPoint point)
         aAdds.push_back(aAdd->addAction(assetTypeToString(assetType)));
     }
     QAction *aImport(menu.addAction("Importer"));
-    if(current->parent() != nullptr)
+    if(current != nullptr && current->parent() != nullptr)
     {
         aDel = menu.addAction("Supprimer");
         aRename = menu.addAction("Renomer");
