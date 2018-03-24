@@ -73,3 +73,12 @@ bool assetCanBeCreated(AssetType type)
         return true;
     }
 }
+
+bool assetCanBeOpened(AssetType type)
+{
+    switch(type)
+    {
+    default:
+        return true;
+    }
+}

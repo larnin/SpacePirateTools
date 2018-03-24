@@ -70,7 +70,7 @@ void FileExplorer::onItemDoubleClicked(QTreeWidgetItem *item, int column)
     auto dir = parent->text(0);
     auto type = stringToAssetType(dir);
 
-    if(type == AssetType::Unknow || !assetCanBeCreated(type))
+    if(type == AssetType::Unknow || !assetCanBeOpened(type))
         return;
     Event<OpenRessourceEvent>::send({type, dir + "/" + item->text(0) + "." + assetTypeExtension(type)});
 }

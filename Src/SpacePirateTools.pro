@@ -31,7 +31,8 @@ SOURCES += \
     Animator/animatorstate.cpp \
     Animator/animatortransition.cpp \
     UI/Animator/animatorinfos.cpp \
-    UI/Animator/centralanimatorwidget.cpp
+    UI/Animator/centralanimatorwidget.cpp \
+    UI/imagewidget.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -60,7 +61,8 @@ HEADERS += \
     Animator/animatortransition.h \
     UI/Animator/animatorinfos.h \
     UI/Animator/centralanimatorwidget.h \
-    vect2convert.h
+    vect2convert.h \
+    UI/imagewidget.h
 
 CONFIG += c++14
 

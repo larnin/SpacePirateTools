@@ -19,5 +19,6 @@ QString assetTypeExtension(AssetType type);
 AssetType stringToAssetType(const QString & s);
 AssetType extensionToAssetType(const QString & s);
 bool assetCanBeCreated(AssetType type);
+bool assetCanBeOpened(AssetType type);
 
 #endif // ASSETTYPE_H

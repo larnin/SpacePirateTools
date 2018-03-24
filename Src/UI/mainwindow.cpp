@@ -11,6 +11,7 @@
 #include "UI/Animation/centralanimationwidget.h"
 #include "UI/Animator/animatorinfos.h"
 #include "UI/Animator/centralanimatorwidget.h"
+#include "UI/imagewidget.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -221,6 +222,9 @@ void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
     case AssetType::Tileset:
 
         break;
+    case AssetType::Image:
+        openImage(fullName);
+        break;
     default:
         closeCurrentWidget();
         break;
@@ -248,7 +252,6 @@ void MainWindow::openAnimation(const QString & filename)
     addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
 }
 
-
 void MainWindow::openAnimator(const QString & filename)
 {
     AnimatorInfos *a = new AnimatorInfos(filename);
@@ -256,6 +259,11 @@ void MainWindow::openAnimator(const QString & filename)
     setCentralWidget(animWidget);
     m_assetDocks.push_back(new Dock<AnimatorInfos>(a, "Animator", false));
     addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
+}
+
+void MainWindow::openImage(const QString & filename)
+{
+    setCentralWidget(new ImageWidget(filename));
 }
 
 void MainWindow::clearDocks()

@@ -41,6 +41,7 @@ private:
     void closeCurrentWidget();
     void openAnimation(const QString & filename);
     void openAnimator(const QString & filename);
+    void openImage(const QString & filename);
 
     void onOpenRessource(const OpenRessourceEvent & e);
     void clearDocks();
