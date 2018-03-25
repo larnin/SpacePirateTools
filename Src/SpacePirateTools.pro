@@ -65,7 +65,8 @@ HEADERS += \
     vect2convert.h \
     UI/imagewidget.h \
     ressource.h \
-    UI/Tileset/singletileview.h
+    UI/Tileset/singletileview.h \
+    Tileset/tileshape.h
 
 CONFIG += c++14
 

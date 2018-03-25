@@ -3,58 +3,7 @@
 
 #include "UI/qsfmlcanvas.h"
 #include "ressource.h"
-
-enum class TileShape
-{
-    Empty,
-    Full,
-    Left3,
-    Right3,
-    Top3,
-    Down3,
-    Horizontal,
-    Vertical,
-    TopLeft,
-    TopRight,
-    DownLeft,
-    DownRight,
-    Left,
-    Right,
-    Top,
-    Down,
-    QuadCorners,
-    TopLeftCorners3,
-    TopRightCorners3,
-    DownLeftCorners3,
-    DownRightCorners3,
-    DiagonalTopLeft,
-    DiagonalTopRight,
-    LeftCorners,
-    RightCorners,
-    TopCorners,
-    DownCorners,
-    TopLeftCorner,
-    TopRightCorner,
-    DownLeftCorner,
-    DownRightCorner,
-    TopLeftWithCorner,
-    TopRightWithCorner,
-    DownLeftWithCorner,
-    DownRightWithCorner,
-    LeftCorners2,
-    RightCorners2,
-    TopCorners2,
-    DownCorners2,
-    LeftCornerTop,
-    RightCornerTop,
-    TopCornerTop,
-    DownCornerTop,
-    LeftCornerDown,
-    RightCornerDown,
-    TopCornerDown,
-    DownCornerDown,
-    Max = DownCornerDown
-};
+#include "Tileset/tileshape.h"
 
 class SingleTileView : public QSFMLCanvas
 {
