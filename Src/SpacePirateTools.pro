@@ -62,7 +62,8 @@ HEADERS += \
     UI/Animator/animatorinfos.h \
     UI/Animator/centralanimatorwidget.h \
     vect2convert.h \
-    UI/imagewidget.h
+    UI/imagewidget.h \
+    ressource.h
 
 CONFIG += c++14
 
