@@ -1,5 +1,6 @@
 #include "UI/mainwindow.h"
 #include "ProjectInfos/configs.h"
+#include "ProjectInfos/projectinfos.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -11,7 +12,10 @@ int main(int argc, char *argv[])
     auto returnValue(a.exec());
 
     if(returnValue == 0)
+    {
+        ProjectInfos::instance().save();
         Configs::instance().save();
+    }
 
     return returnValue;
 }

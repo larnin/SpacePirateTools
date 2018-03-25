@@ -3,8 +3,15 @@
 
 #include "filelist.h"
 #include "assettype.h"
+#include "Events/Event.h"
+#include "Events/Args/saveevent.h"
 #include <QString>
 #include <vector>
+
+struct ProjectOptions
+{
+    unsigned int tileSize;
+};
 
 class ProjectInfos
 {
@@ -18,14 +25,24 @@ public:
     inline const QString & projectDirectory() const { return m_projectDirectory; }
     void reloadFileList();
 
+    void save();
+    inline ProjectOptions & options() {return m_options;}
+
     static ProjectInfos & instance();
 
 private:
+    void load();
+    void onSave(const SaveEvent &);
+
     static ProjectInfos m_instance;
 
     bool m_projectLoaded;
     QString m_projectDirectory;
     FileList m_fileList;
+
+    ProjectOptions m_options;
+
+    EventHolder<SaveEvent> m_saveHolder;
 };
 
 #endif // PROJECTINFOS_H

@@ -32,7 +32,8 @@ SOURCES += \
     Animator/animatortransition.cpp \
     UI/Animator/animatorinfos.cpp \
     UI/Animator/centralanimatorwidget.cpp \
-    UI/imagewidget.cpp
+    UI/imagewidget.cpp \
+    UI/Tileset/singletileview.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -63,7 +64,8 @@ HEADERS += \
     UI/Animator/centralanimatorwidget.h \
     vect2convert.h \
     UI/imagewidget.h \
-    ressource.h
+    ressource.h \
+    UI/Tileset/singletileview.h
 
 CONFIG += c++14
 
