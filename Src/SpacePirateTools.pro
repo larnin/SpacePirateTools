@@ -33,7 +33,8 @@ SOURCES += \
     UI/Animator/animatorinfos.cpp \
     UI/Animator/centralanimatorwidget.cpp \
     UI/imagewidget.cpp \
-    UI/Tileset/singletileview.cpp
+    UI/Tileset/singletileview.cpp \
+    Tileset/tilecollider.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -66,7 +67,9 @@ HEADERS += \
     UI/imagewidget.h \
     ressource.h \
     UI/Tileset/singletileview.h \
-    Tileset/tileshape.h
+    Tileset/tileshape.h \
+    Tileset/tilecollider.h \
+    enumclasshash.h
 
 CONFIG += c++14
 
