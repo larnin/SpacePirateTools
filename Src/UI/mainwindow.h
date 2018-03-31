@@ -42,6 +42,8 @@ private:
     void openAnimation(const QString & filename);
     void openAnimator(const QString & filename);
     void openImage(const QString & filename);
+    void openTileset(const QString & filename);
+    void openScene(const QString & filename);
 
     void onOpenRessource(const OpenRessourceEvent & e);
     void clearDocks();

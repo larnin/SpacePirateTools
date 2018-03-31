@@ -11,6 +11,7 @@
 #include "UI/Animation/centralanimationwidget.h"
 #include "UI/Animator/animatorinfos.h"
 #include "UI/Animator/centralanimatorwidget.h"
+#include "UI/Tileset/tilesetinfos.h"
 #include "UI/imagewidget.h"
 #include <QMenuBar>
 #include <QAction>
@@ -217,10 +218,10 @@ void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
         openAnimator(fullName);
         break;
     case AssetType::Scene:
-
+        openScene(fullName);
         break;
     case AssetType::Tileset:
-
+        openTileset(fullName);
         break;
     case AssetType::Image:
         openImage(fullName);
@@ -264,6 +265,19 @@ void MainWindow::openAnimator(const QString & filename)
 void MainWindow::openImage(const QString & filename)
 {
     setCentralWidget(new ImageWidget(filename));
+}
+
+void MainWindow::openTileset(const QString & filename)
+{
+    TilesetInfos *a = new TilesetInfos(filename);
+
+    m_assetDocks.push_back(new Dock<TilesetInfos>(a, "Tileset", false));
+    addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
+}
+
+void MainWindow::openScene(const QString & /*filename*/)
+{
+    //todo !
 }
 
 void MainWindow::clearDocks()

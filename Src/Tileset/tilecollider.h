@@ -16,6 +16,7 @@ enum class TileColliderType : unsigned int
     Cross,
     TShape,
     CentredCorner,
+    Max = CentredCorner
 };
 
 enum class TileColliderRotation : unsigned int
