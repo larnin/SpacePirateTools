@@ -1,5 +1,7 @@
 #include "singletileview.h"
 #include "ProjectInfos/projectinfos.h"
+#include "Tileset/tilecollider.h"
+#include <QMouseEvent>
 
 constexpr unsigned int shapeSize(25);
 constexpr unsigned int shapeTextureSize(4);
@@ -11,6 +13,7 @@ SingleTileView::SingleTileView(TileShape shape, QWidget *parent)
     : QSFMLCanvas(20, parent)
     , m_shapeTexture("TileShapes.png")
     , m_shape(shape)
+    , m_colliderValue(0)
 {
     updateView();
 }
@@ -26,6 +29,8 @@ void SingleTileView::OnUpdate()
     if(m_texture.isValid() && m_id > 0)
         drawSprite(m_texture, m_id, ProjectInfos::instance().options().tileSize, m_deltaTile
                    , sf::FloatRect((totalSize - tileSize) / 2.0f, (totalSize - tileSize ) / 2.0f, tileSize, tileSize));
+
+    drawCollider();
 }
 
 void SingleTileView::resizeEvent(QResizeEvent *)
@@ -58,4 +63,17 @@ void SingleTileView::drawSprite(const Texture & texture, unsigned int id, unsign
     s.setScale(rect.width / tileSize, rect.height / tileSize);
 
     RenderWindow::draw(s);
+}
+
+void SingleTileView::drawCollider()
+{
+    RenderWindow::draw(TileCollider(m_colliderValue).drawShape(sf::Color::Yellow, sf::Vector2f(0, 0), tileSize));
+}
+
+void SingleTileView::mousePressEvent(QMouseEvent * e)
+{
+    if(e->button() == Qt::LeftButton)
+        emit onLeftClick();
+    if(e->button() == Qt::RightButton)
+        emit onRightClick();
 }

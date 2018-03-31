@@ -49,8 +49,21 @@ sf::VertexArray TileCollider::drawShape(const sf::Color & color, const sf::Vecto
         return sf::VertexArray();
 
     sf::VertexArray array = it->second();
+
     for(unsigned int i(0) ; i < array.getVertexCount() ; i++)
     {
+        for(unsigned int j(0) ; j < static_cast<unsigned int>(rotation) ; j++)
+        {
+            float temp = array[i].position.x;
+            array[i].position.x = -array[i].position.y;
+            array[i].position.y = temp;
+        }
+
+        if(xFlipped)
+            array[i].position.x *= -1;
+        if(yFlipped)
+            array[i].position.y *= -1;
+
         array[i].position *= scale;
         array[i].position += offset;
         array[i].color = color;
