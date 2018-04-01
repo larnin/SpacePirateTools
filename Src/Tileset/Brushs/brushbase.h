@@ -31,7 +31,7 @@ public:
     QString name;
 
 protected:
-    BrushBase(BrushType type, QString _name);
+    BrushBase(BrushType type, const QString & _name);
 
     virtual void onSave(QJsonObject & obj) const = 0;
 

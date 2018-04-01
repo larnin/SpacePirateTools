@@ -1,4 +1,5 @@
 #include "brushbase.h"
+#include "brushrandom.h"
 #include <cassert>
 
 QString brushTypeToString(BrushType type)
@@ -32,7 +33,7 @@ BrushType brushTypeFromString(const QString & s)
     return BrushType::Pattern;
 }
 
-BrushBase::BrushBase(BrushType type, QString _name)
+BrushBase::BrushBase(BrushType type, const QString & _name)
     : name(_name)
     , m_brushType(type)
 {
@@ -43,6 +44,7 @@ QJsonObject BrushBase::save() const
 {
     QJsonObject obj;
     obj.insert("brushType", static_cast<int>(m_brushType));
+    obj.insert("name", name);
 
     onSave(obj);
 
@@ -51,13 +53,36 @@ QJsonObject BrushBase::save() const
 
 std::unique_ptr<BrushBase> BrushBase::loadBrush(const QJsonObject & obj)
 {
-    //todo
+    BrushType type = static_cast<BrushType>(obj["brushType"].toInt());
+    QString name(obj["name"].toString());
+
+    switch(type)
+    {
+    case BrushType::Random:
+        return std::make_unique<BrushRandom>(obj, name);
+
+    default:
+        break;
+    }
+
+    assert(false);
+
     return std::unique_ptr<BrushBase>();
 }
 
 
 std::unique_ptr<BrushBase> BrushBase::createBrush(BrushType type, const QString & name)
 {
-    //todo
+    switch(type)
+    {
+    case BrushType::Random:
+        return std::make_unique<BrushRandom>(name);
+
+    default:
+        break;
+    }
+
+    assert(false);
+
     return std::unique_ptr<BrushBase>();
 }

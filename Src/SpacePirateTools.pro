@@ -39,7 +39,8 @@ SOURCES += \
     Tileset/tilesetdata.cpp \
     Tileset/Brushs/brushbase.cpp \
     UI/flowlayout.cpp \
-    UI/Tileset/brushcreatedialog.cpp
+    UI/Tileset/brushcreatedialog.cpp \
+    Tileset/Brushs/brushrandom.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -79,7 +80,8 @@ HEADERS += \
     Tileset/tilesetdata.h \
     Tileset/Brushs/brushbase.h \
     UI/flowlayout.h \
-    UI/Tileset/brushcreatedialog.h
+    UI/Tileset/brushcreatedialog.h \
+    Tileset/Brushs/brushrandom.h
 
 CONFIG += c++14
 
