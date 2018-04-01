@@ -37,7 +37,8 @@ SOURCES += \
     Tileset/tilecollider.cpp \
     UI/Tileset/tilesetinfos.cpp \
     Tileset/tilesetdata.cpp \
-    Tileset/Brushs/brushbase.cpp
+    Tileset/Brushs/brushbase.cpp \
+    UI/flowlayout.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -75,7 +76,8 @@ HEADERS += \
     enumclasshash.h \
     UI/Tileset/tilesetinfos.h \
     Tileset/tilesetdata.h \
-    Tileset/Brushs/brushbase.h
+    Tileset/Brushs/brushbase.h \
+    UI/flowlayout.h
 
 CONFIG += c++14
 
