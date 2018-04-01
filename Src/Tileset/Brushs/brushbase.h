@@ -11,8 +11,12 @@ enum class BrushType
     Vertical,
     Square,
     Full,
-    Patern,
+    Pattern,
+    Max = Pattern,
 };
+
+QString brushTypeToString(BrushType type);
+BrushType brushTypeFromString(const QString & s);
 
 class BrushBase
 {
@@ -20,11 +24,14 @@ public:
     QJsonObject save() const;
 
     static std::unique_ptr<BrushBase> loadBrush(const QJsonObject & obj);
+    static std::unique_ptr<BrushBase> createBrush(BrushType type, const QString & name);
 
     inline BrushType getBrushType() const {return m_brushType;}
 
+    QString name;
+
 protected:
-    BrushBase(BrushType type);
+    BrushBase(BrushType type, QString _name);
 
     virtual void onSave(QJsonObject & obj) const = 0;
 

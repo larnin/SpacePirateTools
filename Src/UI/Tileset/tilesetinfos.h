@@ -19,10 +19,21 @@ public:
     TilesetInfos(const QString &assetName, QWidget * parent = nullptr);
     ~TilesetInfos();
 
-    inline TilesetData & getTilesetData() { return m_tileset;}
+    inline TilesetData & getTilesetData() { return m_datas;}
+
+public slots:
+    void onBrushSelected(int index);
+    void onRightClickBrush(QPoint point);
+    void onTileSizeChanged();
+    void onDeltaChanged();
+    void onImageSelected(int index);
 
 private:
     void initializeWidgets();
+
+    void updateImageList();
+    void updateBrushList();
+    void updateValues();
 
     void onSave(const SaveEvent &);
     void onRename(const RenamedFileEvent & e);
@@ -31,7 +42,7 @@ private:
 
     QString m_assetName;
 
-    TilesetData m_tileset;
+    TilesetData m_datas;
 
     QSpinBox *m_tileSize;
     QComboBox *m_texture;
@@ -42,6 +53,8 @@ private:
     EventHolder<RenamedFileEvent> renameHolder;
     EventHolder<RemovedFileEvent> removedHolder;
     EventHolder<AddedFileEvent> addedHolder;
+
+    int m_currentTile;
 };
 
 #endif // TILESETINFOS_H
