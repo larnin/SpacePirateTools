@@ -1,5 +1,6 @@
 #include "brushbase.h"
 #include "brushrandom.h"
+#include "brushpatern.h"
 #include <cassert>
 
 QString brushTypeToString(BrushType type)
@@ -60,7 +61,8 @@ std::unique_ptr<BrushBase> BrushBase::loadBrush(const QJsonObject & obj)
     {
     case BrushType::Random:
         return std::make_unique<BrushRandom>(obj, name);
-
+    case BrushType::Pattern:
+        return std::make_unique<BrushPatern>(obj, name);
     default:
         break;
     }
@@ -77,6 +79,8 @@ std::unique_ptr<BrushBase> BrushBase::createBrush(BrushType type, const QString 
     {
     case BrushType::Random:
         return std::make_unique<BrushRandom>(name);
+    case BrushType::Pattern:
+        return std::make_unique<BrushPatern>(name, sf::Vector2u(1, 1));
 
     default:
         break;

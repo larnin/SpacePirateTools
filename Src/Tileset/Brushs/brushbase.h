@@ -1,6 +1,8 @@
 #ifndef BRUSHBASE_H
 #define BRUSHBASE_H
 
+#include "Tileset/tilecollider.h"
+#include "Tileset/tileshape.h"
 #include <QJsonObject>
 #include <memory>
 
@@ -17,6 +19,18 @@ enum class BrushType
 
 QString brushTypeToString(BrushType type);
 BrushType brushTypeFromString(const QString & s);
+
+struct TileFullInfos
+{
+    inline TileFullInfos(TileShape _shape, TileCollider _collider, unsigned int _id)
+        : shape(_shape), collider(_collider), id(_id) { }
+    inline TileFullInfos(TileCollider _collider, unsigned int _id)
+        : shape(TileShape::Empty), collider(_collider), id(_id) { }
+
+    TileShape shape;
+    TileCollider collider;
+    unsigned int id;
+};
 
 class BrushBase
 {

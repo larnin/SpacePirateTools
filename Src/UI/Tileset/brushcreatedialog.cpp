@@ -37,7 +37,7 @@ void BrushCreateDialog::setTypeTexts()
 {
     m_type->clear();
 
-    for(unsigned int i(0) ; i < static_cast<unsigned int>(BrushType::Max) ; i++)
+    for(unsigned int i(0) ; i <= static_cast<unsigned int>(BrushType::Max) ; i++)
         m_type->addItem(brushTypeToString(static_cast<BrushType>(i)));
 }
 

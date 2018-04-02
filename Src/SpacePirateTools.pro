@@ -40,7 +40,8 @@ SOURCES += \
     Tileset/Brushs/brushbase.cpp \
     UI/flowlayout.cpp \
     UI/Tileset/brushcreatedialog.cpp \
-    Tileset/Brushs/brushrandom.cpp
+    Tileset/Brushs/brushrandom.cpp \
+    Tileset/Brushs/brushpatern.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -81,7 +82,8 @@ HEADERS += \
     Tileset/Brushs/brushbase.h \
     UI/flowlayout.h \
     UI/Tileset/brushcreatedialog.h \
-    Tileset/Brushs/brushrandom.h
+    Tileset/Brushs/brushrandom.h \
+    Tileset/Brushs/brushpatern.h
 
 CONFIG += c++14
 
