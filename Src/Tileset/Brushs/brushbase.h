@@ -36,6 +36,7 @@ class BrushBase
 {
 public:
     QJsonObject save() const;
+    virtual ~BrushBase() = default;
 
     static std::unique_ptr<BrushBase> loadBrush(const QJsonObject & obj);
     static std::unique_ptr<BrushBase> createBrush(BrushType type, const QString & name);

@@ -1,6 +1,10 @@
 #include "brushbase.h"
 #include "brushrandom.h"
 #include "brushpatern.h"
+#include "brushfull.h"
+#include "brushhorizontal.h"
+#include "brushvertical.h"
+#include "brushsquare.h"
 #include <cassert>
 
 QString brushTypeToString(BrushType type)
@@ -63,6 +67,14 @@ std::unique_ptr<BrushBase> BrushBase::loadBrush(const QJsonObject & obj)
         return std::make_unique<BrushRandom>(obj, name);
     case BrushType::Pattern:
         return std::make_unique<BrushPatern>(obj, name);
+    case BrushType::Full:
+        return std::make_unique<BrushFull>(obj, name);
+    case BrushType::Square:
+        return std::make_unique<BrushSquare>(obj, name);
+    case BrushType::Horizontal:
+        return std::make_unique<BrushHorizontal>(obj, name);
+    case BrushType::Vertical:
+        return std::make_unique<BrushVertical>(obj, name);
     default:
         break;
     }
@@ -81,7 +93,14 @@ std::unique_ptr<BrushBase> BrushBase::createBrush(BrushType type, const QString 
         return std::make_unique<BrushRandom>(name);
     case BrushType::Pattern:
         return std::make_unique<BrushPatern>(name, sf::Vector2u(1, 1));
-
+    case BrushType::Full:
+        return std::make_unique<BrushFull>(name);
+    case BrushType::Square:
+        return std::make_unique<BrushSquare>(name);
+    case BrushType::Horizontal:
+        return std::make_unique<BrushHorizontal>(name);
+    case BrushType::Vertical:
+        return std::make_unique<BrushVertical>(name);
     default:
         break;
     }

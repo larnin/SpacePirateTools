@@ -18,8 +18,10 @@ public:
     TileFullInfos const & operator [](const sf::Vector2u & pos) const;
 
 protected:
-    unsigned int posToIndex(const sf::Vector2u & pos) const;
     void onSave(QJsonObject & obj) const override;
+
+private:
+    unsigned int posToIndex(const sf::Vector2u & pos) const;
 
     std::vector<TileFullInfos> m_tiles;
     sf::Vector2u m_size;
