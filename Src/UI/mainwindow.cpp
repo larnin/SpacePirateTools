@@ -12,6 +12,7 @@
 #include "UI/Animator/animatorinfos.h"
 #include "UI/Animator/centralanimatorwidget.h"
 #include "UI/Tileset/tilesetinfos.h"
+#include "UI/Tileset/centraltilesetwindow.h"
 #include "UI/imagewidget.h"
 #include <QMenuBar>
 #include <QAction>
@@ -270,7 +271,8 @@ void MainWindow::openImage(const QString & filename)
 void MainWindow::openTileset(const QString & filename)
 {
     TilesetInfos *a = new TilesetInfos(filename);
-
+    CentralTilesetWindow *tilesetWidget = new CentralTilesetWindow(a);
+    setCentralWidget(tilesetWidget);
     m_assetDocks.push_back(new Dock<TilesetInfos>(a, "Tileset", false));
     addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
 }

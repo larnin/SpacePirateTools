@@ -2,6 +2,7 @@
 #include "UI/linewidget.h"
 #include "ProjectInfos/projectinfos.h"
 #include "brushcreatedialog.h"
+#include "centraltilesetwindow.h"
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -11,6 +12,7 @@
 
 TilesetInfos::TilesetInfos(const QString &assetName, QWidget *parent)
     : QWidget(parent)
+    , m_centralWindow(nullptr)
     , m_assetName(assetName)
     , m_datas(assetName)
     , saveHolder(Event<SaveEvent>::connect([this](const auto & e){onSave(e);}))
@@ -89,8 +91,10 @@ void TilesetInfos::updateImageList()
     if(m_texture->currentIndex() < 0)
     {
         m_texture->setCurrentIndex(0);
-        m_datas.imageName = "";;
+        m_datas.imageName = "";
     }
+    if(m_centralWindow != nullptr)
+        m_centralWindow->setTexture(m_datas.imageName);
 
     m_texture->blockSignals(false);
 }
@@ -217,5 +221,12 @@ void TilesetInfos::onImageSelected(int index)
     if(index <= 0)
         m_datas.imageName = "";
     else m_datas.imageName = m_texture->currentText();
-    //do more stuff
+    if(m_centralWindow != nullptr)
+        m_centralWindow->setTexture(m_datas.imageName);
+}
+
+void TilesetInfos::setCentralTilesetWindow(CentralTilesetWindow * w)
+{
+    m_centralWindow = w;
+    w->setTexture(m_datas.imageName);
 }

@@ -3,11 +3,11 @@
 #include "Tileset/tilecollider.h"
 #include <QMouseEvent>
 
-constexpr unsigned int shapeSize(25);
+constexpr unsigned int shapeSize(38);
 constexpr unsigned int shapeTextureSize(4);
 constexpr unsigned int shapeDeltaSize(1);
-constexpr unsigned int tileSize(20);
-constexpr unsigned int totalSize(30);
+constexpr unsigned int tileSize(32);
+constexpr unsigned int totalSize(44);
 
 SingleTileView::SingleTileView(TileShape shape, QWidget *parent)
     : QSFMLCanvas(20, parent)

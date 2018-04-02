@@ -12,8 +12,11 @@
 #include <QSpinBox>
 #include <QListWidget>
 
+class CentralTilesetWindow;
+
 class TilesetInfos : public QWidget
 {
+    friend class CentralTilesetWindow;
     Q_OBJECT
 public:
     TilesetInfos(const QString &assetName, QWidget * parent = nullptr);
@@ -29,6 +32,7 @@ public slots:
     void onImageSelected(int index);
 
 private:
+    void setCentralTilesetWindow(CentralTilesetWindow * w);
     void initializeWidgets();
 
     void updateImageList();
@@ -40,6 +44,7 @@ private:
     void onRemove(const RemovedFileEvent &);
     void onAdd(const AddedFileEvent &);
 
+    CentralTilesetWindow * m_centralWindow;
     QString m_assetName;
 
     TilesetData m_datas;

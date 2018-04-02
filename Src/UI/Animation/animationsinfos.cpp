@@ -346,9 +346,11 @@ void AnimationsInfos::updateImageList()
     {
         m_texture->setCurrentIndex(0);
         m_datas.imageName = "";
-        m_centralWidget->updateTexture(m_datas.imageName);
-        m_preview->updateTexture(m_datas.imageName);
     }
+    if(m_centralWidget != nullptr)
+        m_centralWidget->updateTexture(m_datas.imageName);
+    if(m_preview != nullptr)
+        m_preview->updateTexture(m_datas.imageName);
 
     m_texture->blockSignals(false);
 }
