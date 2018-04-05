@@ -33,6 +33,8 @@ public:
 
     TileCollider collider;
 
+    BrushWindowBase* getBrushWindows() override;
+
 protected:
     void onSave(QJsonObject & obj) const override;
 };

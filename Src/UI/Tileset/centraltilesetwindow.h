@@ -13,6 +13,7 @@ public:
     CentralTilesetWindow(TilesetInfos * infos, QWidget * parent = nullptr);
 
     void setTexture(const QString & textureName);
+    void setDeltaTile(unsigned int delta);
     void setBrushWindow(BrushWindowBase * window);
 
 private:
@@ -20,6 +21,7 @@ private:
     BrushWindowBase *m_brushWindow;
     QVBoxLayout *m_layout;
     Texture m_texture;
+    unsigned int m_delta;
 };
 
 #endif // CENTRALTILESETWINDOW_H

@@ -5,6 +5,7 @@ CentralTilesetWindow::CentralTilesetWindow(TilesetInfos *infos, QWidget *parent)
     : QWidget(parent)
     , m_infos(infos)
     , m_brushWindow(nullptr)
+    , m_delta(0)
 {
     m_infos->setCentralTilesetWindow(this);
     setStyleSheet("background-color:#C0C0C0;");
@@ -29,6 +30,13 @@ void CentralTilesetWindow::setTexture(const QString & textureName)
         m_brushWindow->setTexture(m_texture);
 }
 
+void CentralTilesetWindow::setDeltaTile(unsigned int delta)
+{
+    m_delta = delta;
+    if(m_brushWindow)
+        m_brushWindow->setDeltaTile(delta);
+}
+
 void CentralTilesetWindow::setBrushWindow(BrushWindowBase * window)
 {
     if(m_brushWindow != nullptr)
@@ -42,6 +50,7 @@ void CentralTilesetWindow::setBrushWindow(BrushWindowBase * window)
     if(m_brushWindow != nullptr)
     {
         m_brushWindow->setTexture(m_texture);
+        m_brushWindow->setDeltaTile(m_delta);
         m_layout->addWidget(m_brushWindow);
     }
 }

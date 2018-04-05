@@ -2,6 +2,7 @@
 
 BrushWindowBase::BrushWindowBase(QWidget *parent)
     : QWidget(parent)
+    , m_delta(0)
 {
 
 }
@@ -9,5 +10,11 @@ BrushWindowBase::BrushWindowBase(QWidget *parent)
 void BrushWindowBase::setTexture(const Texture & t)
 {
     m_texture = t;
-    onTextureUpdate();
+    onValueUpdate();
+}
+
+void BrushWindowBase::setDeltaTile(unsigned int delta)
+{
+    m_delta = delta;
+    onValueUpdate();
 }

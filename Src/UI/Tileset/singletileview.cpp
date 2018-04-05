@@ -13,6 +13,8 @@ SingleTileView::SingleTileView(TileShape shape, QWidget *parent)
     : QSFMLCanvas(20, parent)
     , m_shapeTexture("TileShapes.png")
     , m_shape(shape)
+    , m_id(0)
+    , m_deltaTile(0)
     , m_colliderValue(0)
 {
     updateView();
@@ -26,7 +28,7 @@ void SingleTileView::OnUpdate()
         drawSprite(m_shapeTexture, static_cast<unsigned int>(m_shape), shapeTextureSize, shapeDeltaSize
                    , sf::FloatRect((totalSize - shapeSize) / 2.0f, (totalSize - shapeSize) / 2.0f, shapeSize, shapeSize));
 
-    if(m_texture.isValid() && m_id > 0)
+    if(m_texture.isValid())
         drawSprite(m_texture, m_id, ProjectInfos::instance().options().tileSize, m_deltaTile
                    , sf::FloatRect((totalSize - tileSize) / 2.0f, (totalSize - tileSize ) / 2.0f, tileSize, tileSize));
 

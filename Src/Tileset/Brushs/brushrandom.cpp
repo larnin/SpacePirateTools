@@ -39,3 +39,8 @@ void BrushRandom::onSave(QJsonObject & obj) const
 
     obj.insert("tiles", array);
 }
+
+ BrushWindowBase* BrushRandom::getBrushWindows()
+ {
+     return nullptr;
+ }

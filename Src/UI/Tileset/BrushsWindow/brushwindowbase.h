@@ -10,12 +10,14 @@ public:
     virtual ~BrushWindowBase() = default;
 
     void setTexture(const Texture & t);
+    void setDeltaTile(unsigned int delta);
 
 protected:
     BrushWindowBase(QWidget * parent = nullptr);
-    virtual void onTextureUpdate() = 0;
+    virtual void onValueUpdate() = 0;
 
     Texture m_texture;
+    unsigned int m_delta;
 };
 
 #endif // BRUSHWINDOWBASE_H

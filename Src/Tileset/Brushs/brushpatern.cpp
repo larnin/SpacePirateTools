@@ -80,3 +80,8 @@ unsigned int BrushPatern::posToIndex(const sf::Vector2u & pos) const
 
     return pos.x + pos.y * m_size.x;
 }
+
+ BrushWindowBase* BrushPatern::getBrushWindows()
+ {
+     return nullptr;
+ }

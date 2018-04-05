@@ -1,4 +1,5 @@
 #include "brushtiled.h"
+#include "UI/Tileset/BrushsWindow/brushwindowtiled.h"
 #include <QJsonArray>
 #include <cassert>
 #include <algorithm>
@@ -158,3 +159,7 @@ std::vector<TileShape> BrushTiled::getShapes(BrushType type)
     return {};
 }
 
+ BrushWindowBase* BrushTiled::getBrushWindows()
+ {
+     return new BrushWindowTiled(this);
+ }

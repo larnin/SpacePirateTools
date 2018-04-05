@@ -3,6 +3,7 @@
 
 #include "Tileset/tilecollider.h"
 #include "Tileset/tileshape.h"
+#include "UI/Tileset/BrushsWindow/brushwindowbase.h"
 #include <QJsonObject>
 #include <memory>
 
@@ -42,6 +43,7 @@ public:
     static std::unique_ptr<BrushBase> createBrush(BrushType type, const QString & name);
 
     inline BrushType getBrushType() const {return m_brushType;}
+    virtual BrushWindowBase* getBrushWindows() = 0;
 
     QString name;
 

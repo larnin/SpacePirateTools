@@ -152,7 +152,13 @@ void TilesetInfos::onAdd(const AddedFileEvent &)
 void TilesetInfos::onBrushSelected(int index)
 {
     m_currentTile = index;
-    //do more stuff
+
+    if(m_centralWindow != nullptr)
+    {
+        if(m_currentTile > 0 && m_currentTile < int(m_datas.brushs.size()))
+            m_centralWindow->setBrushWindow(m_datas.brushs[m_currentTile]->getBrushWindows());
+        else m_centralWindow->setBrushWindow(nullptr);
+    }
 }
 
 void TilesetInfos::onRightClickBrush(QPoint point)
@@ -214,6 +220,8 @@ void TilesetInfos::onTileSizeChanged()
 void TilesetInfos::onDeltaChanged()
 {
     m_datas.delta = m_delta->value();
+    if(m_centralWindow != nullptr)
+        m_centralWindow->setDeltaTile(m_datas.delta);
 }
 
 void TilesetInfos::onImageSelected(int index)
@@ -229,4 +237,5 @@ void TilesetInfos::setCentralTilesetWindow(CentralTilesetWindow * w)
 {
     m_centralWindow = w;
     w->setTexture(m_datas.imageName);
+    w->setDeltaTile(m_datas.delta);
 }

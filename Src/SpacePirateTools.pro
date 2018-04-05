@@ -48,7 +48,8 @@ SOURCES += \
     Tileset/Brushs/brushsquare.cpp \
     Tileset/Brushs/brushfull.cpp \
     UI/Tileset/BrushsWindow/brushwindowbase.cpp \
-    UI/Tileset/centraltilesetwindow.cpp
+    UI/Tileset/centraltilesetwindow.cpp \
+    UI/Tileset/BrushsWindow/brushwindowtiled.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -97,7 +98,8 @@ HEADERS += \
     Tileset/Brushs/brushsquare.h \
     Tileset/Brushs/brushfull.h \
     UI/Tileset/BrushsWindow/brushwindowbase.h \
-    UI/Tileset/centraltilesetwindow.h
+    UI/Tileset/centraltilesetwindow.h \
+    UI/Tileset/BrushsWindow/brushwindowtiled.h
 
 CONFIG += c++14
 

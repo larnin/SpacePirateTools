@@ -17,6 +17,8 @@ public:
     TileFullInfos & operator[](const sf::Vector2u & pos);
     TileFullInfos const & operator [](const sf::Vector2u & pos) const;
 
+    BrushWindowBase* getBrushWindows() override;
+
 protected:
     void onSave(QJsonObject & obj) const override;
 
