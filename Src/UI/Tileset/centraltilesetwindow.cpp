@@ -8,7 +8,11 @@ CentralTilesetWindow::CentralTilesetWindow(TilesetInfos *infos, QWidget *parent)
     , m_delta(0)
 {
     m_infos->setCentralTilesetWindow(this);
-    setStyleSheet("background-color:#C0C0C0;");
+
+    QPalette pal = palette();
+    pal.setColor(QPalette::Background, QColor(192, 192, 192));
+    setAutoFillBackground(true);
+    setPalette(pal);
 
     m_layout = new QVBoxLayout();
     setLayout(m_layout);

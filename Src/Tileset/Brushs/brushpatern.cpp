@@ -1,4 +1,5 @@
 #include "brushpatern.h"
+#include <UI/Tileset/BrushsWindow/brushwindowpatern.h>
 #include <QJsonArray>
 #include <cassert>
 
@@ -37,7 +38,7 @@ void BrushPatern::setSize(const sf::Vector2u & size, TileFullInfos defaultTile)
     for(unsigned int i(0) ; i < m_size.x ; i++)
         for(unsigned int j(0) ; j < m_size.y; j++)
         {
-            if(i > size.x || j > size.y)
+            if(i >= size.x || j >= size.y)
                 continue;
 
             newVect[i + j * size.x] = m_tiles[posToIndex({i, j})];
@@ -83,5 +84,5 @@ unsigned int BrushPatern::posToIndex(const sf::Vector2u & pos) const
 
  BrushWindowBase* BrushPatern::getBrushWindows()
  {
-     return nullptr;
+     return new BrushWindowPatern(this);
  }
