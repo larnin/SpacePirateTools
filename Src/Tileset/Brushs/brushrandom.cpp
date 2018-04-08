@@ -1,4 +1,5 @@
 #include "brushrandom.h"
+#include "UI/Tileset/BrushsWindow/brushwindowrandom.h"
 #include <QJsonArray>
 
 BrushRandom::BrushRandom(const QJsonObject & obj, const QString & _name)
@@ -40,7 +41,7 @@ void BrushRandom::onSave(QJsonObject & obj) const
     obj.insert("tiles", array);
 }
 
- BrushWindowBase* BrushRandom::getBrushWindows()
- {
-     return nullptr;
- }
+BrushWindowBase* BrushRandom::getBrushWindows()
+{
+    return new BrushWindowRandom(this);
+}

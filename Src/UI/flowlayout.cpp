@@ -29,6 +29,7 @@ void FlowLayout::addItem(QLayoutItem *item)
 
 void FlowLayout::addWidget(QWidget *widget, Qt::Alignment alignment)
 {
+    addChildWidget(widget);
     QWidgetItem * item = new QWidgetItem(widget);
     item->setAlignment(alignment);
     addItem(item);
@@ -36,6 +37,7 @@ void FlowLayout::addWidget(QWidget *widget, Qt::Alignment alignment)
 
 void FlowLayout::addLayout(QLayout *layout)
 {
+    addChildLayout(layout);
     addItem(layout);
 }
 

@@ -155,7 +155,7 @@ void TilesetInfos::onBrushSelected(int index)
 
     if(m_centralWindow != nullptr)
     {
-        if(m_currentTile > 0 && m_currentTile < int(m_datas.brushs.size()))
+        if(m_currentTile >= 0 && m_currentTile < int(m_datas.brushs.size()))
             m_centralWindow->setBrushWindow(m_datas.brushs[m_currentTile]->getBrushWindows());
         else m_centralWindow->setBrushWindow(nullptr);
     }

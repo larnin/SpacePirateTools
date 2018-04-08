@@ -15,6 +15,7 @@ public:
 public slots:
     void onLeftClick(unsigned int index);
     void onRightClick(unsigned int index);
+
 protected:
     void onValueUpdate() override;
 
