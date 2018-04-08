@@ -1,6 +1,7 @@
 #include "brushwindowtiled.h"
 #include "UI/flowlayout.h"
-#include "QFrame"
+#include "UI/Tileset/tileselectiondialog.h"
+#include <QFrame>
 #include <QVBoxLayout>
 
 BrushWindowTiled::BrushWindowTiled(BrushTiled *brush, QWidget *parent)
@@ -46,7 +47,14 @@ void BrushWindowTiled::onValueUpdate()
 
 void BrushWindowTiled::onLeftClick(unsigned int index)
 {
-    //todo
+    bool ok = false;
+    unsigned int value = TileSelectionDialog::getTileID(m_texture, m_delta, this, &ok);
+    if(!ok)
+        return;
+
+    auto & tile = m_brush->tile(m_brush->validShapes()[index]);
+    tile.id = value;
+    m_tiles[index]->setTileID(value);
 }
 
 void BrushWindowTiled::onRightClick(unsigned int index)

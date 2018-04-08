@@ -1,5 +1,6 @@
 #include "brushwindowpatern.h"
 #include "UI/linewidget.h"
+#include "UI/Tileset/tileselectiondialog.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -53,7 +54,13 @@ BrushWindowPatern::BrushWindowPatern(BrushPatern * brush, QWidget * parent)
 
 void BrushWindowPatern::onLeftClick(unsigned int x, unsigned int y)
 {
-    //todo
+    bool ok = false;
+    unsigned int value = TileSelectionDialog::getTileID(m_texture, m_delta, this, &ok);
+    if(!ok)
+        return;
+    unsigned int index(x + y * m_brush->getSize().x);
+    m_tiles[index]->setTileID(value);
+    (*m_brush)[sf::Vector2u(x, y)].id = value;
 }
 
 void BrushWindowPatern::onRightClick(unsigned int x, unsigned int y)
@@ -100,38 +107,6 @@ void BrushWindowPatern::onSizeValueChanged()
 
     m_tiles = tiles;
     m_widgets = widgets;
-
-    /*if(size.x != oldSize.x)
-    {
-        if(size.x > oldSize.x)
-        {
-            for(unsigned int j(0); j < std::min(oldSize.y, size.y); j++)
-                for(unsigned int i(oldSize.x) ; i < size.x ; i++)
-                    addWidget(i, j, (*m_brush)[sf::Vector2u(i, j)]);
-        }
-        else
-        {
-            for(int j(oldSize.y - 1) ; j >= 0 ; j--)
-                for(unsigned int i(oldSize.x - 1) ; i >= size.x ; i --)
-                    removeWidget(i, j);
-        }
-    }
-
-    if(size.y != oldSize.y)
-    {
-        if(size.y > oldSize.y)
-        {
-            for(unsigned int j(oldSize.y) ; j < size.y ; j++)
-                for(unsigned int i(0) ; i < size.x ; i++)
-                    addWidget(i, j, (*m_brush)[sf::Vector2u(i, j)]);
-        }
-        else
-        {
-            for(unsigned int j(oldSize.y - 1) ; j >= size.y ; j--)
-                for(int i(size.x - 1) ; i >>= 0 ; i--)
-                    removeWidget(i, j);
-        }
-    }*/
 }
 
 std::pair<QWidget*, SingleTileView*> BrushWindowPatern::addWidget(unsigned int x, unsigned int y, TileFullInfos tileValue)

@@ -1,5 +1,6 @@
 #include "brushwindowrandom.h"
 #include "UI/linewidget.h"
+#include "UI/Tileset/tileselectiondialog.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -56,7 +57,14 @@ BrushWindowRandom::BrushWindowRandom(BrushRandom *brush, QWidget *parent)
 
 void BrushWindowRandom::onLeftClick(QWidget *parent)
 {
-    //todo !
+    bool ok = false;
+    unsigned int value = TileSelectionDialog::getTileID(m_texture, m_delta, this, &ok);
+    if(!ok)
+        return;
+
+    auto index(indexOf(parent));
+    (*m_brush)[index].id = value;
+    m_tiles[index]->setTileID(value);
 }
 
 void BrushWindowRandom::onRightClickCollider()

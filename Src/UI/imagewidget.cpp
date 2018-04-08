@@ -6,12 +6,17 @@
 constexpr unsigned int defaultZoomLevel(2);
 
 ImageWidget::ImageWidget(const QString &assetName, QWidget * parent)
+    : ImageWidget(Texture(assetName.toStdString()), parent)
+{
+
+}
+
+ImageWidget::ImageWidget(Texture texture, QWidget * parent)
     : QSFMLCanvas(20, parent)
+    , m_texture(texture)
     , m_zoomLevel(2)
 {
-    m_texture.loadFromFile(assetName.toStdString());
-
-    m_center = sf::Vector2f(m_texture.getSize() / 2u);
+    m_center = sf::Vector2f(m_texture->getSize() / 2u);
     rebuildView();
 }
 
@@ -19,7 +24,7 @@ void ImageWidget::OnUpdate()
 {
     RenderWindow::clear(Configs::instance().animationBackgroundColor);
 
-    sf::Sprite s(m_texture);
+    sf::Sprite s(*m_texture);
     RenderWindow::draw(s);
 }
 

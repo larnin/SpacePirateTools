@@ -2,12 +2,15 @@
 #define IMAGEWIDGET_H
 
 #include "qsfmlcanvas.h"
-#include <SFML/Graphics/Texture.hpp>
+#include "ressource.h"
 
 class ImageWidget : public QSFMLCanvas
 {
 public:
     ImageWidget(const QString &assetName, QWidget * parent = nullptr);
+    ImageWidget(Texture texture, QWidget * parent = nullptr);
+
+    inline Texture getTexture() const {return m_texture;}
 
 protected:
     void OnUpdate() override;
@@ -23,7 +26,7 @@ private:
     float zoom();
     void rebuildView();
 
-    sf::Texture m_texture;
+    Texture m_texture;
     unsigned int m_zoomLevel;
     sf::Vector2f m_center;
     bool m_drag;
