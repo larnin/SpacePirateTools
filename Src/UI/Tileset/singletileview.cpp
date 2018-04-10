@@ -1,6 +1,7 @@
 #include "singletileview.h"
 #include "ProjectInfos/projectinfos.h"
 #include "Tileset/tilecollider.h"
+#include <SFML/Graphics/Sprite.hpp>
 #include <QMouseEvent>
 
 constexpr unsigned int shapeSize(38);
@@ -69,7 +70,8 @@ void SingleTileView::drawSprite(const Texture & texture, unsigned int id, unsign
 
 void SingleTileView::drawCollider()
 {
-    RenderWindow::draw(TileCollider(m_colliderValue).drawShape(sf::Color::Yellow, sf::Vector2f(0, 0), tileSize));
+    auto pos = totalSize / 2.0f;
+    RenderWindow::draw(TileCollider(m_colliderValue).drawShape(sf::Color::Green, sf::Vector2f(pos, pos), tileSize));
 }
 
 void SingleTileView::mousePressEvent(QMouseEvent * e)

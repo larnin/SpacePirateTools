@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 class QSFMLCanvas : public QWidget, public sf::RenderWindow
 {

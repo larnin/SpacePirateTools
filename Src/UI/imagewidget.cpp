@@ -1,5 +1,6 @@
 #include "imagewidget.h"
 #include "ProjectInfos/configs.h"
+#include <SFML/Graphics/Sprite.hpp>
 #include <QWheelEvent>
 #include <QMouseEvent>
 

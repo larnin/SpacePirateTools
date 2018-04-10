@@ -1,6 +1,7 @@
 #include "brushwindowtiled.h"
 #include "UI/flowlayout.h"
 #include "UI/Tileset/tileselectiondialog.h"
+#include "UI/Tileset/tilecolliderselectiondialog.h"
 #include <QFrame>
 #include <QVBoxLayout>
 
@@ -59,5 +60,11 @@ void BrushWindowTiled::onLeftClick(unsigned int index)
 
 void BrushWindowTiled::onRightClick(unsigned int index)
 {
-    //todo
+    bool ok = false;
+    auto value = TileColliderSelectionDialog::getTileCollider(this, &ok);
+    if(!ok)
+        return;
+    m_tiles[index]->setTileColliderValue(value.toInt());
+    auto & tile = m_brush->tile(m_brush->validShapes()[index]);
+    tile.collider = value;
 }

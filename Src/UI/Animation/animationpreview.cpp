@@ -2,6 +2,7 @@
 #include "animationsinfos.h"
 #include "ProjectInfos/projectinfos.h"
 #include "ProjectInfos/configs.h"
+#include <SFML/Graphics/Sprite.hpp>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <algorithm>

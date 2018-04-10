@@ -1,6 +1,7 @@
 #include "brushwindowpatern.h"
 #include "UI/linewidget.h"
 #include "UI/Tileset/tileselectiondialog.h"
+#include "UI/Tileset/tilecolliderselectiondialog.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -65,7 +66,13 @@ void BrushWindowPatern::onLeftClick(unsigned int x, unsigned int y)
 
 void BrushWindowPatern::onRightClick(unsigned int x, unsigned int y)
 {
-    //todo
+    bool ok = false;
+    auto value = TileColliderSelectionDialog::getTileCollider(this, &ok);
+    if(!ok)
+        return;
+    unsigned int index(x + y * m_brush->getSize().x);
+    m_tiles[index]->setTileColliderValue(value.toInt());
+    (*m_brush)[sf::Vector2u(x, y)].collider = value;
 }
 
 void BrushWindowPatern::onValueUpdate()

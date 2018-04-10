@@ -232,10 +232,10 @@ sf::VertexArray TileCollider::drawCentredCorner()
     array[0].position = sf::Vector2f(-0.25f, -0.5f);
     array[1].position = sf::Vector2f( 0.25f, -0.5f);
     array[2].position = sf::Vector2f( 0.25f, -0.5f);
-    array[3].position = sf::Vector2f( 0.25f,  0.25f);
-    array[4].position = sf::Vector2f( 0.25f,  0.25f);
-    array[5].position = sf::Vector2f( 0.5f,  0.25f);
-    array[6].position = sf::Vector2f( 0.5f,  0.25f);
+    array[3].position = sf::Vector2f( 0.25f,  -0.25f);
+    array[4].position = sf::Vector2f( 0.25f,  -0.25f);
+    array[5].position = sf::Vector2f( 0.5f,  -0.25f);
+    array[6].position = sf::Vector2f( 0.5f,  -0.25f);
     array[7].position = sf::Vector2f( 0.5f,  0.25f);
     array[8].position = sf::Vector2f( 0.5f,  0.25f);
     array[9].position = sf::Vector2f(-0.25f,  0.25f);

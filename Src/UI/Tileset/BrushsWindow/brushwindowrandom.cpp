@@ -1,6 +1,7 @@
 #include "brushwindowrandom.h"
 #include "UI/linewidget.h"
 #include "UI/Tileset/tileselectiondialog.h"
+#include "UI/Tileset/tilecolliderselectiondialog.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -69,7 +70,12 @@ void BrushWindowRandom::onLeftClick(QWidget *parent)
 
 void BrushWindowRandom::onRightClickCollider()
 {
-    //todo !
+    bool ok = false;
+    auto value = TileColliderSelectionDialog::getTileCollider(this, &ok);
+    if(!ok)
+        return;
+    m_collider->setTileColliderValue(value.toInt());
+    m_brush->collider = value;
 }
 
 void BrushWindowRandom::onChangeWeight(QWidget *parent, float value)

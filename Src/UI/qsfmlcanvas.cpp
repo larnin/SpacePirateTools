@@ -1,3 +1,4 @@
+#include <SFML/Window/Event.hpp>
 #include <QResizeEvent>
 #include "qsfmlcanvas.h"
 
@@ -21,6 +22,9 @@ void QSFMLCanvas::showEvent(QShowEvent*)
         connect(&m_timer, SIGNAL(timeout()), this, SLOT(repaint()));
         m_timer.start();
         m_initialized = true;
+
+        QResizeEvent e(QWidget::size(), QWidget::size());
+        resizeEvent(&e);
     }
 }
 

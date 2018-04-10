@@ -53,7 +53,9 @@ SOURCES += \
     UI/Tileset/BrushsWindow/brushwindowpatern.cpp \
     UI/Tileset/BrushsWindow/brushwindowrandom.cpp \
     UI/Tileset/tileselectionwidget.cpp \
-    UI/Tileset/tileselectiondialog.cpp
+    UI/Tileset/tileselectiondialog.cpp \
+    UI/Tileset/tilecolliderselectionwidget.cpp \
+    UI/Tileset/tilecolliderselectiondialog.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -107,7 +109,9 @@ HEADERS += \
     UI/Tileset/BrushsWindow/brushwindowpatern.h \
     UI/Tileset/BrushsWindow/brushwindowrandom.h \
     UI/Tileset/tileselectionwidget.h \
-    UI/Tileset/tileselectiondialog.h
+    UI/Tileset/tileselectiondialog.h \
+    UI/Tileset/tilecolliderselectionwidget.h \
+    UI/Tileset/tilecolliderselectiondialog.h
 
 CONFIG += c++14
 
