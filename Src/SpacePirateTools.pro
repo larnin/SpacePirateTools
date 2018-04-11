@@ -111,7 +111,8 @@ HEADERS += \
     UI/Tileset/tileselectionwidget.h \
     UI/Tileset/tileselectiondialog.h \
     UI/Tileset/tilecolliderselectionwidget.h \
-    UI/Tileset/tilecolliderselectiondialog.h
+    UI/Tileset/tilecolliderselectiondialog.h \
+    matrix.h
 
 CONFIG += c++14
 
