@@ -13,6 +13,7 @@
 #include "UI/Animator/centralanimatorwidget.h"
 #include "UI/Tileset/tilesetinfos.h"
 #include "UI/Tileset/centraltilesetwindow.h"
+#include "UI/Scene/sceneinfos.h"
 #include "UI/imagewidget.h"
 #include <QMenuBar>
 #include <QAction>
@@ -277,9 +278,12 @@ void MainWindow::openTileset(const QString & filename)
     addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
 }
 
-void MainWindow::openScene(const QString & /*filename*/)
+void MainWindow::openScene(const QString & filename)
 {
-    //todo !
+    SceneInfos *a = new SceneInfos(filename);
+
+    m_assetDocks.push_back(new Dock<SceneInfos>(a, "Scene layers", false));
+    addDockWidget(Qt::LeftDockWidgetArea, m_assetDocks.back());
 }
 
 void MainWindow::clearDocks()

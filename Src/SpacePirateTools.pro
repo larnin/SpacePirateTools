@@ -55,7 +55,10 @@ SOURCES += \
     UI/Tileset/tileselectionwidget.cpp \
     UI/Tileset/tileselectiondialog.cpp \
     UI/Tileset/tilecolliderselectionwidget.cpp \
-    UI/Tileset/tilecolliderselectiondialog.cpp
+    UI/Tileset/tilecolliderselectiondialog.cpp \
+    Scene/scenedata.cpp \
+    Scene/Layers/layerbase.cpp \
+    UI/Scene/sceneinfos.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -112,7 +115,10 @@ HEADERS += \
     UI/Tileset/tileselectiondialog.h \
     UI/Tileset/tilecolliderselectionwidget.h \
     UI/Tileset/tilecolliderselectiondialog.h \
-    matrix.h
+    matrix.h \
+    Scene/scenedata.h \
+    Scene/Layers/layerbase.h \
+    UI/Scene/sceneinfos.h
 
 CONFIG += c++14
 
