@@ -58,7 +58,8 @@ SOURCES += \
     UI/Tileset/tilecolliderselectiondialog.cpp \
     Scene/scenedata.cpp \
     Scene/Layers/layerbase.cpp \
-    UI/Scene/sceneinfos.cpp
+    UI/Scene/sceneinfos.cpp \
+    UI/Scene/newlayerdialog.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -118,7 +119,8 @@ HEADERS += \
     matrix.h \
     Scene/scenedata.h \
     Scene/Layers/layerbase.h \
-    UI/Scene/sceneinfos.h
+    UI/Scene/sceneinfos.h \
+    UI/Scene/newlayerdialog.h
 
 CONFIG += c++14
 

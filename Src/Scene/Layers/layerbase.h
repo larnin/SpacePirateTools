@@ -11,6 +11,7 @@ enum class LayerType
 {
     Tilemap,
     Objects,
+    Max = Objects
 };
 
 QString layerTypeToString(LayerType type);

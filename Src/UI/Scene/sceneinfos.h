@@ -22,15 +22,25 @@ public:
     inline SceneData & getDatas(){ return m_datas;}
 
 public slots:
+    void onSizeChange();
+    void onLayerIndexChange(int index);
+    void onLayerRightClick(QPoint point);
 
 private:
     void initializeWidgets();
+    void addLayer();
+    void delLayer(unsigned int index);
+    void upLayer(unsigned int index);
+    void downLayer(unsigned int index);
+    void renameLayer(unsigned int index);
 
     void onSave(const SaveEvent &);
     void onRename(const RenamedFileEvent & e);
 
     SceneData m_datas;
     QString m_assetName;
+
+    int m_currentIndex;
 
     QSpinBox* m_sizeX;
     QSpinBox* m_sizeY;
