@@ -1,4 +1,5 @@
 #include "assettype.h"
+#include "enumiterators.h"
 #include <cassert>
 
 QString assetTypeToString(AssetType type)
@@ -48,18 +49,18 @@ QString assetTypeExtension(AssetType type)
 AssetType stringToAssetType(const QString & s)
 {
     auto str = s.toLower().trimmed();
-    for(unsigned int i(0) ; i <= static_cast<unsigned int>(AssetType::Max) ; i++)
-        if(str == assetTypeToString(static_cast<AssetType>(i)).toLower().trimmed())
-            return static_cast<AssetType>(i);
+    for(auto t : AssetType::Max)
+        if(str == assetTypeToString(t).toLower().trimmed())
+            return t;
     return AssetType::Unknow;
 }
 
 AssetType extensionToAssetType(const QString & s)
 {
     auto str = s.toLower().trimmed();
-    for(unsigned int i(0) ; i <= static_cast<unsigned int>(AssetType::Max) ; i++)
-        if(str == assetTypeExtension(static_cast<AssetType>(i)).toLower().trimmed())
-            return static_cast<AssetType>(i);
+    for(auto t : AssetType::Max)
+        if(str == assetTypeExtension(t).toLower().trimmed())
+            return t;
     return AssetType::Unknow;
 }
 

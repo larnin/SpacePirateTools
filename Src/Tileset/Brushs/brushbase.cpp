@@ -5,6 +5,7 @@
 #include "brushhorizontal.h"
 #include "brushvertical.h"
 #include "brushsquare.h"
+#include "enumiterators.h"
 #include <cassert>
 
 QString brushTypeToString(BrushType type)
@@ -30,9 +31,9 @@ QString brushTypeToString(BrushType type)
 
 BrushType brushTypeFromString(const QString & s)
 {
-    for(unsigned int i(0) ; i < static_cast<unsigned int>(BrushType::Max) ; i++)
-        if(brushTypeToString(static_cast<BrushType>(i)) == s)
-            return static_cast<BrushType>(i);
+    for(auto v : BrushType::Max)
+        if(brushTypeToString(v) == s)
+            return v;
     assert(false);
 
     return BrushType::Pattern;

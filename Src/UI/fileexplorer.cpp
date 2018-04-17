@@ -5,6 +5,7 @@
 #include "Events/Args/renamedfileevent.h"
 #include "Events/Args/removedfileevent.h"
 #include "Events/Args/addedfileevent.h"
+#include "enumiterators.h"
 #include <QVBoxLayout>
 #include <QMessageBox>
 #include <QInputDialog>
@@ -44,9 +45,8 @@ void FileExplorer::updateTree()
         return;
     }
 
-    for(unsigned int i(0) ; i <= static_cast<unsigned int>(AssetType::Max) ; i++)
+    for(auto type : AssetType::Max)
     {
-        AssetType type(static_cast<AssetType>(i));
         QTreeWidgetItem * dirItem = new QTreeWidgetItem(m_tree);
         dirItem->setText(0, assetTypeToString(type));
         auto extension = assetTypeExtension(type);
@@ -93,9 +93,8 @@ void FileExplorer::onRightClick(QPoint point)
     QAction *aRename(nullptr);
     QMenu *aAdd(menu.addMenu("Ajouter"));
     std::vector<QAction*> aAdds;
-    for(unsigned int i(0) ; i <= static_cast<unsigned int>(AssetType::Max) ; i++)
+    for(auto assetType : AssetType::Max)
     {
-        auto assetType = static_cast<AssetType>(i);
         if(!assetCanBeCreated(assetType))
             continue;
         aAdds.push_back(aAdd->addAction(assetTypeToString(assetType)));

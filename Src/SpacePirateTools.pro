@@ -120,7 +120,8 @@ HEADERS += \
     Scene/scenedata.h \
     Scene/Layers/layerbase.h \
     UI/Scene/sceneinfos.h \
-    UI/Scene/newlayerdialog.h
+    UI/Scene/newlayerdialog.h \
+    enumiterators.h
 
 CONFIG += c++14
 

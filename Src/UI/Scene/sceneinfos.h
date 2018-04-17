@@ -34,6 +34,8 @@ private:
     void downLayer(unsigned int index);
     void renameLayer(unsigned int index);
 
+    void updateLayerList();
+
     void onSave(const SaveEvent &);
     void onRename(const RenamedFileEvent & e);
 

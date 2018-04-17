@@ -1,4 +1,5 @@
 #include "tilecolliderselectionwidget.h"
+#include "enumiterators.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -94,10 +95,11 @@ void TileColliderSelectionWidget::drawAllShapes()
 
     auto nbWidth = nbCollidersWidth();
 
-    for(unsigned int i(0) ; i <= static_cast<unsigned int>(TileColliderType::Max); i++)
+    for(auto v : TileColliderType::Max)
     {
+        auto i = static_cast<unsigned int>(v);
         sf::Vector2u pos(i % nbWidth, i / nbWidth);
-        c.type = static_cast<TileColliderType>(i);
+        c.type = v;
         RenderWindow::draw(c.drawShape(shapesColor, sf::Vector2f(pos * (colliderSize + colliderDelta)) + sf::Vector2f(colliderSize, colliderSize) / 2.0f, colliderSize));
     }
 }
@@ -111,8 +113,9 @@ int TileColliderSelectionWidget::posToIndex(const sf::Vector2f & pos) const
 {
     auto nbWidth = nbCollidersWidth();
 
-    for(unsigned int i(0) ; i <= static_cast<unsigned int>(TileColliderType::Max); i++)
+    for(auto v : TileColliderType::Max)
     {
+        auto i = static_cast<unsigned int>(v);
         sf::Vector2u posCollider(i % nbWidth, i / nbWidth);
 
         if(sf::FloatRect(sf::Vector2f(posCollider * (colliderSize + colliderDelta)), sf::Vector2f(colliderSize, colliderSize)).contains(pos))

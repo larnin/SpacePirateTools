@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QMenu>
 #include <QAction>
+#include <QPushButton>
 
 SceneInfos::SceneInfos(const QString &assetName, QWidget *parent)
     : QWidget(parent)
@@ -16,6 +17,7 @@ SceneInfos::SceneInfos(const QString &assetName, QWidget *parent)
     , renameHolder(Event<RenamedFileEvent>::connect([this](const auto & e){onRename(e);}))
 {
     initializeWidgets();
+    updateLayerList();
 }
 
 SceneInfos::~SceneInfos()
@@ -142,4 +144,29 @@ void SceneInfos::downLayer(unsigned int index)
 void SceneInfos::renameLayer(unsigned int index)
 {
 
+}
+
+void SceneInfos::updateLayerList()
+{
+    m_layers->blockSignals(true);
+
+    m_layers->clear();
+
+    for(unsigned int i(0) ; i < m_datas.layerCount() ; i++)
+    {
+        const auto & layer = m_datas.layer(i);
+        m_layers->addItem(layer.name + " : " + layerTypeToString(layer.getLayerType()));
+        auto item = m_layers->item(m_layers->count() - 1);
+
+        QWidget* widget = new QWidget();
+        QPushButton* showButton = new QPushButton(QIcon("Img/View.png"), "");
+        QPushButton* gizmoButton = new QPushButton(QIcon("Img/Gismos.png"), "");
+        QHBoxLayout* layout = new QHBoxLayout();
+        layout->addWidget(showButton);
+        layout->addWidget(gizmoButton);
+        widget->setLayout(layout);
+        m_layers->setItemWidget(item, widget);
+    }
+
+    m_layers->blockSignals(false);
 }

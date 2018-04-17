@@ -12,7 +12,7 @@ constexpr unsigned int totalSize(44);
 
 SingleTileView::SingleTileView(TileShape shape, QWidget *parent)
     : QSFMLCanvas(20, parent)
-    , m_shapeTexture("TileShapes.png")
+    , m_shapeTexture("Img/TileShapes.png")
     , m_shape(shape)
     , m_id(0)
     , m_deltaTile(0)

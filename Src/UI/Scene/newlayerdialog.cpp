@@ -1,4 +1,5 @@
 #include "newlayerdialog.h"
+#include "enumiterators.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -13,8 +14,8 @@ NewLayerDialog::NewLayerDialog(QWidget *parent)
     nameLayout->addWidget(m_name, 1);
 
     m_type = new QComboBox();
-    for(unsigned int i(0) ; i <= static_cast<unsigned int>(LayerType::Max) ; i++)
-        m_type->addItem(layerTypeToString(static_cast<LayerType>(i)));
+    for(auto v : LayerType::Max)
+        m_type->addItem(layerTypeToString(v));
     QHBoxLayout* typeLayout = new QHBoxLayout();
     typeLayout->addWidget(new QLabel("Type : "));
     typeLayout->addWidget(m_type, 1);

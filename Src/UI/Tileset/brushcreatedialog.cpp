@@ -1,4 +1,5 @@
 #include "brushcreatedialog.h"
+#include "enumiterators.h"
 #include <QPushButton>
 #include <QLabel>
 #include <QHBoxLayout>
@@ -37,8 +38,8 @@ void BrushCreateDialog::setTypeTexts()
 {
     m_type->clear();
 
-    for(unsigned int i(0) ; i <= static_cast<unsigned int>(BrushType::Max) ; i++)
-        m_type->addItem(brushTypeToString(static_cast<BrushType>(i)));
+    for(auto v : BrushType::Max)
+        m_type->addItem(brushTypeToString(v));
 }
 
 BrushCreateInfos BrushCreateDialog::get() const
