@@ -1,5 +1,7 @@
 #include "layerbase.h"
-
+#include "objectslayer.h"
+#include "tilesetlayer.h"
+#include <cassert>
 
 QString layerTypeToString(LayerType type)
 {
@@ -35,12 +37,31 @@ QJsonObject LayerBase::save() const
 
 std::unique_ptr<LayerBase> LayerBase::loadLayer(const QJsonObject & obj)
 {
-    //todo
+    auto name = obj["name"].toString();
+    auto type = static_cast<LayerType>(obj["type"].toInt());
+
+    switch(type)
+    {
+    case LayerType::Objects:
+        return std::make_unique<ObjectsLayer>(name, obj);
+    case LayerType::Tilemap:
+        return std::make_unique<TilesetLayer>(name, obj);
+    }
+
+    assert(false);
     return {};
 }
 
 std::unique_ptr<LayerBase> LayerBase::createLayer(LayerType type, const QString & name, const sf::Vector2u & size)
 {
-    //todo
+    switch(type)
+    {
+    case LayerType::Objects:
+        return std::make_unique<ObjectsLayer>(name, size);
+    case LayerType::Tilemap:
+        return std::make_unique<TilesetLayer>(name, size);
+    }
+
+    assert(false);
     return {};
 }

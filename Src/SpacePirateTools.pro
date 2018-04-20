@@ -59,7 +59,9 @@ SOURCES += \
     Scene/scenedata.cpp \
     Scene/Layers/layerbase.cpp \
     UI/Scene/sceneinfos.cpp \
-    UI/Scene/newlayerdialog.cpp
+    UI/Scene/newlayerdialog.cpp \
+    Scene/Layers/tilesetlayer.cpp \
+    Scene/Layers/objectslayer.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -121,7 +123,9 @@ HEADERS += \
     Scene/Layers/layerbase.h \
     UI/Scene/sceneinfos.h \
     UI/Scene/newlayerdialog.h \
-    enumiterators.h
+    enumiterators.h \
+    Scene/Layers/tilesetlayer.h \
+    Scene/Layers/objectslayer.h
 
 CONFIG += c++14
 

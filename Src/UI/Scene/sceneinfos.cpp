@@ -124,6 +124,12 @@ void SceneInfos::addLayer()
 {
     bool ok = true;
     auto layerInfos = NewLayerDialog::getLayerInfos(this, &ok);
+
+    if(!ok)
+        return;
+
+    m_datas.addLayer(layerInfos.type, layerInfos.name, m_datas.getSize());
+    updateLayerList();
 }
 
 void SceneInfos::delLayer(unsigned int index)
@@ -160,13 +166,42 @@ void SceneInfos::updateLayerList()
 
         QWidget* widget = new QWidget();
         QPushButton* showButton = new QPushButton(QIcon("Img/View.png"), "");
-        QPushButton* gizmoButton = new QPushButton(QIcon("Img/Gismos.png"), "");
+        showButton->setFixedSize(24, 24);
+        showButton->setCheckable(true);
+        showButton->setChecked(!layer.hidden);
+        QPushButton* gizmoButton = new QPushButton(QIcon("Img/Gizmos.png"), "");
+        gizmoButton->setFixedSize(24, 24);
+        gizmoButton->setCheckable(true);
+        gizmoButton->setChecked(layer.showGizmos);
         QHBoxLayout* layout = new QHBoxLayout();
+        layout->addStretch(1);
         layout->addWidget(showButton);
         layout->addWidget(gizmoButton);
+        layout->setContentsMargins(0, 0, 0, 0);
         widget->setLayout(layout);
+        item->setSizeHint(widget->sizeHint());
         m_layers->setItemWidget(item, widget);
+
+        connect(showButton, &QPushButton::toggled, this, [this, i](bool value){updateVisibility(i, value);});
+        connect(gizmoButton, &QPushButton::toggled, this, [this, i](bool value){updateGizmos(i, value);});
     }
 
     m_layers->blockSignals(false);
+}
+
+
+void SceneInfos::updateGizmos(unsigned int index, bool value)
+{
+    if(m_datas.layerCount() <= index)
+        return;
+
+    m_datas.layer(index).showGizmos = value;
+}
+
+void SceneInfos::updateVisibility(unsigned int index, bool value)
+{
+    if(m_datas.layerCount() <= index)
+        return;
+
+    m_datas.layer(index).hidden = !value;
 }

@@ -25,6 +25,8 @@ public slots:
     void onSizeChange();
     void onLayerIndexChange(int index);
     void onLayerRightClick(QPoint point);
+    void updateGizmos(unsigned int index, bool value);
+    void updateVisibility(unsigned int index, bool value);
 
 private:
     void initializeWidgets();
