@@ -51,6 +51,17 @@ public:
         return m_datas.end();
     }
 
+    void resize(const sf::Vector2u & newSize, T defaultValue = T())
+    {
+        Matrix m(newSize, defaultValue);
+
+        for(unsigned int i(0) ; i < std::min(m_size.x, newSize.x) ; i++)
+            for(unsigned int j(0) ; j < std::min(m_size.y, newSize.y) ; j++)
+                m({i, j}) = operator ()({i, j});
+        m_datas = m.m_datas;
+        m_size = newSize;
+    }
+
 private:
     std::vector<T> m_datas;
     sf::Vector2u m_size;
