@@ -7,6 +7,8 @@
 #include <QMenu>
 #include <QAction>
 #include <QPushButton>
+#include <QInputDialog>
+#include <QMessageBox>
 
 SceneInfos::SceneInfos(const QString &assetName, QWidget *parent)
     : QWidget(parent)
@@ -76,7 +78,9 @@ void SceneInfos::onSizeChange()
 
 void SceneInfos::onLayerIndexChange(int index)
 {
+    //todo  opening layer
 
+    m_currentIndex = index;
 }
 
 void SceneInfos::onLayerRightClick(QPoint point)
@@ -134,22 +138,43 @@ void SceneInfos::addLayer()
 
 void SceneInfos::delLayer(unsigned int index)
 {
+    auto answer = QMessageBox::question(this, "Supprimer un layer", "Etes vous sur de vouloir supprimer ce layer ?");
+    if(answer != QMessageBox::Yes)
+        return;
 
+    m_datas.delLayer(index);
+    updateLayerList();
 }
 
 void SceneInfos::upLayer(unsigned int index)
 {
+    if(index == 0)
+        return;
 
+    m_datas.swapLayers(index, index-1);
+    updateLayerList();
 }
 
 void SceneInfos::downLayer(unsigned int index)
 {
+    if(index >= m_datas.layerCount() - 1)
+        return;
 
+    m_datas.swapLayers(index, index+1);
+    updateLayerList();
 }
 
 void SceneInfos::renameLayer(unsigned int index)
 {
+    LayerBase & l = m_datas.layer(index);
+    bool ok = true;
+    auto name = QInputDialog::getText(this, "Renommer un layer", "Indiquez le nouveau nom du layer", QLineEdit::Normal, l.name, &ok);
 
+    if(ok)
+    {
+        l.name = name;
+        updateLayerList();
+    }
 }
 
 void SceneInfos::updateLayerList()
@@ -187,8 +212,10 @@ void SceneInfos::updateLayerList()
     }
 
     m_layers->blockSignals(false);
-}
 
+    if(m_currentIndex < m_layers->count())
+        m_layers->setCurrentRow(m_currentIndex);
+}
 
 void SceneInfos::updateGizmos(unsigned int index, bool value)
 {
