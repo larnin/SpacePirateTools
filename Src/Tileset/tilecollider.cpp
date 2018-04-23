@@ -71,6 +71,16 @@ sf::VertexArray TileCollider::drawShape(const sf::Color & color, const sf::Vecto
     return array;
 }
 
+void TileCollider::drawShape(const sf::Color & color, const sf::Vector2f & offset, float scale, sf::VertexArray & outarray) const
+{
+    assert(outarray.getPrimitiveType() == sf::Lines);
+
+    auto array = drawShape(color, offset, scale);
+
+    for(unsigned int i(0) ; i < array.getVertexCount() ; i++)
+        outarray.append(array[i]);
+}
+
 sf::VertexArray TileCollider::drawFull()
 {
     sf::VertexArray array(sf::Lines, 8);

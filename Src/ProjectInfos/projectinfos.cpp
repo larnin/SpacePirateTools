@@ -60,6 +60,7 @@ void ProjectInfos::save()
 
     QJsonObject obj;
     obj.insert("tilesize", int(m_options.tileSize));
+    obj.insert("delta", int(m_options.delta));
 
     QFile file(m_projectDirectory + "/" + optionFilename);
     if(!file.open(QIODevice::WriteOnly))
@@ -87,6 +88,7 @@ void ProjectInfos::load()
     QJsonObject obj(doc.object());
 
     m_options.tileSize = obj["tilesize"].toInt();
+    m_options.delta = obj["delta"].toInt();
 }
 
 void ProjectInfos::onSave(const SaveEvent &)

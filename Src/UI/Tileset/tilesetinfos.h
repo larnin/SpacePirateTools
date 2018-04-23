@@ -50,8 +50,8 @@ private:
     TilesetData m_datas;
 
     QSpinBox *m_tileSize;
-    QComboBox *m_texture;
     QSpinBox *m_delta;
+    QComboBox *m_texture;
     QListWidget *m_listTile;
 
     EventHolder<SaveEvent> saveHolder;

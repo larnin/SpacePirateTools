@@ -11,6 +11,7 @@
 struct ProjectOptions
 {
     unsigned int tileSize;
+    unsigned int delta;
 };
 
 class ProjectInfos

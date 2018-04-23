@@ -14,7 +14,6 @@ void TilesetData::save(const QString & fileName)
     QJsonObject obj;
 
     obj.insert("image", imageName);
-    obj.insert("delta", int(delta));
 
     QJsonArray brushArray;
     for(const auto & brush : brushs)
@@ -48,7 +47,6 @@ void TilesetData::load(const QString & fileName)
     QJsonObject obj(doc.object());
 
     imageName = obj["image"].toString();
-    delta = obj["delta"].toInt();
 
     brushs.clear();
     auto brushIt = obj.find("brushs");

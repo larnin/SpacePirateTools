@@ -1,6 +1,9 @@
-#include "tilesetlayer.h"
+﻿#include "tilesetlayer.h"
 #include "ProjectInfos/projectinfos.h"
+#include <SFML/Graphics/RenderTarget.hpp>
 #include <QJsonArray>
+
+const sf::Color gizmosColor(sf::Color::Green);
 
 TilesetLayer::TilesetLayer(const QString &name, const QJsonObject &obj)
     : LayerBase(LayerType::Tilemap, name)
@@ -24,6 +27,8 @@ TilesetLayer::TilesetLayer(const QString &name, const QJsonObject &obj)
 
     setTextureName(obj["texture"].toString());
     brushName = obj["brush"].toString();
+
+    updateRender();
 }
 
 TilesetLayer::TilesetLayer(const QString & name, const sf::Vector2u &size)
@@ -52,14 +57,30 @@ void TilesetLayer::onSave(QJsonObject & obj) const
     obj.insert("brush", brushName);
 }
 
-void TilesetLayer::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
 
+void TilesetLayer::setTile(const sf::Vector2u & pos, const TileInfos & tile)
+{
+    m_tiles(pos) = tile;
+    updateRender();
+}
+
+void TilesetLayer::draw(sf::RenderTarget &target, sf::RenderStates) const
+{
+    if(!m_texture.isValid())
+        return;
+
+    if(!hidden)
+        target.draw(m_tileArray, sf::RenderStates(m_texture()));
+
+    if(showGizmos)
+        target.draw(m_gizmoArray);
 }
 
 void TilesetLayer::setSize(const sf::Vector2u & size)
 {
     m_tiles.resize(size);
+
+    updateRender();
 }
 
 void TilesetLayer::setTextureName(const QString & name)
@@ -75,4 +96,80 @@ void TilesetLayer::setTextureName(const QString & name)
     }
 
     m_textureName = name;
+
+    updateRender();
+}
+
+void TilesetLayer::updateRender()
+{
+    updateTileRender();
+    updateGizmoRender();
+}
+
+void TilesetLayer::updateTileRender()
+{
+    m_tileArray.clear();
+    m_tileArray.setPrimitiveType(sf::Quads);
+
+    if(!m_texture.isValid())
+        return;
+
+    unsigned int count = renderableTileCount();
+    m_tileArray.resize(count * 4);
+
+    unsigned int index(0);
+    unsigned int tileSize = ProjectInfos::instance().options().tileSize;
+    unsigned int delta = ProjectInfos::instance().options().delta;
+
+    unsigned int tileByRow = (m_texture->getSize().x + delta) / (tileSize + delta);
+
+    for(unsigned int i(0) ; i < m_tiles.getSize().x ; i++)
+        for(unsigned int j(0) ; j < m_tiles.getSize().y ; j++)
+        {
+            unsigned int id(m_tiles({i, j}).id);
+            unsigned int x(id % tileByRow);
+            unsigned int y(id / tileByRow);
+
+            drawQuad(&m_tileArray[index * 4], sf::FloatRect(x * tileSize - tileSize / 2.0f, y * tileSize - tileSize / 2.0f, tileSize, tileSize)
+                    , sf::FloatRect(x * (tileSize + delta), y * (tileSize + delta), tileSize, tileSize));
+
+            index++;
+        }
+}
+
+void TilesetLayer::updateGizmoRender()
+{
+    auto size = ProjectInfos::instance().options().tileSize;
+
+    m_gizmoArray.clear();
+    m_gizmoArray.setPrimitiveType(sf::Lines);
+
+    for(unsigned int i(0) ; i < m_tiles.getSize().x ; i++)
+        for(unsigned int j(0) ; j < m_tiles.getSize().y ; j++)
+            m_tiles({i, j}).collider.drawShape(gizmosColor, sf::Vector2f(i * size, j * size), size, m_gizmoArray);
+}
+
+unsigned int TilesetLayer::renderableTileCount() const
+{
+    unsigned int count(0);
+
+    for(auto tile : m_tiles)
+        if(tile.id > 0)
+            count ++;
+    return count;
+}
+
+void TilesetLayer::drawQuad(sf::Vertex* quad, const sf::FloatRect & rect, const sf::FloatRect & texRect) const
+{
+    quad[0].position = sf::Vector2f(rect.left, rect.top);
+    quad[0].texCoords = sf::Vector2f(texRect.left, texRect.top);
+
+    quad[1].position = sf::Vector2f(rect.left + rect.width, rect.top);
+    quad[1].texCoords = sf::Vector2f(texRect.left + texRect.width, texRect.top);
+
+    quad[2].position = sf::Vector2f(rect.left + rect.width, rect.top + rect.height);
+    quad[2].texCoords = sf::Vector2f(texRect.left + texRect.width, texRect.top + texRect.height);
+
+    quad[3].position = sf::Vector2f(rect.left, rect.top + rect.height);
+    quad[3].texCoords = sf::Vector2f(texRect.left, texRect.top + texRect.height);
 }

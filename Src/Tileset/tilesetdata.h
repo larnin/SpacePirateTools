@@ -14,7 +14,6 @@ public:
     void save(const QString & fileName);
 
     QString imageName;
-    unsigned int delta;
     std::vector<std::unique_ptr<BrushBase>> brushs;
 
 private:

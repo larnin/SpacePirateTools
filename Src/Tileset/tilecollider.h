@@ -40,6 +40,7 @@ struct TileCollider
     void fromInt(unsigned int value);
 
     sf::VertexArray drawShape(const sf::Color & color, const sf::Vector2f & offset, float scale) const;
+    void drawShape(const sf::Color & color, const sf::Vector2f & offset, float scale, sf::VertexArray & outarray) const;
 
     TileColliderType type;
     TileColliderRotation rotation;
