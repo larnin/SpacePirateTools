@@ -11,9 +11,15 @@
 #include <QWidget>
 #include <QListWidget>
 #include <QSpinBox>
+#include <QPushButton>
+#include <QCheckBox>
+
+class CentralSceneWindow;
 
 class SceneInfos : public QWidget
 {
+    friend class CentralSceneWindow;
+
     Q_OBJECT
 public:
     SceneInfos(const QString &assetName, QWidget * parent = nullptr);
@@ -22,13 +28,17 @@ public:
     inline SceneData & getDatas(){ return m_datas;}
 
 public slots:
+    void onColorCLicked();
     void onSizeChange();
     void onLayerIndexChange(int index);
     void onLayerRightClick(QPoint point);
     void updateGizmos(unsigned int index, bool value);
     void updateVisibility(unsigned int index, bool value);
 
+    inline bool showGrid() const {return m_showGrid->isChecked();}
+
 private:
+    inline void setCentralSceneWindow(CentralSceneWindow * scene) { m_sceneWindow = scene;}
     void initializeWidgets();
     void addLayer();
     void delLayer(unsigned int index);
@@ -37,6 +47,7 @@ private:
     void renameLayer(unsigned int index);
 
     void updateLayerList();
+    void updateColorButton();
 
     void onSave(const SaveEvent &);
     void onRename(const RenamedFileEvent & e);
@@ -46,13 +57,16 @@ private:
 
     int m_currentIndex;
 
+    QPushButton* m_colorButton;
     QSpinBox* m_sizeX;
     QSpinBox* m_sizeY;
     QListWidget* m_layers;
+    QCheckBox* m_showGrid;
 
     EventHolder<SaveEvent> saveHolder;
     EventHolder<RenamedFileEvent> renameHolder;
 
+    CentralSceneWindow * m_sceneWindow;
 };
 
 #endif // SCENEINFOS_H

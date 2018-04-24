@@ -14,6 +14,7 @@
 #include "UI/Tileset/tilesetinfos.h"
 #include "UI/Tileset/centraltilesetwindow.h"
 #include "UI/Scene/sceneinfos.h"
+#include "UI/Scene/centralscenewindow.h"
 #include "UI/imagewidget.h"
 #include <QMenuBar>
 #include <QAction>
@@ -281,8 +282,9 @@ void MainWindow::openTileset(const QString & filename)
 void MainWindow::openScene(const QString & filename)
 {
     SceneInfos *a = new SceneInfos(filename);
-
-    m_assetDocks.push_back(new Dock<SceneInfos>(a, "Scene layers", false));
+    CentralSceneWindow *sceneWidget = new CentralSceneWindow(a);
+    setCentralWidget(sceneWidget);
+    m_assetDocks.push_back(new Dock<SceneInfos>(a, "Scene", false));
     addDockWidget(Qt::LeftDockWidgetArea, m_assetDocks.back());
 }
 

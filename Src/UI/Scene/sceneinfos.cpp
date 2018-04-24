@@ -1,6 +1,7 @@
 #include "sceneinfos.h"
 #include "UI/linewidget.h"
 #include "newlayerdialog.h"
+#include "centralscenewindow.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -9,6 +10,7 @@
 #include <QPushButton>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QColorDialog>
 
 SceneInfos::SceneInfos(const QString &assetName, QWidget *parent)
     : QWidget(parent)
@@ -20,6 +22,7 @@ SceneInfos::SceneInfos(const QString &assetName, QWidget *parent)
 {
     initializeWidgets();
     updateLayerList();
+    updateColorButton();
 }
 
 SceneInfos::~SceneInfos()
@@ -29,6 +32,14 @@ SceneInfos::~SceneInfos()
 
 void SceneInfos::initializeWidgets()
 {
+    m_showGrid = new QCheckBox("Afficher la grille");
+
+    m_colorButton = new QPushButton();
+    m_colorButton->setFixedSize(26, 26);
+    QHBoxLayout* colorLayout = new QHBoxLayout();
+    colorLayout->addWidget(new QLabel("Couleur de fond :"));
+    colorLayout->addWidget(m_colorButton);
+
     m_sizeX = new QSpinBox();
     m_sizeX->setRange(1, 1000);
     m_sizeX->setValue(m_datas.getSize().x);
@@ -45,6 +56,9 @@ void SceneInfos::initializeWidgets()
     m_layers = new QListWidget();
 
     QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(m_showGrid);
+    layout->addWidget(new LineWidget(LineOrientation::Horizontal));
+    layout->addLayout(colorLayout);
     layout->addWidget(new QLabel("Taille"));
     layout->addLayout(sizeLayout);
     layout->addWidget(new LineWidget(LineOrientation::Horizontal));
@@ -58,6 +72,7 @@ void SceneInfos::initializeWidgets()
     m_layers->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_layers, SIGNAL(currentRowChanged(int)), this, SLOT(onLayerIndexChange(int)));
     connect(m_layers, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onLayerRightClick(QPoint)));
+    connect(m_colorButton, SIGNAL(clicked(bool)), this, SLOT(onColorCLicked()));
 }
 
 void SceneInfos::onSave(const SaveEvent &)
@@ -69,6 +84,18 @@ void SceneInfos::onRename(const RenamedFileEvent & e)
 {
     if(m_assetName == e.oldName)
         m_assetName = e.newName;
+}
+
+
+void SceneInfos::onColorCLicked()
+{
+    QColor oldColor(m_datas.color.r, m_datas.color.g, m_datas.color.b);
+    auto color = QColorDialog::getColor(oldColor, this, "Couleur de fond");
+    if(!color.isValid())
+        return;
+
+    m_datas.color = sf::Color(color.red(), color.green(), color.blue());
+    updateColorButton();
 }
 
 void SceneInfos::onSizeChange()
@@ -215,6 +242,15 @@ void SceneInfos::updateLayerList()
 
     if(m_currentIndex < m_layers->count())
         m_layers->setCurrentRow(m_currentIndex);
+}
+
+void SceneInfos::updateColorButton()
+{
+    constexpr int size(30);
+    QPixmap map(size, size);
+    auto color = m_datas.color;
+    map.fill(QColor(color.r, color.g, color.b));
+    m_colorButton->setIcon(QIcon(map));
 }
 
 void SceneInfos::updateGizmos(unsigned int index, bool value)

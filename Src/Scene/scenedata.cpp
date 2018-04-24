@@ -6,7 +6,8 @@
 #include <QJsonArray>
 
 SceneData::SceneData(const QString & fileName)
-    : m_size(10, 10)
+    : color(sf::Color::Black)
+    , m_size(10, 10)
 {
     load(fileName);
 }
@@ -17,6 +18,9 @@ void SceneData::save(const QString & fileName) const
 
     obj.insert("sx", int(m_size.x));
     obj.insert("sy", int(m_size.y));
+    obj.insert("r", int(color.r));
+    obj.insert("g", int(color.g));
+    obj.insert("b", int(color.b));
 
     QJsonArray layers;
     for(const auto & l : m_layers)
@@ -49,6 +53,8 @@ void SceneData::load(const QString & fileName)
     QJsonObject obj(doc.object());
 
     m_size = sf::Vector2u(obj["sx"].toInt(), obj["sy"].toInt());
+
+    color = sf::Color(obj["r"].toInt(), obj["g"].toInt(), obj["b"].toInt());
 
     auto it = obj.find("layers");
     if(it != obj.end() && it->isArray())

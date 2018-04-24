@@ -3,6 +3,7 @@
 
 #include "Layers/layerbase.h"
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <QString>
 #include <vector>
 #include <memory>
@@ -24,6 +25,8 @@ public:
     void addLayer(LayerType type, const QString &name, const sf::Vector2u &size);
     void delLayer(unsigned int index);
     inline void swapLayers(unsigned int index1, unsigned int index2){std::swap(m_layers[index1], m_layers[index2]);}
+
+    sf::Color color;
 
 private:
     void load(const QString & fileName);
