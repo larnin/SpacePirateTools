@@ -21,6 +21,7 @@ public:
     TilesetLayer(const QString & name, const sf::Vector2u &size);
 
     void setSize(const sf::Vector2u & size) override;
+    QWidget * getToolWindow(CentralSceneWindow * window) override;
     inline sf::Vector2u size() const { return m_tiles.getSize(); }
 
     inline TileInfos getTile(const sf::Vector2u & pos) const {return m_tiles(pos);}
@@ -28,6 +29,7 @@ public:
 
     void setTextureName(const QString & name);
     inline QString textureName() const { return m_textureName; }
+    inline Texture texture() const { return m_texture; }
 
     QString brushName;
 

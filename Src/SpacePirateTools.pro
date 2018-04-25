@@ -63,7 +63,9 @@ SOURCES += \
     Scene/Layers/tilesetlayer.cpp \
     Scene/Layers/objectslayer.cpp \
     UI/Scene/centralscenewindow.cpp \
-    UI/Scene/layertoolholder.cpp
+    UI/Scene/layertoolholder.cpp \
+    UI/Scene/LayerToolWindow/tilesetlayertoolwindow.cpp \
+    UI/Scene/blockview.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -129,7 +131,9 @@ HEADERS += \
     Scene/Layers/tilesetlayer.h \
     Scene/Layers/objectslayer.h \
     UI/Scene/centralscenewindow.h \
-    UI/Scene/layertoolholder.h
+    UI/Scene/layertoolholder.h \
+    UI/Scene/LayerToolWindow/tilesetlayertoolwindow.h \
+    UI/Scene/blockview.h
 
 CONFIG += c++14
 

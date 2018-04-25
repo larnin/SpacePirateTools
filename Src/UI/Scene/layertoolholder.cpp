@@ -9,6 +9,7 @@ LayerToolHolder::LayerToolHolder(QWidget *parent)
     m_layout = new QVBoxLayout();
     m_currentWidget = new QLabel(labelText);
     m_layout->addWidget(m_currentWidget);
+    m_layout->setMargin(0);
 
     setLayout(m_layout);
     setMinimumWidth(200);

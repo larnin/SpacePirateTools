@@ -11,6 +11,7 @@ public:
     ObjectsLayer(const QString & name, const sf::Vector2u &);
 
     void setSize(const sf::Vector2u & size) override;
+    QWidget * getToolWindow(CentralSceneWindow * window) override;
 
 protected:
     void onSave(QJsonObject & obj) const override;

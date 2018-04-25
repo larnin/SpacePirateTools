@@ -1,8 +1,49 @@
 #include "tilecollider.h"
 #include "enumclasshash.h"
+#include "enumiterators.h"
 #include <unordered_map>
 #include <functional>
 #include <cassert>
+
+QString tileColliderTypeToString(TileColliderType type)
+{
+    switch(type)
+    {
+    case TileColliderType::Empty:
+        return "Empty";
+    case TileColliderType::Full:
+        return "Full";
+    case TileColliderType::Triangle:
+        return "Triangle";
+    case TileColliderType::Half:
+        return "Half";
+    case TileColliderType::Quarter:
+        return "Quarter";
+    case TileColliderType::ThreeQuarter:
+        return "Tree quarter";
+    case TileColliderType::CentredHalf:
+        return "Centred half";
+    case TileColliderType::Cross:
+        return "Cross";
+    case TileColliderType::TShape:
+        return "T shape";
+    case TileColliderType::CentredCorner:
+        return "Centred corner";
+    default:
+        break;
+    }
+    assert(false);
+    return "";
+}
+
+TileColliderType tileColliderTypeFromString(const QString & s)
+{
+    for(auto t : TileColliderType::Max)
+        if(tileColliderTypeToString(t) == s)
+            return t;
+    assert(false);
+    return TileColliderType::Max;
+}
 
 TileCollider::TileCollider(unsigned int value)
 {

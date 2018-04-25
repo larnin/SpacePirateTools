@@ -26,3 +26,9 @@ void ObjectsLayer::setSize(const sf::Vector2u & size)
 {
 
 }
+
+#include <QLabel>
+QWidget * ObjectsLayer::getToolWindow(CentralSceneWindow * window)
+{
+    return new QLabel("Cet outil n'est pas encore disponible");
+}

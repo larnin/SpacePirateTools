@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <QString>
 
 enum class TileColliderType : unsigned int
 {
@@ -18,6 +19,9 @@ enum class TileColliderType : unsigned int
     CentredCorner,
     Max = CentredCorner
 };
+
+QString tileColliderTypeToString(TileColliderType type);
+TileColliderType tileColliderTypeFromString(const QString & s);
 
 enum class TileColliderRotation : unsigned int
 {

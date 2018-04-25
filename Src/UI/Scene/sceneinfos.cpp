@@ -106,9 +106,14 @@ void SceneInfos::onSizeChange()
 
 void SceneInfos::onLayerIndexChange(int index)
 {
-    //todo  opening layer
-
     m_currentIndex = index;
+
+    if(m_layerToolHolder != nullptr)
+    {
+        if(index < 0 || index >= int(m_datas.layerCount()))
+            m_layerToolHolder->setWidget(nullptr);
+        else m_layerToolHolder->setWidget(m_datas.layer(index).getToolWindow(m_sceneWindow));
+    }
 }
 
 void SceneInfos::onLayerRightClick(QPoint point)
@@ -243,6 +248,7 @@ void SceneInfos::updateLayerList()
 
     if(m_currentIndex < m_layers->count())
         m_layers->setCurrentRow(m_currentIndex);
+    onLayerIndexChange(m_layers->currentRow());
 }
 
 void SceneInfos::updateColorButton()

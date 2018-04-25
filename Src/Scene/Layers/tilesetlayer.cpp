@@ -1,5 +1,7 @@
 ﻿#include "tilesetlayer.h"
 #include "ProjectInfos/projectinfos.h"
+#include "UI/Scene/LayerToolWindow/tilesetlayertoolwindow.h"
+#include "UI/Scene/centralscenewindow.h"
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <QJsonArray>
 
@@ -32,22 +34,11 @@ TilesetLayer::TilesetLayer(const QString &name, const QJsonObject &obj)
     updateRender();
 }
 
-#include <random>
-
 TilesetLayer::TilesetLayer(const QString & name, const sf::Vector2u &size)
     : LayerBase(LayerType::Tilemap, name)
     , m_tiles(size)
 {
 
-    std::default_random_engine rand;
-    std::uniform_int_distribution<unsigned int> dId(0, 100);
-    std::uniform_int_distribution<unsigned int> dBox(0, 512);
-    for(unsigned int i(0) ; i < size.x ; i++)
-        for(unsigned int j(0) ; j < size.y ; j++)
-        {
-            m_tiles({i, j}) = TileInfos{dId(rand), {dBox(rand)}};
-        }
-    updateRender();
 }
 
 void TilesetLayer::onSave(QJsonObject & obj) const
@@ -90,6 +81,11 @@ void TilesetLayer::setSize(const sf::Vector2u & size)
     m_tiles.resize(size);
 
     updateRender();
+}
+
+QWidget * TilesetLayer::getToolWindow(CentralSceneWindow * window)
+{
+    return new TilesetLayerToolWindow(window, *this);
 }
 
 void TilesetLayer::setTextureName(const QString & name)
