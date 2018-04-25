@@ -136,10 +136,12 @@ void TilesetLayer::updateTileRender()
         for(unsigned int j(0) ; j < m_tiles.getSize().y ; j++)
         {
             unsigned int id(m_tiles({i, j}).id);
+            if(id == 0)
+                continue;
             unsigned int x(id % tileByRow);
             unsigned int y(id / tileByRow);
 
-            drawQuad(&m_tileArray[index * 4], sf::FloatRect(x * tileSize - tileSize / 2.0f, y * tileSize - tileSize / 2.0f, tileSize, tileSize)
+            drawQuad(&m_tileArray[index * 4], sf::FloatRect(i * tileSize - tileSize / 2.0f, j * tileSize - tileSize / 2.0f, tileSize, tileSize)
                     , sf::FloatRect(x * (tileSize + delta), y * (tileSize + delta), tileSize, tileSize));
 
             index++;

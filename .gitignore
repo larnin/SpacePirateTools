@@ -3,6 +3,7 @@
 /Libs
 /build*
 /Env/
+/Out/
 
 *.slo
 *.lo

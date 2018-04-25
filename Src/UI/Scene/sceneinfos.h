@@ -2,6 +2,7 @@
 #define SCENEINFOS_H
 
 #include "Scene/scenedata.h"
+#include "layertoolholder.h"
 #include "Events/Event.h"
 #include "Events/Args/saveevent.h"
 #include "Events/Args/removedfileevent.h"
@@ -26,6 +27,7 @@ public:
     ~SceneInfos();
 
     inline SceneData & getDatas(){ return m_datas;}
+    inline void setLayerHolder(LayerToolHolder * layerTool) { m_layerToolHolder = layerTool;}
 
 public slots:
     void onColorCLicked();
@@ -62,6 +64,8 @@ private:
     QSpinBox* m_sizeY;
     QListWidget* m_layers;
     QCheckBox* m_showGrid;
+
+    LayerToolHolder * m_layerToolHolder;
 
     EventHolder<SaveEvent> saveHolder;
     EventHolder<RenamedFileEvent> renameHolder;

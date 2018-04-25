@@ -62,7 +62,8 @@ SOURCES += \
     UI/Scene/newlayerdialog.cpp \
     Scene/Layers/tilesetlayer.cpp \
     Scene/Layers/objectslayer.cpp \
-    UI/Scene/centralscenewindow.cpp
+    UI/Scene/centralscenewindow.cpp \
+    UI/Scene/layertoolholder.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -127,7 +128,8 @@ HEADERS += \
     enumiterators.h \
     Scene/Layers/tilesetlayer.h \
     Scene/Layers/objectslayer.h \
-    UI/Scene/centralscenewindow.h
+    UI/Scene/centralscenewindow.h \
+    UI/Scene/layertoolholder.h
 
 CONFIG += c++14
 

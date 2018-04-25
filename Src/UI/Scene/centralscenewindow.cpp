@@ -16,7 +16,6 @@ CentralSceneWindow::CentralSceneWindow(SceneInfos * infos, QWidget *parent)
     infos->setCentralSceneWindow(this);
 }
 
-
 void CentralSceneWindow::OnUpdate()
 {
     RenderWindow::clear(m_infos->getDatas().color);
@@ -111,7 +110,6 @@ void CentralSceneWindow::rebuildView()
     RenderWindow::setView(v);
 }
 
-#include <iostream>
 void CentralSceneWindow::drawGrid()
 {
     unsigned int tileSize = ProjectInfos::instance().options().tileSize;

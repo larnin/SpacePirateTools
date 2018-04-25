@@ -17,6 +17,7 @@ SceneInfos::SceneInfos(const QString &assetName, QWidget *parent)
     , m_datas(assetName)
     , m_assetName(assetName)
     , m_currentIndex(-1)
+    , m_layerToolHolder(nullptr)
     , saveHolder(Event<SaveEvent>::connect([this](const auto & e){onSave(e);}))
     , renameHolder(Event<RenamedFileEvent>::connect([this](const auto & e){onRename(e);}))
 {
