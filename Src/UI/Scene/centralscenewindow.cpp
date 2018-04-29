@@ -14,6 +14,7 @@ CentralSceneWindow::CentralSceneWindow(SceneInfos * infos, QWidget *parent)
     , m_draging(false)
 {
     infos->setCentralSceneWindow(this);
+    setMouseTracking(true);
 }
 
 void CentralSceneWindow::OnUpdate()
@@ -24,7 +25,10 @@ void CentralSceneWindow::OnUpdate()
         RenderWindow::draw(m_infos->getDatas().layer(i));
 
     if(m_infos->showGrid())
-    drawGrid();
+        drawGrid();
+
+    if(m_tool)
+        RenderWindow::draw(*m_tool);
 }
 
 void CentralSceneWindow::wheelEvent(QWheelEvent * event)
@@ -50,6 +54,13 @@ void CentralSceneWindow::mouseMoveEvent(QMouseEvent * event)
         rebuildView();
         return;
     }
+
+    if(m_tool)
+    {
+        auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+        event->setLocalPos(QPointF(pos.x, pos.y));
+        m_tool->mouseMoveEvent(event);
+    }
 }
 
 void CentralSceneWindow::mousePressEvent(QMouseEvent * event)
@@ -61,17 +72,43 @@ void CentralSceneWindow::mousePressEvent(QMouseEvent * event)
 
     if(event->button() == Qt::MiddleButton)
         m_draging = true;
+
+    if(m_tool)
+    {
+        auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+        event->setLocalPos(QPointF(pos.x, pos.y));
+        m_tool->mousePressEvent(event);
+    }
 }
 
-void CentralSceneWindow::mouseReleaseEvent(QMouseEvent *)
+void CentralSceneWindow::mouseReleaseEvent(QMouseEvent * event)
 {
-    m_draging = false;
+    if(event->button() == Qt::MiddleButton)
+        m_draging = false;
+
+    if(m_tool)
+    {
+        auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+        event->setLocalPos(QPointF(pos.x, pos.y));
+        m_tool->mouseReleaseEvent(event);
+    }
 }
 
 void CentralSceneWindow::resizeEvent(QResizeEvent * event)
 {
     QWidget::resizeEvent(event);
     rebuildView();
+}
+
+void CentralSceneWindow::keyPressEvent(QKeyEvent * event)
+{
+    if(m_tool)
+        m_tool->keyPressEvent(event);
+}
+void CentralSceneWindow::keyReleaseEvent(QKeyEvent * event)
+{
+    if(m_tool)
+        m_tool->keyReleaseEvent(event);
 }
 
 const std::vector<float> & CentralSceneWindow::zoomLevels()

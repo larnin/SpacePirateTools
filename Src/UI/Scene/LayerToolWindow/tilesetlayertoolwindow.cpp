@@ -89,11 +89,14 @@ void TilesetLayerToolWindow::initializeWidgets()
     colliderLayout->addWidget(radioGroup);
     colliderGroup->setLayout(colliderLayout);
 
+    QPushButton * selectButton = new QPushButton("Select");
+
     QWidget * singleTileHolder = new QWidget();
     QVBoxLayout * singleTileLayout = new QVBoxLayout();
     singleTileLayout->addWidget(new QLabel("Tile :"));
     singleTileLayout->addWidget(blockViewFrame, 1);
     singleTileLayout->addWidget(colliderGroup);
+    singleTileLayout->addWidget(selectButton);
     singleTileHolder->setLayout(singleTileLayout);
 
     QTabWidget * tab = new QTabWidget();
@@ -117,6 +120,7 @@ void TilesetLayerToolWindow::initializeWidgets()
     connect(m_rot270, SIGNAL(clicked(bool)), this, SLOT(onColliderValueChanged()));
     connect(m_xFlipped, SIGNAL(toggled(bool)), this, SLOT(onColliderValueChanged()));
     connect(m_yFlipped, SIGNAL(toggled(bool)), this, SLOT(onColliderValueChanged()));
+    connect(selectButton, SIGNAL(clicked(bool)), this, SLOT(onTileValidSelection()));
 }
 
 void TilesetLayerToolWindow::createBrushList()
@@ -227,6 +231,11 @@ void TilesetLayerToolWindow::onColliderValueChanged()
                       : (m_rot180->isChecked() ? TileColliderRotation::R180
                       : TileColliderRotation::R270));
 
+    //todo
+}
+
+void TilesetLayerToolWindow::onTileValidSelection()
+{
     //todo
 }
 

@@ -26,6 +26,7 @@ public:
 
     inline TileInfos getTile(const sf::Vector2u & pos) const {return m_tiles(pos);}
     void setTile(const sf::Vector2u & pos, const TileInfos & tile);
+    void setTiles(const std::vector<sf::Vector2u> & pos, const std::vector<TileInfos> & tile);
 
     void setTextureName(const QString & name);
     inline QString textureName() const { return m_textureName; }

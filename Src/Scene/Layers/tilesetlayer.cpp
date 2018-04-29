@@ -67,6 +67,16 @@ void TilesetLayer::setTile(const sf::Vector2u & pos, const TileInfos & tile)
     updateRender();
 }
 
+void TilesetLayer::setTiles(const std::vector<sf::Vector2u> & pos, const std::vector<TileInfos> & tile)
+{
+    assert(pos.size() == tile.size());
+
+    for(unsigned int i(0) ; i < pos.size() ; i++)
+        m_tiles(pos[i]) = tile[i];
+
+    updateRender();
+}
+
 void TilesetLayer::draw(sf::RenderTarget &target, sf::RenderStates) const
 {
     if(!hidden && m_texture.isValid())

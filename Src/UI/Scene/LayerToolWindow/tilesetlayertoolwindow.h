@@ -24,6 +24,7 @@ public slots:
     void onSelectBrush(int value);
     void onSelectTile(unsigned int id);
     void onColliderValueChanged();
+    void onTileValidSelection();
 
 private:
     void initializeWidgets();

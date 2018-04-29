@@ -14,6 +14,7 @@ public:
     BlockView(QWidget * parent = nullptr);
 
      void setTexture(Texture texture);
+     inline unsigned int getCurrentBlock() {return m_selectedId;}
 
 signals:
     void selectBlock(unsigned int id);
