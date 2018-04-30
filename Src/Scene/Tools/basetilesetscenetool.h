@@ -28,6 +28,7 @@ protected:
     void draw(sf::RenderTarget &target, sf::RenderStates) const override;
     sf::Rect<unsigned int> selectionBounds() const;
     virtual void onAddTile(const sf::Vector2u & pos) = 0;
+    virtual void drawCursor(sf::RenderTarget &target, const sf::Vector2u & pos) const = 0;
 
     TilesetLayer & m_layer;
 
@@ -40,7 +41,6 @@ private:
     void addTile(const sf::Vector2u & pos);
     void onSelectionEnd();
     void drawTiles(sf::RenderTarget &target) const;
-    void drawCursor(sf::RenderTarget &target) const;
     void drawQuad(sf::Vertex* quad, const sf::FloatRect & rect, const sf::FloatRect & texRect) const;
 
     sf::Vector2u m_mousePos;

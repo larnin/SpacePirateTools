@@ -2,6 +2,7 @@
 #include "ProjectInfos/projectinfos.h"
 #include "UI/linewidget.h"
 #include "enumiterators.h"
+#include "Scene/Tools/singletilescenetool.h"
 #include <QTabWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -222,6 +223,11 @@ void TilesetLayerToolWindow::onSelectTile(unsigned int id)
 
 void TilesetLayerToolWindow::onColliderValueChanged()
 {
+
+}
+
+void TilesetLayerToolWindow::onTileValidSelection()
+{
     TileCollider collider;
     collider.type = tileColliderTypeFromString(m_colliderType->currentText());
     collider.xFlipped = m_xFlipped->isChecked();
@@ -231,12 +237,7 @@ void TilesetLayerToolWindow::onColliderValueChanged()
                       : (m_rot180->isChecked() ? TileColliderRotation::R180
                       : TileColliderRotation::R270));
 
-    //todo
-}
-
-void TilesetLayerToolWindow::onTileValidSelection()
-{
-    //todo
+    m_centralScene->setTool(std::make_unique<SingleTileSceneTool>(m_layer, TileInfos{m_blockView->getCurrentBlock(), collider}));
 }
 
 void TilesetLayerToolWindow::onRename(const RenamedFileEvent &)

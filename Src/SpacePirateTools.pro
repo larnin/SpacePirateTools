@@ -66,7 +66,9 @@ SOURCES += \
     UI/Scene/layertoolholder.cpp \
     UI/Scene/LayerToolWindow/tilesetlayertoolwindow.cpp \
     UI/Scene/blockview.cpp \
-    Scene/Tools/basetilesetscenetool.cpp
+    Scene/Tools/basetilesetscenetool.cpp \
+    Scene/Tools/singletilescenetool.cpp \
+    Scene/Tools/randomscenetool.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -136,7 +138,9 @@ HEADERS += \
     UI/Scene/LayerToolWindow/tilesetlayertoolwindow.h \
     UI/Scene/blockview.h \
     Scene/Tools/basescenetool.h \
-    Scene/Tools/basetilesetscenetool.h
+    Scene/Tools/basetilesetscenetool.h \
+    Scene/Tools/singletilescenetool.h \
+    Scene/Tools/randomscenetool.h
 
 CONFIG += c++14
 
