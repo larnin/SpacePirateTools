@@ -11,3 +11,8 @@ BrushFull::BrushFull(const QString & _name)
 {
 
 }
+
+std::unique_ptr<BaseSceneTool> BrushFull::getSceneTool(TilesetLayer & layer) const
+{
+    return {};
+}

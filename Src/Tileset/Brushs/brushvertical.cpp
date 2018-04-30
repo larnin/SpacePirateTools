@@ -11,3 +11,8 @@ BrushVertical::BrushVertical(const QString & _name)
 {
 
 }
+
+std::unique_ptr<BaseSceneTool> BrushVertical::getSceneTool(TilesetLayer & layer) const
+{
+    return {};
+}

@@ -1,5 +1,6 @@
 #include "brushpatern.h"
-#include <UI/Tileset/BrushsWindow/brushwindowpatern.h>
+#include "UI/Tileset/BrushsWindow/brushwindowpatern.h"
+#include "Scene/Tools/paternscenetool.h"
 #include <QJsonArray>
 #include <cassert>
 
@@ -85,4 +86,9 @@ unsigned int BrushPatern::posToIndex(const sf::Vector2u & pos) const
  BrushWindowBase* BrushPatern::getBrushWindows()
  {
      return new BrushWindowPatern(this);
+ }
+
+ std::unique_ptr<BaseSceneTool> BrushPatern::getSceneTool(TilesetLayer & layer) const
+ {
+     return std::make_unique<PaternSceneTool>(layer, *this);
  }

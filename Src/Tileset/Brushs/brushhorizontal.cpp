@@ -11,3 +11,8 @@ BrushHorizontal::BrushHorizontal(const QString & _name)
 {
 
 }
+
+std::unique_ptr<BaseSceneTool> BrushHorizontal::getSceneTool(TilesetLayer & layer) const
+{
+    return {};
+}

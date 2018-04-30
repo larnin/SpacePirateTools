@@ -213,7 +213,10 @@ void TilesetLayerToolWindow::onBrushIndexChanged(int index)
 
 void TilesetLayerToolWindow::onSelectBrush(int value)
 {
-    //todo
+    if(value >= int(m_tileset->brushs.size()) || value < 0)
+        return;
+
+    m_centralScene->setTool(m_tileset->brushs[value]->getSceneTool(m_layer));
 }
 
 void TilesetLayerToolWindow::onSelectTile(unsigned int id)
@@ -223,7 +226,7 @@ void TilesetLayerToolWindow::onSelectTile(unsigned int id)
 
 void TilesetLayerToolWindow::onColliderValueChanged()
 {
-
+    //todo
 }
 
 void TilesetLayerToolWindow::onTileValidSelection()

@@ -1,5 +1,6 @@
 #include "brushrandom.h"
 #include "UI/Tileset/BrushsWindow/brushwindowrandom.h"
+#include "Scene/Tools/randomscenetool.h"
 #include <QJsonArray>
 
 BrushRandom::BrushRandom(const QJsonObject & obj, const QString & _name)
@@ -44,4 +45,9 @@ void BrushRandom::onSave(QJsonObject & obj) const
 BrushWindowBase* BrushRandom::getBrushWindows()
 {
     return new BrushWindowRandom(this);
+}
+
+std::unique_ptr<BaseSceneTool> BrushRandom::getSceneTool(TilesetLayer & layer) const
+{
+    return std::make_unique<RandomSceneTool>(layer, *this);
 }

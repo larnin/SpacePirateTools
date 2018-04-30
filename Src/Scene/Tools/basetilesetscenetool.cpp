@@ -10,7 +10,7 @@ BaseTilesetSceneTool::BaseTilesetSceneTool(TilesetLayer &layer)
     : m_layer(layer)
     , m_altButtonPressed(false)
     , m_onSelection(false)
-    , m_mousePos(0, 0)
+    , m_mousePos(-1, -1)
 {
 
 }

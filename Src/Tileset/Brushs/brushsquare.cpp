@@ -11,3 +11,8 @@ BrushSquare::BrushSquare(const QString & _name)
 {
 
 }
+
+std::unique_ptr<BaseSceneTool> BrushSquare::getSceneTool(TilesetLayer & layer) const
+{
+    return {};
+}

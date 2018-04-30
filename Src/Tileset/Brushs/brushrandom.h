@@ -35,6 +35,8 @@ public:
 
     BrushWindowBase* getBrushWindows() override;
 
+    std::unique_ptr<BaseSceneTool> getSceneTool(TilesetLayer & layer) const override;
+
 protected:
     void onSave(QJsonObject & obj) const override;
 };

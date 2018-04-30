@@ -4,6 +4,8 @@
 #include "Tileset/tilecollider.h"
 #include "Tileset/tileshape.h"
 #include "UI/Tileset/BrushsWindow/brushwindowbase.h"
+#include "Scene/Tools/basetilesetscenetool.h"
+#include "Scene/Layers/tilesetlayer.h"
 #include <QJsonObject>
 #include <memory>
 
@@ -44,6 +46,7 @@ public:
 
     inline BrushType getBrushType() const {return m_brushType;}
     virtual BrushWindowBase* getBrushWindows() = 0;
+    virtual std::unique_ptr<BaseSceneTool> getSceneTool(TilesetLayer & layer) const = 0;
 
     QString name;
 

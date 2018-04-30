@@ -68,7 +68,8 @@ SOURCES += \
     UI/Scene/blockview.cpp \
     Scene/Tools/basetilesetscenetool.cpp \
     Scene/Tools/singletilescenetool.cpp \
-    Scene/Tools/randomscenetool.cpp
+    Scene/Tools/randomscenetool.cpp \
+    Scene/Tools/paternscenetool.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -140,7 +141,8 @@ HEADERS += \
     Scene/Tools/basescenetool.h \
     Scene/Tools/basetilesetscenetool.h \
     Scene/Tools/singletilescenetool.h \
-    Scene/Tools/randomscenetool.h
+    Scene/Tools/randomscenetool.h \
+    Scene/Tools/paternscenetool.h
 
 CONFIG += c++14
 
