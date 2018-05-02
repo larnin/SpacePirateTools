@@ -13,7 +13,7 @@ public:
     TileFullInfos & tile(TileShape shape);
     TileFullInfos const & tile(TileShape shape) const;
 
-     BrushWindowBase* getBrushWindows() override;
+    BrushWindowBase* getBrushWindows() override;
 
 protected:
     BrushTiled(const QJsonObject & obj, const QString & _name, BrushType type);

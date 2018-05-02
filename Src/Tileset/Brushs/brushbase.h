@@ -30,6 +30,8 @@ struct TileFullInfos
     inline TileFullInfos(TileCollider _collider, unsigned int _id)
         : shape(TileShape::Empty), collider(_collider), id(_id) { }
 
+    inline TileInfos toTileInfos() const { return {id, collider}; }
+
     TileShape shape;
     TileCollider collider;
     unsigned int id;
