@@ -72,7 +72,8 @@ SOURCES += \
     Scene/Tools/paternscenetool.cpp \
     Scene/Tools/verticalbrushscenetool.cpp \
     Scene/Tools/horizontalbrushscenetool.cpp \
-    Scene/Tools/squarebrushscenetool.cpp
+    Scene/Tools/squarebrushscenetool.cpp \
+    Scene/Tools/fullbrushscrenetool.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -148,7 +149,8 @@ HEADERS += \
     Scene/Tools/paternscenetool.h \
     Scene/Tools/verticalbrushscenetool.h \
     Scene/Tools/horizontalbrushscenetool.h \
-    Scene/Tools/squarebrushscenetool.h
+    Scene/Tools/squarebrushscenetool.h \
+    Scene/Tools/fullbrushscrenetool.h
 
 CONFIG += c++14
 
