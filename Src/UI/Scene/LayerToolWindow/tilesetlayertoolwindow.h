@@ -5,6 +5,7 @@
 #include "UI/Scene/blockview.h"
 #include "Scene/Layers/tilesetlayer.h"
 #include "Tileset/tilesetdata.h"
+#include "Events/Args/editionevents.h"
 #include <QWidget>
 #include <QComboBox>
 #include <QListWidget>
@@ -36,6 +37,7 @@ private:
     void onRename(const RenamedFileEvent &);
     void onRemove(const RemovedFileEvent &);
     void onAdd(const AddedFileEvent &);
+    void onSelectModeSwitch(const SelectModeSwitchEvent & e);
 
     CentralSceneWindow* m_centralScene;
     TilesetLayer& m_layer;
@@ -58,6 +60,7 @@ private:
     EventHolder<RenamedFileEvent> renameHolder;
     EventHolder<RemovedFileEvent> removedHolder;
     EventHolder<AddedFileEvent> addedHolder;
+    EventHolder<SelectModeSwitchEvent> selectModeSwitchHolder;
 };
 
 #endif // TILESETLAYERTOOLWINDOW_H

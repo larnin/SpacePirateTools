@@ -2,6 +2,7 @@
 #include "ProjectInfos/projectinfos.h"
 #include "UI/Scene/LayerToolWindow/tilesetlayertoolwindow.h"
 #include "UI/Scene/centralscenewindow.h"
+#include "Scene/Tools/copytilesetscenetool.h"
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <QJsonArray>
 
@@ -96,6 +97,11 @@ void TilesetLayer::setSize(const sf::Vector2u & size)
 QWidget * TilesetLayer::getToolWindow(CentralSceneWindow * window)
 {
     return new TilesetLayerToolWindow(window, *this);
+}
+
+std::unique_ptr<BaseSceneTool> TilesetLayer::getSelectionTool()
+{
+    return std::make_unique<CopyTilesetSceneTool>(*this);
 }
 
 void TilesetLayer::setTextureName(const QString & name)

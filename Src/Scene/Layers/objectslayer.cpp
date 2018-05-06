@@ -1,4 +1,5 @@
 #include "objectslayer.h"
+#include "Scene/Tools/basescenetool.h"
 
 ObjectsLayer::ObjectsLayer(const QString & name, const QJsonObject & obj)
     : LayerBase(LayerType::Objects, name)
@@ -31,4 +32,9 @@ void ObjectsLayer::setSize(const sf::Vector2u & size)
 QWidget * ObjectsLayer::getToolWindow(CentralSceneWindow * window)
 {
     return new QLabel("Cet outil n'est pas encore disponible");
+}
+
+std::unique_ptr<BaseSceneTool> ObjectsLayer::getSelectionTool()
+{
+    return {};
 }

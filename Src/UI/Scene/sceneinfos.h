@@ -8,6 +8,7 @@
 #include "Events/Args/removedfileevent.h"
 #include "Events/Args/renamedfileevent.h"
 #include "Events/Args/addedfileevent.h"
+#include "Events/Args/editionevents.h"
 #include <QString>
 #include <QWidget>
 #include <QListWidget>
@@ -53,6 +54,7 @@ private:
 
     void onSave(const SaveEvent &);
     void onRename(const RenamedFileEvent & e);
+    void onSelectModeSwitch(const SelectModeSwitchEvent & e);
 
     SceneData m_datas;
     QString m_assetName;
@@ -67,8 +69,9 @@ private:
 
     LayerToolHolder * m_layerToolHolder;
 
-    EventHolder<SaveEvent> saveHolder;
-    EventHolder<RenamedFileEvent> renameHolder;
+    EventHolder<SaveEvent> m_saveHolder;
+    EventHolder<RenamedFileEvent> m_renameHolder;
+    EventHolder<SelectModeSwitchEvent> m_selectModeSwitchHolder;
 
     CentralSceneWindow * m_sceneWindow;
 };

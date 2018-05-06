@@ -12,6 +12,7 @@ public:
 
     void setSize(const sf::Vector2u & size) override;
     QWidget * getToolWindow(CentralSceneWindow * window) override;
+    std::unique_ptr<BaseSceneTool> getSelectionTool() override;
 
 protected:
     void onSave(QJsonObject & obj) const override;

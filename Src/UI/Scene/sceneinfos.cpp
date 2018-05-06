@@ -18,8 +18,10 @@ SceneInfos::SceneInfos(const QString &assetName, QWidget *parent)
     , m_assetName(assetName)
     , m_currentIndex(-1)
     , m_layerToolHolder(nullptr)
-    , saveHolder(Event<SaveEvent>::connect([this](const auto & e){onSave(e);}))
-    , renameHolder(Event<RenamedFileEvent>::connect([this](const auto & e){onRename(e);}))
+    , m_saveHolder(Event<SaveEvent>::connect([this](const auto & e){onSave(e);}))
+    , m_renameHolder(Event<RenamedFileEvent>::connect([this](const auto & e){onRename(e);}))
+    , m_selectModeSwitchHolder(Event<SelectModeSwitchEvent>::connect([this](const auto & e){onSelectModeSwitch(e);}))
+    , m_sceneWindow(nullptr)
 {
     initializeWidgets();
     updateLayerList();
@@ -87,6 +89,16 @@ void SceneInfos::onRename(const RenamedFileEvent & e)
         m_assetName = e.newName;
 }
 
+void SceneInfos::onSelectModeSwitch(const SelectModeSwitchEvent & e)
+{
+    if(!e.selectMode)
+        return;
+
+    if(m_currentIndex < 0 || m_currentIndex >= int(m_datas.layerCount()))
+        return;
+
+    m_sceneWindow->setTool(m_datas.layer(m_currentIndex).getSelectionTool());
+}
 
 void SceneInfos::onColorCLicked()
 {
@@ -108,6 +120,8 @@ void SceneInfos::onLayerIndexChange(int index)
 {
     m_currentIndex = index;
 
+    if(m_sceneWindow != nullptr)
+        m_sceneWindow->setTool({});
     if(m_layerToolHolder != nullptr)
     {
         if(index < 0 || index >= int(m_datas.layerCount()))
@@ -174,6 +188,10 @@ void SceneInfos::delLayer(unsigned int index)
     auto answer = QMessageBox::question(this, "Supprimer un layer", "Etes vous sur de vouloir supprimer ce layer ?");
     if(answer != QMessageBox::Yes)
         return;
+
+    auto tool = m_sceneWindow->currentTool();
+    if(tool != nullptr && &m_datas.layer(index) == &tool->layer())
+        m_sceneWindow->setTool({});
 
     m_datas.delLayer(index);
     updateLayerList();

@@ -7,7 +7,8 @@
 constexpr Qt::Modifier altKey(Qt::SHIFT);
 
 BaseTilesetSceneTool::BaseTilesetSceneTool(TilesetLayer &layer)
-    : m_layer(layer)
+    : BaseSceneTool(layer)
+    , m_layer(layer)
     , m_altButtonPressed(false)
     , m_onSelection(false)
     , m_mousePos(-1, -1)
@@ -72,6 +73,8 @@ void BaseTilesetSceneTool::addTile(const sf::Vector2u & pos)
 
 void BaseTilesetSceneTool::onSelectionEnd()
 {
+    beforeSelectionEnd();
+
     m_onSelection = false;
 
     std::vector<sf::Vector2u> pos;

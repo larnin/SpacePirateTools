@@ -12,7 +12,8 @@ class CentralSceneWindow : public QSFMLCanvas
 public:
     CentralSceneWindow(SceneInfos * infos, QWidget * parent = nullptr);
 
-    void setTool(std::unique_ptr<BaseSceneTool> && tool) { m_tool = std::move(tool); }
+    inline void setTool(std::unique_ptr<BaseSceneTool> && tool) { m_tool = std::move(tool); }
+    inline const BaseSceneTool * currentTool() const { return m_tool ? m_tool.get() : nullptr; }
 
 protected:
     void OnUpdate() override;

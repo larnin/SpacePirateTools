@@ -17,6 +17,7 @@ TilesetLayerToolWindow::TilesetLayerToolWindow(CentralSceneWindow * centralScene
     , renameHolder(Event<RenamedFileEvent>::connect([this](const auto & e){onRename(e);}))
     , removedHolder(Event<RemovedFileEvent>::connect([this](const auto & e){onRemove(e);}))
     , addedHolder(Event<AddedFileEvent>::connect([this](const auto & e){onAdd(e);}))
+    , selectModeSwitchHolder(Event<SelectModeSwitchEvent>::connect([this](const auto & e){onSelectModeSwitch(e);}))
 {
     initializeWidgets();
 
@@ -214,9 +215,8 @@ void TilesetLayerToolWindow::onBrushIndexChanged(int index)
 void TilesetLayerToolWindow::onSelectBrush(int value)
 {
     if(value >= int(m_tileset->brushs.size()) || value < 0)
-        return;
-
-    m_centralScene->setTool(m_tileset->brushs[value]->getSceneTool(m_layer));
+        m_centralScene->setTool({});
+    else m_centralScene->setTool(m_tileset->brushs[value]->getSceneTool(m_layer));
 }
 
 void TilesetLayerToolWindow::onSelectTile(unsigned int id)
@@ -259,4 +259,11 @@ void TilesetLayerToolWindow::onAdd(const AddedFileEvent &)
 {
     updateImageList();
     updateBrushList();
+}
+
+void TilesetLayerToolWindow::onSelectModeSwitch(const SelectModeSwitchEvent & e)
+{
+    if(e.selectMode)
+        return;
+    onSelectBrush(m_brushList->currentRow());
 }

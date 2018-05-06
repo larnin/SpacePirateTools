@@ -27,7 +27,7 @@ public slots:
     void onRedo();
     void onCopy();
     void onCut();
-    void onPast();
+    void onPaste();
     void onSelectMode(bool mode);
 
     void onShowExplorer();

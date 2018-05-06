@@ -5,6 +5,7 @@
 #include "Events/Args/projectloadedevent.h"
 #include "Events/Args/clearevent.h"
 #include "Events/Args/saveevent.h"
+#include "Events/Args/editionevents.h"
 #include "dock.h"
 #include "fileexplorer.h"
 #include "UI/Animation/animationsinfos.h"
@@ -64,6 +65,7 @@ void MainWindow::createMenus()
         pastAction->setShortcut(QKeySequence("Ctrl+V"));
         editMenu->addSeparator();
         auto selectModeAction = editMenu->addAction("Mode de &selection");
+        selectModeAction->setCheckable(true);
         selectModeAction->setShortcut(QKeySequence("Tab"));
 
     QMenu *windowMenu = menuBar()->addMenu("&Fenetre");
@@ -79,7 +81,7 @@ void MainWindow::createMenus()
     connect(redoAction, SIGNAL(triggered(bool)), this, SLOT(onRedo()));
     connect(copyAction, SIGNAL(triggered(bool)), this, SLOT(onCopy()));
     connect(cutAction, SIGNAL(triggered(bool)), this, SLOT(onCut()));
-    connect(pastAction, SIGNAL(triggered(bool)), this, SLOT(onPast()));
+    connect(pastAction, SIGNAL(triggered(bool)), this, SLOT(onPaste()));
     connect(selectModeAction, SIGNAL(toggled(bool)), this, SLOT(onSelectMode(bool)));
 
     connect(showExplorer, SIGNAL(triggered(bool)), this, SLOT(onShowExplorer()));
@@ -151,32 +153,33 @@ void MainWindow::onSaveAndQuit()
 
 void MainWindow::onUndo()
 {
-    QMessageBox::information(this, "Not implemented", "Undo n'est pas encore implémenté, veuillez reessayer plus tard.");
+    Event<UndoEvent>::send({});
 }
 
 void MainWindow::onRedo()
 {
-    QMessageBox::information(this, "Not implemented", "Redo n'est pas encore implémenté, veuillez reessayer plus tard.");
+    Event<RedoEvent>::send({});
 }
 
 void MainWindow::onCopy()
 {
-    QMessageBox::information(this, "Not implemented", "Copy n'est pas encore implémenté, veuillez reessayer plus tard.");
+    Event<CopyEvent>::send({});
 }
 
 void MainWindow::onCut()
 {
-    QMessageBox::information(this, "Not implemented", "Cut n'est pas encore implémenté, veuillez reessayer plus tard.");
+    Event<CutEvent>::send({});
 }
 
-void MainWindow::onPast()
+void MainWindow::onPaste()
 {
-    QMessageBox::information(this, "Not implemented", "Past n'est pas encore implémenté, veuillez reessayer plus tard.");
+    onSelectMode(true);
+    Event<PasteEvent>::send({});
 }
 
-void MainWindow::onSelectMode(bool /*mode*/)
+void MainWindow::onSelectMode(bool mode)
 {
-    QMessageBox::information(this, "Not implemented", "Le mode selection n'est pas encore implémenté, veuillez reessayer plus tard.");
+    Event<SelectModeSwitchEvent>::send({mode});
 }
 
 void MainWindow::onShowExplorer()

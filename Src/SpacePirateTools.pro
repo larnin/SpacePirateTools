@@ -73,7 +73,8 @@ SOURCES += \
     Scene/Tools/verticalbrushscenetool.cpp \
     Scene/Tools/horizontalbrushscenetool.cpp \
     Scene/Tools/squarebrushscenetool.cpp \
-    Scene/Tools/fullbrushscrenetool.cpp
+    Scene/Tools/fullbrushscrenetool.cpp \
+    Scene/Tools/copytilesetscenetool.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -150,7 +151,9 @@ HEADERS += \
     Scene/Tools/verticalbrushscenetool.h \
     Scene/Tools/horizontalbrushscenetool.h \
     Scene/Tools/squarebrushscenetool.h \
-    Scene/Tools/fullbrushscrenetool.h
+    Scene/Tools/fullbrushscrenetool.h \
+    Events/Args/editionevents.h \
+    Scene/Tools/copytilesetscenetool.h
 
 CONFIG += c++14
 

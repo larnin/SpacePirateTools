@@ -29,6 +29,7 @@ protected:
     sf::Rect<unsigned int> selectionBounds() const;
     virtual void onAddTile(const sf::Vector2u & pos) = 0;
     virtual void drawCursor(sf::RenderTarget &target, const sf::Vector2u & pos) const = 0;
+    virtual void beforeSelectionEnd() {}
 
     TilesetLayer & m_layer;
 
