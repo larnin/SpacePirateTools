@@ -120,6 +120,7 @@ void BaseTilesetSceneTool::drawTiles(sf::RenderTarget &target) const
         return;
 
     sf::VertexArray array(sf::Quads, m_blocks.size() * 4);
+    sf::VertexArray backArray(sf::Quads, m_blocks.size() * 4);
 
     auto size = ProjectInfos::instance().options().tileSize;
     auto delta = ProjectInfos::instance().options().delta;
@@ -134,8 +135,14 @@ void BaseTilesetSceneTool::drawTiles(sf::RenderTarget &target) const
 
         drawQuad(&array[i * 4], sf::FloatRect((b.pos.x - 0.5f) * size, (b.pos.y - 0.5f) * size, size, size)
                 , sf::FloatRect(x * (delta + size), y * (delta+ size), size, size));
+        drawQuad(&backArray[i * 4], sf::FloatRect((b.pos.x - 0.5f) * size, (b.pos.y - 0.5f) * size, size, size)
+                , sf::FloatRect(x * (delta + size), y * (delta+ size), size, size));
     }
 
+    for(unsigned int i(0) ; i < backArray.getVertexCount() ; i++)
+        backArray[i].color = sf::Color(255, 255, 255, 80);
+
+    target.draw(backArray);
     target.draw(array, m_layer.texture()());
 }
 
