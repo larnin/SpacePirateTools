@@ -10,7 +10,8 @@ enum class AssetType
     Animation,
     Animator,
     Scene,
-    Max = Scene,
+    Object,
+    Max = Object,
     Unknow = Max+1,
 };
 

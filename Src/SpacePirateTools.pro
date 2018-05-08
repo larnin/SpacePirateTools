@@ -75,7 +75,9 @@ SOURCES += \
     Scene/Tools/squarebrushscenetool.cpp \
     Scene/Tools/fullbrushscrenetool.cpp \
     Scene/Tools/copytilesetscenetool.cpp \
-    Scene/Tools/pastetilesetscenetool.cpp
+    Scene/Tools/pastetilesetscenetool.cpp \
+    Object/objectdata.cpp \
+    Object/objectproperty.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -155,13 +157,17 @@ HEADERS += \
     Scene/Tools/fullbrushscrenetool.h \
     Events/Args/editionevents.h \
     Scene/Tools/copytilesetscenetool.h \
-    Scene/Tools/pastetilesetscenetool.h
+    Scene/Tools/pastetilesetscenetool.h \
+    Object/objectdata.h \
+    Object/objectproperty.h
 
 CONFIG += c++14
 
 # SFML
 DEFINES += SFML_STATIC
 LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
+INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
+DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
 
 CONFIG(release, debug|release): LIBS += -lsfml-graphics-s \
                                         -lsfml-window-s \
@@ -197,5 +203,3 @@ CONFIG(debug, debug|release): LIBS +=   -lsfml-graphics-s-d \
                                         -lvorbis \
                                         -logg
 
-INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
-DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include

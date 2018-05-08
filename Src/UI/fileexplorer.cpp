@@ -171,6 +171,7 @@ void FileExplorer::del(QTreeWidgetItem *item)
 
     Event<RemovedFileEvent>::send({fullName});
 }
+
 void FileExplorer::add(AssetType type)
 {
     if(!assetCanBeCreated(type))
@@ -189,6 +190,10 @@ void FileExplorer::add(AssetType type)
         QMessageBox::information(this, "La ressource existe", "La ressource " + fullName + " existe déja");
         return;
     }
+
+    QDir d(dir + assetTypeToString(type) + "/");
+    if(!d.exists())
+        d.mkpath(d.absolutePath());
 
     QFile file(dir + fullName);
     if(!file.open(QIODevice::WriteOnly))
@@ -225,6 +230,10 @@ void FileExplorer::import()
     auto dir = ProjectInfos::instance().projectDirectory() + "/";
     auto assetfullName = assetTypeToString(assetType) + "/" + name + "." + extension;
     auto fullName = dir + assetfullName;
+
+    QDir d(dir + assetTypeToString(assetType) + "/");
+    if(!d.exists())
+        d.mkpath(d.absolutePath());
 
     if(QFile::exists(fullName))
     {
