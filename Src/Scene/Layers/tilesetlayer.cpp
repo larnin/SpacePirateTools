@@ -99,9 +99,9 @@ QWidget * TilesetLayer::getToolWindow(CentralSceneWindow * window)
     return new TilesetLayerToolWindow(window, *this);
 }
 
-std::unique_ptr<BaseSceneTool> TilesetLayer::getSelectionTool()
+std::unique_ptr<BaseSceneTool> TilesetLayer::getSelectionTool(CentralSceneWindow * window)
 {
-    return std::make_unique<CopyTilesetSceneTool>(*this);
+    return std::make_unique<CopyTilesetSceneTool>(*this, window);
 }
 
 void TilesetLayer::setTextureName(const QString & name)

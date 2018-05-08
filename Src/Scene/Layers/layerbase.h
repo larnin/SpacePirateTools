@@ -29,7 +29,7 @@ public:
 
     virtual void setSize(const sf::Vector2u & size) = 0;
     virtual QWidget * getToolWindow(CentralSceneWindow * window) = 0;
-    virtual std::unique_ptr<BaseSceneTool> getSelectionTool() = 0;
+    virtual std::unique_ptr<BaseSceneTool> getSelectionTool(CentralSceneWindow *window) = 0;
 
     static std::unique_ptr<LayerBase> loadLayer(const QJsonObject & obj);
     static std::unique_ptr<LayerBase> createLayer(LayerType type, const QString & name, const sf::Vector2u &size);

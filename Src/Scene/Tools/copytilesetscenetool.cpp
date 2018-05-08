@@ -1,4 +1,5 @@
 #include "copytilesetscenetool.h"
+#include "pastetilesetscenetool.h"
 #include "ProjectInfos/projectinfos.h"
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -6,13 +7,14 @@
 
 std::vector<CopyTilesetSceneTool::CopyValue> CopyTilesetSceneTool::m_copyBuffer;
 
-CopyTilesetSceneTool::CopyTilesetSceneTool(TilesetLayer &layer)
+CopyTilesetSceneTool::CopyTilesetSceneTool(TilesetLayer &layer, CentralSceneWindow *window)
     : BaseTilesetSceneTool(layer)
     , m_copyHolder(Event<CopyEvent>::connect([this](const auto & e){onCopy(e);}))
     , m_cutHolder(Event<CutEvent>::connect([this](const auto & e){onCut(e);}))
     , m_pasteHolder(Event<PasteEvent>::connect([this](const auto & e){onPaste(e);}))
     , m_haveSelected(false)
     , m_onSelection(false)
+    , m_window(window)
 {
 
 }
@@ -66,7 +68,7 @@ void CopyTilesetSceneTool::onCopy(const CopyEvent &)
         for(unsigned int j(0) ; int(j) <= std::abs(int(m_endPos.y) - int(m_startPos.y)) ; j++)
         {
             sf::Vector2u pos(i + std::min(m_startPos.x, m_endPos.x), j + std::min(m_startPos.y, m_endPos.y));
-            m_copyBuffer.push_back({pos, m_layer.getTile(pos)});
+            m_copyBuffer.push_back({sf::Vector2u(i, j), m_layer.getTile(pos)});
         }
 }
 
@@ -88,5 +90,7 @@ void CopyTilesetSceneTool::onCut(const CutEvent &)
 
 void CopyTilesetSceneTool::onPaste(const PasteEvent &)
 {
-
+    if(m_copyBuffer.empty())
+        m_window->setTool({});
+    else m_window->setTool(std::make_unique<PasteTilesetSceneTool>(m_layer, m_copyBuffer));
 }

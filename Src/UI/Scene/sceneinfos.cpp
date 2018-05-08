@@ -97,7 +97,7 @@ void SceneInfos::onSelectModeSwitch(const SelectModeSwitchEvent & e)
     if(m_currentIndex < 0 || m_currentIndex >= int(m_datas.layerCount()))
         return;
 
-    m_sceneWindow->setTool(m_datas.layer(m_currentIndex).getSelectionTool());
+    m_sceneWindow->setTool(m_datas.layer(m_currentIndex).getSelectionTool(m_sceneWindow));
 }
 
 void SceneInfos::onColorCLicked()

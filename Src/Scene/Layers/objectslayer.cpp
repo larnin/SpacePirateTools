@@ -34,7 +34,7 @@ QWidget * ObjectsLayer::getToolWindow(CentralSceneWindow * window)
     return new QLabel("Cet outil n'est pas encore disponible");
 }
 
-std::unique_ptr<BaseSceneTool> ObjectsLayer::getSelectionTool()
+std::unique_ptr<BaseSceneTool> ObjectsLayer::getSelectionTool(CentralSceneWindow *window)
 {
     return {};
 }

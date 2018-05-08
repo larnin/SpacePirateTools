@@ -4,17 +4,18 @@
 #include "basetilesetscenetool.h"
 #include "Events/Event.h"
 #include "Events/Args/editionevents.h"
+#include "UI/Scene/centralscenewindow.h"
 
 class CopyTilesetSceneTool : public BaseTilesetSceneTool
 {
+public:
     struct CopyValue
     {
         sf::Vector2u pos;
         TileInfos tile;
     };
 
-public:
-    CopyTilesetSceneTool(TilesetLayer & layer);
+    CopyTilesetSceneTool(TilesetLayer & layer, CentralSceneWindow* window);
 
 protected:
     void onAddTile(const sf::Vector2u & pos) override;
@@ -34,6 +35,7 @@ private:
     bool m_onSelection;
     sf::Vector2u m_startPos;
     sf::Vector2u m_endPos;
+    CentralSceneWindow * m_window;
 
     static std::vector<CopyValue> m_copyBuffer;
 };

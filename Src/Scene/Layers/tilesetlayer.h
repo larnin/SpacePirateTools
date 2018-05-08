@@ -22,7 +22,7 @@ public:
 
     void setSize(const sf::Vector2u & size) override;
     QWidget * getToolWindow(CentralSceneWindow * window) override;
-    std::unique_ptr<BaseSceneTool> getSelectionTool() override;
+    std::unique_ptr<BaseSceneTool> getSelectionTool(CentralSceneWindow *window) override;
 
     inline sf::Vector2u size() const { return m_tiles.getSize(); }
 
