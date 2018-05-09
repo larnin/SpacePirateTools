@@ -3,6 +3,7 @@
 
 #include "Value/objectvaluebase.h"
 #include <QString>
+#include <QWidget>
 #include <memory>
 
 enum class InspectorVisibility

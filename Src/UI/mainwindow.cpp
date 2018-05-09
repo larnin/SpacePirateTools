@@ -236,6 +236,7 @@ void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
         break;
     case AssetType::Object:
         openObject(fullName);
+        break;
     default:
         closeCurrentWidget();
         break;

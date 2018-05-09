@@ -11,9 +11,13 @@
 
 class ObjectInfos : public QWidget
 {
+    Q_OBJECT
 public:
     ObjectInfos(const QString &assetName, QWidget * parent = nullptr);
     ~ObjectInfos();
+
+public slots:
+    void onAddClicked();
 
 private:
     void initializeWidgets();
