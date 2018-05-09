@@ -1,7 +1,9 @@
 #ifndef OBJECTPROPERTY_H
 #define OBJECTPROPERTY_H
 
+#include "Value/objectvaluebase.h"
 #include <QString>
+#include <memory>
 
 enum class InspectorVisibility
 {
@@ -32,8 +34,7 @@ public:
     ObjectProperty & operator=(ObjectProperty &&) = default;
 
     QString name;
-    //add value
-
+    std::unique_ptr<ObjectValueBase> value;
     InspectorVisibility inspectorVisibility;
     SceneVisibility sceneVisibility;
 };

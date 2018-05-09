@@ -19,7 +19,7 @@ void ObjectData::save(const QString & fileName) const
     {
         QJsonObject pObj;
         pObj.insert("name", p.name);
-        //add value
+        pObj.insert("value", p.value->save());
         pObj.insert("iv", static_cast<int>(p.inspectorVisibility));
         pObj.insert("sv", static_cast<int>(p.sceneVisibility));
         properties.append(pObj);
@@ -62,6 +62,7 @@ void ObjectData::load(const QString & fileName)
 
             ObjectProperty prop;
             prop.name = p["name"].toString();
+            prop.value = ObjectValueBase::loadValue(p["value"].toObject());
             prop.inspectorVisibility = static_cast<InspectorVisibility>(p["iv"].toInt());
             prop.sceneVisibility = static_cast<SceneVisibility>(p["sv"].toInt());
             push_back(std::move(prop));
