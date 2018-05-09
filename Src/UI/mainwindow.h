@@ -44,6 +44,7 @@ private:
     void openImage(const QString & filename);
     void openTileset(const QString & filename);
     void openScene(const QString & filename);
+    void openObject(const QString & filename);
 
     void onOpenRessource(const OpenRessourceEvent & e);
     void clearDocks();

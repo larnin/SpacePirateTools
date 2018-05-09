@@ -17,6 +17,7 @@
 #include "UI/Scene/sceneinfos.h"
 #include "UI/Scene/layertoolholder.h"
 #include "UI/Scene/centralscenewindow.h"
+#include "UI/Object/objectinfos.h"
 #include "UI/imagewidget.h"
 #include <QMenuBar>
 #include <QAction>
@@ -233,6 +234,8 @@ void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
     case AssetType::Image:
         openImage(fullName);
         break;
+    case AssetType::Object:
+        openObject(fullName);
     default:
         closeCurrentWidget();
         break;
@@ -294,6 +297,11 @@ void MainWindow::openScene(const QString & filename)
     addDockWidget(Qt::LeftDockWidgetArea, m_assetDocks.back());
     m_assetDocks.push_back(new Dock<LayerToolHolder>(l, "Layer tool", false));
     addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
+}
+
+void MainWindow::openObject(const QString & filename)
+{
+    setCentralWidget(new ObjectInfos(filename));
 }
 
 void MainWindow::clearDocks()

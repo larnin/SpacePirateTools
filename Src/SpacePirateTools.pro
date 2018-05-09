@@ -78,7 +78,8 @@ SOURCES += \
     Scene/Tools/pastetilesetscenetool.cpp \
     Object/objectdata.cpp \
     Object/objectproperty.cpp \
-    Object/Value/objectvaluebase.cpp
+    Object/Value/objectvaluebase.cpp \
+    UI/Object/objectinfos.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -161,7 +162,8 @@ HEADERS += \
     Scene/Tools/pastetilesetscenetool.h \
     Object/objectdata.h \
     Object/objectproperty.h \
-    Object/Value/objectvaluebase.h
+    Object/Value/objectvaluebase.h \
+    UI/Object/objectinfos.h
 
 CONFIG += c++14
 
