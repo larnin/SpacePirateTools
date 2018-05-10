@@ -8,7 +8,6 @@
 
 enum class ValueType
 {
-    Transform,
     Box2DCollider,
     CircleCollider,
     ConvexeCollider,
@@ -23,7 +22,8 @@ enum class ValueType
     Vector2f,
     Vector2i,
     Color,
-    Max = Color
+    Max = Color,
+    Transform,
 };
 
 QString valueTypeToString(ValueType type);
@@ -47,5 +47,6 @@ protected:
 private:
     ValueType m_valueType;
 };
+
 
 #endif // OBJECTVALUEBASE_H

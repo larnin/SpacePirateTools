@@ -4,10 +4,19 @@
 #include <QJsonValue>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <cassert>
+
+ObjectData::ObjectData()
+{
+    push_back(createDefaultTransform());
+}
 
 ObjectData::ObjectData(const QString & fileName)
 {
     load(fileName);
+
+    if(empty() || (*this)[0]->value->type() != ValueType::Transform)
+        insert(begin(), createDefaultTransform());
 }
 
 void ObjectData::save(const QString & fileName) const
@@ -68,4 +77,22 @@ void ObjectData::load(const QString & fileName)
             push_back(std::move(prop));
         }
     }
+}
+
+ObjectValueTransform & ObjectData::transform()
+{
+    assert(!empty());
+    assert((*this)[0]->value->type() == ValueType::Transform);
+
+    return *dynamic_cast<ObjectValueTransform*>((*this)[0]->value.get());
+}
+
+std::unique_ptr<ObjectProperty> ObjectData::createDefaultTransform()
+{
+    auto property = std::make_unique<ObjectProperty>();
+    property->name = "Transform";
+    property->inspectorVisibility = InspectorVisibility::Visible;
+    property->sceneVisibility = SceneVisibility::All;
+    property->value = ObjectValueBase::createValue(ValueType::Transform);
+    return std::move(property);
 }

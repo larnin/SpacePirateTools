@@ -14,11 +14,11 @@ PropertyWidget::PropertyWidget(ObjectProperty &obj, bool forceEdition, QWidget *
         boxLayout->addWidget(obj.value->createUi());
     else if(obj.inspectorVisibility == InspectorVisibility::AsString)
         boxLayout->addWidget(new QLabel(obj.value->toString()));
-    if(forceEdition || obj.inspectorVisibility != InspectorVisibility::Hidden)
+    if(obj.value->type() != ValueType::Transform && (forceEdition || obj.inspectorVisibility != InspectorVisibility::Hidden))
     {
         QPushButton* removeButton = new QPushButton("Supprimer");
         boxLayout->addWidget(removeButton);
-        connect(removeButton, SIGNAL(clicked(bool)), this, SLOT(removeRequested()));
+        connect(removeButton, SIGNAL(clicked(bool)), this, SIGNAL(removeRequested()));
     }
     box->setLayout(boxLayout);
 

@@ -24,12 +24,7 @@ void ObjectInfos::initializeWidgets()
 {
     m_propertiesLayout = new QVBoxLayout();
     for(auto & p : m_datas)
-    {
-        auto widget = new PropertyWidget(*p, true);
-        m_widgets.push_back(widget);
-        m_propertiesLayout->addWidget(widget);
-        connect(widget, &PropertyWidget::removeRequested, this, [this, widget](){onRemove(widget);});
-    }
+        addPropertyWidget(*p);
 
     QPushButton * addButton = new QPushButton("Ajouter une propriétée");
 
@@ -41,6 +36,14 @@ void ObjectInfos::initializeWidgets()
     setLayout(layout);
 
     connect(addButton, SIGNAL(clicked(bool)), this, SLOT(onAddClicked()));
+}
+
+void ObjectInfos::addPropertyWidget(ObjectProperty & p)
+{
+    auto widget = new PropertyWidget(p, true);
+    m_widgets.push_back(widget);
+    m_propertiesLayout->addWidget(widget);
+    connect(widget, &PropertyWidget::removeRequested, this, [this, widget](){onRemove(widget);});
 }
 
 void ObjectInfos::removePropertyWidget(unsigned int index)
@@ -61,7 +64,6 @@ void ObjectInfos::onRename(const RenamedFileEvent & e)
     if(m_assetName == e.oldName)
         m_assetName = e.newName;
 }
-
 
 void ObjectInfos::onAddClicked()
 {

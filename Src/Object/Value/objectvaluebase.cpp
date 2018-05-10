@@ -1,4 +1,5 @@
 #include "objectvaluebase.h"
+#include "objectvaluetransform.h"
 #include <cassert>
 
 QString valueTypeToString(ValueType type)
@@ -61,7 +62,7 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
     switch (type)
     {
     case ValueType::Transform:
-        return {};
+        return std::make_unique<ObjectValueTransform>();
     case ValueType::Box2DCollider:
         return {};
     case ValueType::CircleCollider:
@@ -103,7 +104,7 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
     switch (type)
     {
     case ValueType::Transform:
-        return {};
+        return std::make_unique<ObjectValueTransform>(obj);
     case ValueType::Box2DCollider:
         return {};
     case ValueType::CircleCollider:

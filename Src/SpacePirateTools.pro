@@ -81,7 +81,9 @@ SOURCES += \
     Object/Value/objectvaluebase.cpp \
     UI/Object/objectinfos.cpp \
     UI/Object/propertywidget.cpp \
-    UI/Object/addpropertydialog.cpp
+    UI/Object/addpropertydialog.cpp \
+    Object/Value/objectvaluetransform.cpp \
+    UI/Object/Value/transformvaluewidget.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -167,19 +169,21 @@ HEADERS += \
     Object/Value/objectvaluebase.h \
     UI/Object/objectinfos.h \
     UI/Object/propertywidget.h \
-    UI/Object/addpropertydialog.h
+    UI/Object/addpropertydialog.h \
+    Object/Value/objectvaluetransform.h \
+    UI/Object/Value/transformvaluewidget.h
 
 CONFIG += c++14
 
 # SFML
 DEFINES += SFML_STATIC
-#LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
-#INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
-#DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
+LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
+INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
+DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
 
-LIBS += -LC:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/lib
-INCLUDEPATH += C:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/include
-DEPENDPATH += C:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/include
+#LIBS += -LC:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/lib
+#INCLUDEPATH += C:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/include
+#DEPENDPATH += C:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/include
 
 CONFIG(release, debug|release): LIBS += -lsfml-graphics-s \
                                         -lsfml-window-s \

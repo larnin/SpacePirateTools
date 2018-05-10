@@ -2,6 +2,7 @@
 #define OBJECTDATA_H
 
 #include "objectproperty.h"
+#include "Value/objectvaluetransform.h"
 #include <QString>
 #include <memory>
 #include <vector>
@@ -9,7 +10,7 @@
 class ObjectData : private std::vector<std::unique_ptr<ObjectProperty>>
 {
 public:
-    ObjectData() = default;
+    ObjectData();
     ObjectData(const QString & fileName);
 
     using std::vector<std::unique_ptr<ObjectProperty>>::push_back;
@@ -28,8 +29,11 @@ public:
 
     void save(const QString & fileName) const;
 
+    ObjectValueTransform & transform();
+
 private:
     void load(const QString & fileName);
+    std::unique_ptr<ObjectProperty> createDefaultTransform();
 
 };
 
