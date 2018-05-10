@@ -18,10 +18,10 @@ void ObjectData::save(const QString & fileName) const
     for(const auto & p : *this)
     {
         QJsonObject pObj;
-        pObj.insert("name", p.name);
-        pObj.insert("value", p.value->save());
-        pObj.insert("iv", static_cast<int>(p.inspectorVisibility));
-        pObj.insert("sv", static_cast<int>(p.sceneVisibility));
+        pObj.insert("name", p->name);
+        pObj.insert("value", p->value->save());
+        pObj.insert("iv", static_cast<int>(p->inspectorVisibility));
+        pObj.insert("sv", static_cast<int>(p->sceneVisibility));
         properties.append(pObj);
     }
     obj.insert("properties", properties);
@@ -60,11 +60,11 @@ void ObjectData::load(const QString & fileName)
         {
             auto p = v.toObject();
 
-            ObjectProperty prop;
-            prop.name = p["name"].toString();
-            prop.value = ObjectValueBase::loadValue(p["value"].toObject());
-            prop.inspectorVisibility = static_cast<InspectorVisibility>(p["iv"].toInt());
-            prop.sceneVisibility = static_cast<SceneVisibility>(p["sv"].toInt());
+            auto prop = std::make_unique<ObjectProperty>();
+            prop->name = p["name"].toString();
+            prop->value = ObjectValueBase::loadValue(p["value"].toObject());
+            prop->inspectorVisibility = static_cast<InspectorVisibility>(p["iv"].toInt());
+            prop->sceneVisibility = static_cast<SceneVisibility>(p["sv"].toInt());
             push_back(std::move(prop));
         }
     }

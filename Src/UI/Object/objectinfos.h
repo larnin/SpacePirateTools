@@ -18,6 +18,7 @@ public:
 
 public slots:
     void onAddClicked();
+    void onRemove(QWidget* widget);
 
 private:
     void initializeWidgets();

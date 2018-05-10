@@ -1,6 +1,7 @@
 #include "objectinfos.h"
 #include "UI/linewidget.h"
 #include "propertywidget.h"
+#include "addpropertydialog.h"
 #include <QLabel>
 #include <QPushButton>
 
@@ -24,8 +25,10 @@ void ObjectInfos::initializeWidgets()
     m_propertiesLayout = new QVBoxLayout();
     for(auto & p : m_datas)
     {
-        m_widgets.push_back(new PropertyWidget(p));
-        m_propertiesLayout->addWidget(m_widgets.back());
+        auto widget = new PropertyWidget(*p, true);
+        m_widgets.push_back(widget);
+        m_propertiesLayout->addWidget(widget);
+        connect(widget, &PropertyWidget::removeRequested, this, [this, widget](){onRemove(widget);});
     }
 
     QPushButton * addButton = new QPushButton("Ajouter une propriétée");
@@ -61,6 +64,15 @@ void ObjectInfos::onRename(const RenamedFileEvent & e)
 
 
 void ObjectInfos::onAddClicked()
+{
+    bool ok = false;
+    auto p = AddPropertyDialog::getProperty(this, &ok);
+    if(!ok)
+        return;
+
+}
+
+void ObjectInfos::onRemove(QWidget* widget)
 {
 
 }

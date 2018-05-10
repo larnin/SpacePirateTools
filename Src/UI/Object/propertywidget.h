@@ -6,8 +6,12 @@
 
 class PropertyWidget : public QWidget
 {
+    Q_OBJECT
 public:
-    PropertyWidget(ObjectProperty & obj, QWidget * parent = nullptr);
+    PropertyWidget(ObjectProperty & obj, bool forceEdition, QWidget * parent = nullptr);
+
+signals:
+    void removeRequested();
 
 private:
     ObjectProperty & m_property;

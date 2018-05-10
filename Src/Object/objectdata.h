@@ -6,25 +6,25 @@
 #include <memory>
 #include <vector>
 
-class ObjectData : private std::vector<ObjectProperty>
+class ObjectData : private std::vector<std::unique_ptr<ObjectProperty>>
 {
 public:
     ObjectData() = default;
     ObjectData(const QString & fileName);
 
-    using std::vector<ObjectProperty>::push_back;
-    using std::vector<ObjectProperty>::pop_back;
-    using std::vector<ObjectProperty>::begin;
-    using std::vector<ObjectProperty>::end;
-    using std::vector<ObjectProperty>::front;
-    using std::vector<ObjectProperty>::back;
-    using std::vector<ObjectProperty>::insert;
-    using std::vector<ObjectProperty>::erase;
-    using std::vector<ObjectProperty>::emplace_back;
-    using std::vector<ObjectProperty>::clear;
-    using std::vector<ObjectProperty>::operator [];
-    using std::vector<ObjectProperty>::size;
-    using std::vector<ObjectProperty>::empty;
+    using std::vector<std::unique_ptr<ObjectProperty>>::push_back;
+    using std::vector<std::unique_ptr<ObjectProperty>>::pop_back;
+    using std::vector<std::unique_ptr<ObjectProperty>>::begin;
+    using std::vector<std::unique_ptr<ObjectProperty>>::end;
+    using std::vector<std::unique_ptr<ObjectProperty>>::front;
+    using std::vector<std::unique_ptr<ObjectProperty>>::back;
+    using std::vector<std::unique_ptr<ObjectProperty>>::insert;
+    using std::vector<std::unique_ptr<ObjectProperty>>::erase;
+    using std::vector<std::unique_ptr<ObjectProperty>>::emplace_back;
+    using std::vector<std::unique_ptr<ObjectProperty>>::clear;
+    using std::vector<std::unique_ptr<ObjectProperty>>::operator [];
+    using std::vector<std::unique_ptr<ObjectProperty>>::size;
+    using std::vector<std::unique_ptr<ObjectProperty>>::empty;
 
     void save(const QString & fileName) const;
 
