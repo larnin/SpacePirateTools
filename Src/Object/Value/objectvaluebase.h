@@ -8,6 +8,7 @@
 
 enum class ValueType
 {
+    Transform = -1,
     Box2DCollider,
     CircleCollider,
     ConvexeCollider,
@@ -15,7 +16,8 @@ enum class ValueType
     Animator,
     Animation,
     Object,
-    Renderer,
+    Texture,
+    SpriteRenderer,
     Script,
     Float,
     Int,
@@ -23,7 +25,6 @@ enum class ValueType
     Vector2i,
     Color,
     Max = Color,
-    Transform,
 };
 
 QString valueTypeToString(ValueType type);

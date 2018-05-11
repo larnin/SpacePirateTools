@@ -1,5 +1,7 @@
 #include "objectvaluebase.h"
 #include "objectvaluetransform.h"
+#include "objectvaluebox2dcollider.h"
+#include "objectvaluecirclecollider.h"
 #include <cassert>
 
 QString valueTypeToString(ValueType type)
@@ -22,8 +24,10 @@ QString valueTypeToString(ValueType type)
         return "Animation";
     case ValueType::Object:
         return "Object";
-    case ValueType::Renderer:
-        return "Renderer";
+    case ValueType::Texture:
+        return "Texture";
+    case ValueType::SpriteRenderer:
+        return "Sprite renderer";
     case ValueType::Script:
         return "Script";
     case ValueType::Float:
@@ -64,9 +68,9 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
     case ValueType::Transform:
         return std::make_unique<ObjectValueTransform>();
     case ValueType::Box2DCollider:
-        return {};
+        return std::make_unique<ObjectValueBox2DCollider>();
     case ValueType::CircleCollider:
-        return {};
+        return std::make_unique<ObjectValueCircleCollider>();
     case ValueType::ConvexeCollider:
         return {};
     case ValueType::Rigidbody:
@@ -77,7 +81,9 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
         return {};
     case ValueType::Object:
         return {};
-    case ValueType::Renderer:
+    case ValueType::Texture:
+        return {};
+    case ValueType::SpriteRenderer:
         return {};
     case ValueType::Script:
         return {};
@@ -106,9 +112,9 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
     case ValueType::Transform:
         return std::make_unique<ObjectValueTransform>(obj);
     case ValueType::Box2DCollider:
-        return {};
+        return std::make_unique<ObjectValueBox2DCollider>(obj);
     case ValueType::CircleCollider:
-        return {};
+        return std::make_unique<ObjectValueCircleCollider>(obj);
     case ValueType::ConvexeCollider:
         return {};
     case ValueType::Rigidbody:
@@ -119,7 +125,9 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
         return {};
     case ValueType::Object:
         return {};
-    case ValueType::Renderer:
+    case ValueType::Texture:
+        return {};
+    case ValueType::SpriteRenderer:
         return {};
     case ValueType::Script:
         return {};

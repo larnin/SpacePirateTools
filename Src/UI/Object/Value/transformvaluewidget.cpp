@@ -8,8 +8,10 @@ TransformValueWidget::TransformValueWidget(ObjectValueTransform &transform, QWid
     , m_transform(transform)
 {
     m_posX = new QDoubleSpinBox();
+    m_posX->setRange(-1000000, 1000000);
     m_posX->setValue(m_transform.position.x);
     m_posY = new QDoubleSpinBox();
+    m_posY->setRange(-1000000, 1000000);
     m_posY->setValue(m_transform.position.y);
 
     QHBoxLayout * posLayout = new QHBoxLayout();
@@ -21,8 +23,10 @@ TransformValueWidget::TransformValueWidget(ObjectValueTransform &transform, QWid
     posLayout->addWidget(m_posY, 1);
 
     m_scaleX = new QDoubleSpinBox();
+    m_scaleX->setRange(-1000000, 1000000);
     m_scaleX->setValue(m_transform.scale.x);
     m_scaleY = new QDoubleSpinBox();
+    m_scaleY->setRange(-1000000, 1000000);
     m_scaleY->setValue(m_transform.scale.y);
 
     QHBoxLayout * scaleLayout = new QHBoxLayout();
@@ -31,14 +35,15 @@ TransformValueWidget::TransformValueWidget(ObjectValueTransform &transform, QWid
     scaleLayout->addWidget(m_scaleX, 1);
     scaleLayout->addSpacing(10);
     scaleLayout->addWidget(new QLabel("Y "));
-    scaleLayout->addWidget(m_scaleX, 1);
+    scaleLayout->addWidget(m_scaleY, 1);
 
     m_rotation = new QDoubleSpinBox();
+    m_rotation->setRange(-1000000, 1000000);
     m_rotation->setValue(m_transform.rotation);
 
     QHBoxLayout * rotationLayout = new QHBoxLayout();
     rotationLayout->addWidget(new QLabel("Rotation : "));
-    rotationLayout->addWidget(m_rotation);
+    rotationLayout->addWidget(m_rotation, 1);
 
     QVBoxLayout * layout = new QVBoxLayout();
     layout->addLayout(posLayout);

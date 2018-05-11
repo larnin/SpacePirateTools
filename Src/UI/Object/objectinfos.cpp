@@ -4,6 +4,7 @@
 #include "addpropertydialog.h"
 #include <QLabel>
 #include <QPushButton>
+#include <algorithm>
 
 ObjectInfos::ObjectInfos(const QString &assetName, QWidget *parent)
     : QWidget(parent)
@@ -72,9 +73,18 @@ void ObjectInfos::onAddClicked()
     if(!ok)
         return;
 
+    addPropertyWidget(*p);
+    m_datas.push_back(std::move(p));
 }
 
 void ObjectInfos::onRemove(QWidget* widget)
 {
+    auto it = std::find(m_widgets.begin(), m_widgets.end(), widget);
+    if(it == m_widgets.end())
+        return;
 
+    auto index = std::distance(m_widgets.begin(), it);
+
+    removePropertyWidget(index);
+    m_datas.erase(m_datas.begin() + index);
 }
