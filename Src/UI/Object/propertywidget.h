@@ -3,6 +3,7 @@
 
 #include "Object/objectproperty.h"
 #include <QWidget>
+#include <QComboBox>
 
 class PropertyWidget : public QWidget
 {
@@ -13,8 +14,13 @@ public:
 signals:
     void removeRequested();
 
+public slots:
+    void onVisibilityChange();
+
 private:
     ObjectProperty & m_property;
+    QComboBox * m_inspectorVisibility;
+    QComboBox * m_sceneVisibility;
 };
 
 #endif // PROPERTYWIDGET_H

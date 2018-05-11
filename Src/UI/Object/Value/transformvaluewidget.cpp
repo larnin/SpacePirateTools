@@ -16,10 +16,10 @@ TransformValueWidget::TransformValueWidget(ObjectValueTransform &transform, QWid
 
     QHBoxLayout * posLayout = new QHBoxLayout();
     posLayout->addWidget(new QLabel("Position : "));
-    posLayout->addWidget(new QLabel("X "));
+    posLayout->addWidget(new QLabel("X"));
     posLayout->addWidget(m_posX, 1);
     posLayout->addSpacing(10);
-    posLayout->addWidget(new QLabel("Y "));
+    posLayout->addWidget(new QLabel("Y"));
     posLayout->addWidget(m_posY, 1);
 
     m_scaleX = new QDoubleSpinBox();
@@ -31,10 +31,10 @@ TransformValueWidget::TransformValueWidget(ObjectValueTransform &transform, QWid
 
     QHBoxLayout * scaleLayout = new QHBoxLayout();
     scaleLayout->addWidget(new QLabel("Scale : "));
-    scaleLayout->addWidget(new QLabel("X "));
+    scaleLayout->addWidget(new QLabel("X"));
     scaleLayout->addWidget(m_scaleX, 1);
     scaleLayout->addSpacing(10);
-    scaleLayout->addWidget(new QLabel("Y "));
+    scaleLayout->addWidget(new QLabel("Y"));
     scaleLayout->addWidget(m_scaleY, 1);
 
     m_rotation = new QDoubleSpinBox();

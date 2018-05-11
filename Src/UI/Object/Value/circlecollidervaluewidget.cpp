@@ -16,10 +16,10 @@ CircleColliderValueWidget::CircleColliderValueWidget(ObjectValueCircleCollider &
 
     QHBoxLayout * centerLayout = new QHBoxLayout();
     centerLayout->addWidget(new QLabel("Centre : "));
-    centerLayout->addWidget(new QLabel("X "));
+    centerLayout->addWidget(new QLabel("X"));
     centerLayout->addWidget(m_centerX, 1);
     centerLayout->addSpacing(10);
-    centerLayout->addWidget(new QLabel("Y "));
+    centerLayout->addWidget(new QLabel("Y"));
     centerLayout->addWidget(m_centerY, 1);
 
     m_size = new QDoubleSpinBox();

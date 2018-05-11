@@ -2,6 +2,7 @@
 #include "objectvaluetransform.h"
 #include "objectvaluebox2dcollider.h"
 #include "objectvaluecirclecollider.h"
+#include "objectvalueconvexecollider.h"
 #include <cassert>
 
 QString valueTypeToString(ValueType type)
@@ -72,7 +73,7 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
     case ValueType::CircleCollider:
         return std::make_unique<ObjectValueCircleCollider>();
     case ValueType::ConvexeCollider:
-        return {};
+        return std::make_unique<ObjectValueConvexeCollider>();
     case ValueType::Rigidbody:
         return {};
     case ValueType::Animator:
@@ -116,7 +117,7 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
     case ValueType::CircleCollider:
         return std::make_unique<ObjectValueCircleCollider>(obj);
     case ValueType::ConvexeCollider:
-        return {};
+        return std::make_unique<ObjectValueConvexeCollider>(obj);
     case ValueType::Rigidbody:
         return {};
     case ValueType::Animator:

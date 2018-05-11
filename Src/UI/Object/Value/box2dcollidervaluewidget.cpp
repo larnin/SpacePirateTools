@@ -16,10 +16,10 @@ Box2DColliderValueWidget::Box2DColliderValueWidget(ObjectValueBox2DCollider &col
 
     QHBoxLayout * centerLayout = new QHBoxLayout();
     centerLayout->addWidget(new QLabel("Centre : "));
-    centerLayout->addWidget(new QLabel("X "));
+    centerLayout->addWidget(new QLabel("X"));
     centerLayout->addWidget(m_centerX, 1);
     centerLayout->addSpacing(10);
-    centerLayout->addWidget(new QLabel("Y "));
+    centerLayout->addWidget(new QLabel("Y"));
     centerLayout->addWidget(m_centerY, 1);
 
     m_sizeX = new QDoubleSpinBox();
@@ -31,10 +31,10 @@ Box2DColliderValueWidget::Box2DColliderValueWidget(ObjectValueBox2DCollider &col
 
     QHBoxLayout * sizeLayout = new QHBoxLayout();
     sizeLayout->addWidget(new QLabel("Taille : "));
-    sizeLayout->addWidget(new QLabel("X "));
+    sizeLayout->addWidget(new QLabel("X"));
     sizeLayout->addWidget(m_sizeX, 1);
     sizeLayout->addSpacing(10);
-    sizeLayout->addWidget(new QLabel("Y "));
+    sizeLayout->addWidget(new QLabel("Y"));
     sizeLayout->addWidget(m_sizeY, 1);
 
     QVBoxLayout * layout = new QVBoxLayout();
