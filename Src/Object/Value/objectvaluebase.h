@@ -17,6 +17,7 @@ enum class ValueType
     Animation,
     Object,
     Texture,
+    Scene,
     SpriteRenderer,
     Script,
     Float,

@@ -89,7 +89,11 @@ SOURCES += \
     Object/Value/objectvaluecirclecollider.cpp \
     UI/Object/Value/circlecollidervaluewidget.cpp \
     Object/Value/objectvalueconvexecollider.cpp \
-    UI/Object/Value/convexcollidervaluewidget.cpp
+    UI/Object/Value/convexcollidervaluewidget.cpp \
+    Object/Value/objectvaluerigidbody.cpp \
+    UI/Object/Value/rigidbodyvaluewidget.cpp \
+    Object/Value/objectvalueasset.cpp \
+    UI/Object/Value/assetvaluewidget.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -183,7 +187,11 @@ HEADERS += \
     Object/Value/objectvaluecirclecollider.h \
     UI/Object/Value/circlecollidervaluewidget.h \
     Object/Value/objectvalueconvexecollider.h \
-    UI/Object/Value/convexcollidervaluewidget.h
+    UI/Object/Value/convexcollidervaluewidget.h \
+    Object/Value/objectvaluerigidbody.h \
+    UI/Object/Value/rigidbodyvaluewidget.h \
+    Object/Value/objectvalueasset.h \
+    UI/Object/Value/assetvaluewidget.h
 
 CONFIG += c++14
 

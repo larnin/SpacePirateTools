@@ -3,6 +3,8 @@
 #include "objectvaluebox2dcollider.h"
 #include "objectvaluecirclecollider.h"
 #include "objectvalueconvexecollider.h"
+#include "objectvaluerigidbody.h"
+#include "objectvalueasset.h"
 #include <cassert>
 
 QString valueTypeToString(ValueType type)
@@ -27,6 +29,8 @@ QString valueTypeToString(ValueType type)
         return "Object";
     case ValueType::Texture:
         return "Texture";
+    case ValueType::Scene:
+        return "Scene";
     case ValueType::SpriteRenderer:
         return "Sprite renderer";
     case ValueType::Script:
@@ -75,15 +79,17 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
     case ValueType::ConvexeCollider:
         return std::make_unique<ObjectValueConvexeCollider>();
     case ValueType::Rigidbody:
-        return {};
+        return std::make_unique<ObjectValueRigidbody>();
     case ValueType::Animator:
-        return {};
+        return std::make_unique<ObjectValueAsset>(AssetType::Animator);
     case ValueType::Animation:
-        return {};
+        return std::make_unique<ObjectValueAsset>(AssetType::Animation);
     case ValueType::Object:
-        return {};
+        return std::make_unique<ObjectValueAsset>(AssetType::Object);
     case ValueType::Texture:
-        return {};
+        return std::make_unique<ObjectValueAsset>(AssetType::Image);
+    case ValueType::Scene:
+        return std::make_unique<ObjectValueAsset>(AssetType::Scene);
     case ValueType::SpriteRenderer:
         return {};
     case ValueType::Script:
@@ -119,15 +125,13 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
     case ValueType::ConvexeCollider:
         return std::make_unique<ObjectValueConvexeCollider>(obj);
     case ValueType::Rigidbody:
-        return {};
+        return std::make_unique<ObjectValueRigidbody>(obj);
     case ValueType::Animator:
-        return {};
     case ValueType::Animation:
-        return {};
     case ValueType::Object:
-        return {};
     case ValueType::Texture:
-        return {};
+    case ValueType::Scene:
+        return std::make_unique<ObjectValueAsset>(obj);
     case ValueType::SpriteRenderer:
         return {};
     case ValueType::Script:
