@@ -4,6 +4,7 @@
 #include "addpropertydialog.h"
 #include <QLabel>
 #include <QPushButton>
+#include<QScrollArea>
 #include <algorithm>
 
 ObjectInfos::ObjectInfos(const QString &assetName, QWidget *parent)
@@ -34,7 +35,17 @@ void ObjectInfos::initializeWidgets()
     layout->addWidget(new LineWidget(LineOrientation::Horizontal));
     layout->addWidget(addButton);
     layout->addStretch(1);
-    setLayout(layout);
+
+    QWidget * w = new QWidget();
+    w->setLayout(layout);
+    QScrollArea * area = new QScrollArea();
+    area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    area->setWidgetResizable(true);
+    area->setWidget(w);
+
+    QVBoxLayout * finalLayout = new QVBoxLayout();
+    finalLayout->addWidget(area);
+    setLayout(finalLayout);
 
     connect(addButton, SIGNAL(clicked(bool)), this, SLOT(onAddClicked()));
 }
