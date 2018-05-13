@@ -105,7 +105,11 @@ SOURCES += \
     Object/Value/objectvaluevector2f.cpp \
     UI/Object/Value/vector2fvaluewidget.cpp \
     Object/Value/objectvaluevector2i.cpp \
-    UI/Object/Value/vector2ivaluewidget.cpp
+    UI/Object/Value/vector2ivaluewidget.cpp \
+    Object/Value/objectvaluecolor.cpp \
+    UI/Object/Value/colorvaluewidget.cpp \
+    Object/Value/objectvaluetext.cpp \
+    UI/Object/Value/textvaluewidget.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -215,7 +219,11 @@ HEADERS += \
     Object/Value/objectvaluevector2f.h \
     UI/Object/Value/vector2fvaluewidget.h \
     Object/Value/objectvaluevector2i.h \
-    UI/Object/Value/vector2ivaluewidget.h
+    UI/Object/Value/vector2ivaluewidget.h \
+    Object/Value/objectvaluecolor.h \
+    UI/Object/Value/colorvaluewidget.h \
+    Object/Value/objectvaluetext.h \
+    UI/Object/Value/textvaluewidget.h
 
 CONFIG += c++14
 

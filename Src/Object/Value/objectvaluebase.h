@@ -26,7 +26,7 @@ enum class ValueType
     Vector2i,
     Color,
     Text,
-    Max = Color,
+    Max = Text,
 };
 
 QString valueTypeToString(ValueType type);

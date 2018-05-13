@@ -11,6 +11,8 @@
 #include "objectvalueint.h"
 #include "objectvaluevector2f.h"
 #include "objectvaluevector2i.h"
+#include "objectvaluecolor.h"
+#include "objectvaluetext.h"
 #include <cassert>
 
 QString valueTypeToString(ValueType type)
@@ -111,9 +113,9 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
     case ValueType::Vector2i:
         return std::make_unique<ObjectValueVector2i>();
     case ValueType::Color:
-        return {};
+        return std::make_unique<ObjectValueColor>();
     case ValueType::Text:
-        return {};
+        return std::make_unique<ObjectValueText>();
     }
 
     assert(false);
@@ -155,9 +157,9 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
     case ValueType::Vector2i:
         return std::make_unique<ObjectValueVector2i>(obj);
     case ValueType::Color:
-        return {};
+        return std::make_unique<ObjectValueColor>(obj);
     case ValueType::Text:
-        return {};
+        return std::make_unique<ObjectValueText>(obj);
     }
 
     assert(false);
