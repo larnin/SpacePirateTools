@@ -7,6 +7,10 @@
 #include "objectvalueasset.h"
 #include "objectvaluespriterenderer.h"
 #include "objectvaluescript.h"
+#include "objectvaluefloat.h"
+#include "objectvalueint.h"
+#include "objectvaluevector2f.h"
+#include "objectvaluevector2i.h"
 #include <cassert>
 
 QString valueTypeToString(ValueType type)
@@ -47,6 +51,8 @@ QString valueTypeToString(ValueType type)
         return "Vector2i";
     case ValueType::Color:
         return "Color";
+    case ValueType::Text:
+        return "Texte";
     }
     assert(false);
     return "";
@@ -97,14 +103,16 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
     case ValueType::Script:
         return std::make_unique<ObjectValueScript>();
     case ValueType::Float:
-        return {};
+        return std::make_unique<ObjectValueFloat>();
     case ValueType::Int:
-        return {};
+        return std::make_unique<ObjectValueInt>();
     case ValueType::Vector2f:
-        return {};
+        return std::make_unique<ObjectValueVector2f>();
     case ValueType::Vector2i:
-        return {};
+        return std::make_unique<ObjectValueVector2i>();
     case ValueType::Color:
+        return {};
+    case ValueType::Text:
         return {};
     }
 
@@ -139,14 +147,16 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
     case ValueType::Script:
         return std::make_unique<ObjectValueScript>(obj);
     case ValueType::Float:
-        return {};
+        return std::make_unique<ObjectValueFloat>(obj);
     case ValueType::Int:
-        return {};
+        return std::make_unique<ObjectValueInt>(obj);
     case ValueType::Vector2f:
-        return {};
+        return std::make_unique<ObjectValueVector2f>(obj);
     case ValueType::Vector2i:
-        return {};
+        return std::make_unique<ObjectValueVector2i>(obj);
     case ValueType::Color:
+        return {};
+    case ValueType::Text:
         return {};
     }
 

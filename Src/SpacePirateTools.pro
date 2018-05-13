@@ -97,7 +97,15 @@ SOURCES += \
     Object/Value/objectvaluespriterenderer.cpp \
     UI/Object/Value/spriterenderervaluewidget.cpp \
     Object/Value/objectvaluescript.cpp \
-    UI/Object/Value/scriptvaluewidget.cpp
+    UI/Object/Value/scriptvaluewidget.cpp \
+    Object/Value/objectvaluefloat.cpp \
+    UI/Object/Value/floatvaluewidget.cpp \
+    Object/Value/objectvalueint.cpp \
+    UI/Object/Value/intvaluewidget.cpp \
+    Object/Value/objectvaluevector2f.cpp \
+    UI/Object/Value/vector2fvaluewidget.cpp \
+    Object/Value/objectvaluevector2i.cpp \
+    UI/Object/Value/vector2ivaluewidget.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -199,7 +207,15 @@ HEADERS += \
     Object/Value/objectvaluespriterenderer.h \
     UI/Object/Value/spriterenderervaluewidget.h \
     Object/Value/objectvaluescript.h \
-    UI/Object/Value/scriptvaluewidget.h
+    UI/Object/Value/scriptvaluewidget.h \
+    Object/Value/objectvaluefloat.h \
+    UI/Object/Value/floatvaluewidget.h \
+    Object/Value/objectvalueint.h \
+    UI/Object/Value/intvaluewidget.h \
+    Object/Value/objectvaluevector2f.h \
+    UI/Object/Value/vector2fvaluewidget.h \
+    Object/Value/objectvaluevector2i.h \
+    UI/Object/Value/vector2ivaluewidget.h
 
 CONFIG += c++14
 

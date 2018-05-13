@@ -25,6 +25,7 @@ enum class ValueType
     Vector2f,
     Vector2i,
     Color,
+    Text,
     Max = Color,
 };
 
