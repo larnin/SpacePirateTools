@@ -93,7 +93,11 @@ SOURCES += \
     Object/Value/objectvaluerigidbody.cpp \
     UI/Object/Value/rigidbodyvaluewidget.cpp \
     Object/Value/objectvalueasset.cpp \
-    UI/Object/Value/assetvaluewidget.cpp
+    UI/Object/Value/assetvaluewidget.cpp \
+    Object/Value/objectvaluespriterenderer.cpp \
+    UI/Object/Value/spriterenderervaluewidget.cpp \
+    Object/Value/objectvaluescript.cpp \
+    UI/Object/Value/scriptvaluewidget.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -191,7 +195,11 @@ HEADERS += \
     Object/Value/objectvaluerigidbody.h \
     UI/Object/Value/rigidbodyvaluewidget.h \
     Object/Value/objectvalueasset.h \
-    UI/Object/Value/assetvaluewidget.h
+    UI/Object/Value/assetvaluewidget.h \
+    Object/Value/objectvaluespriterenderer.h \
+    UI/Object/Value/spriterenderervaluewidget.h \
+    Object/Value/objectvaluescript.h \
+    UI/Object/Value/scriptvaluewidget.h
 
 CONFIG += c++14
 

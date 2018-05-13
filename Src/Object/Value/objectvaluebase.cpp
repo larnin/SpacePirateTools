@@ -5,6 +5,8 @@
 #include "objectvalueconvexecollider.h"
 #include "objectvaluerigidbody.h"
 #include "objectvalueasset.h"
+#include "objectvaluespriterenderer.h"
+#include "objectvaluescript.h"
 #include <cassert>
 
 QString valueTypeToString(ValueType type)
@@ -91,9 +93,9 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
     case ValueType::Scene:
         return std::make_unique<ObjectValueAsset>(AssetType::Scene);
     case ValueType::SpriteRenderer:
-        return {};
+        return std::make_unique<ObjectValueSpriteRenderer>();
     case ValueType::Script:
-        return {};
+        return std::make_unique<ObjectValueScript>();
     case ValueType::Float:
         return {};
     case ValueType::Int:
@@ -133,9 +135,9 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
     case ValueType::Scene:
         return std::make_unique<ObjectValueAsset>(obj);
     case ValueType::SpriteRenderer:
-        return {};
+        return std::make_unique<ObjectValueSpriteRenderer>(obj);
     case ValueType::Script:
-        return {};
+        return std::make_unique<ObjectValueScript>(obj);
     case ValueType::Float:
         return {};
     case ValueType::Int:
