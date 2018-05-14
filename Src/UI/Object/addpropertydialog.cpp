@@ -44,7 +44,7 @@ std::unique_ptr<ObjectProperty> AddPropertyDialog::get() const
 {
     auto p = std::make_unique<ObjectProperty>();
     p->name = m_name->text();
-    p->value = ObjectValueBase::createValue(static_cast<ValueType>(m_valueType->currentIndex()));
+    p->values.push_back(ObjectValueBase::createValue(static_cast<ValueType>(m_valueType->currentIndex())));
     p->inspectorVisibility = InspectorVisibility::Visible;
     p->sceneVisibility = SceneVisibility::All;
 

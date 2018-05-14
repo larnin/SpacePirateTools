@@ -9,14 +9,16 @@
 ObjectData::ObjectData()
 {
     push_back(createDefaultTransform());
+    checkObjectIntegrity();
 }
 
 ObjectData::ObjectData(const QString & fileName)
 {
     load(fileName);
 
-    if(empty() || (*this)[0]->value->type() != ValueType::Transform)
+    if(empty() || (*this)[0]->values.empty() || (*this)[0]->values[0]->type() != ValueType::Transform)
         insert(begin(), createDefaultTransform());
+    checkObjectIntegrity();
 }
 
 void ObjectData::save(const QString & fileName) const
@@ -28,9 +30,14 @@ void ObjectData::save(const QString & fileName) const
     {
         QJsonObject pObj;
         pObj.insert("name", p->name);
-        pObj.insert("value", p->value->save());
+
+        QJsonArray values;
+        for(const auto & v : p->values)
+            values.append(v->save());
+        pObj.insert("values", values);
         pObj.insert("iv", static_cast<int>(p->inspectorVisibility));
         pObj.insert("sv", static_cast<int>(p->sceneVisibility));
+        pObj.insert("fixed", p->fixedSize ? 1 : 0);
         properties.append(pObj);
     }
     obj.insert("properties", properties);
@@ -71,9 +78,12 @@ void ObjectData::load(const QString & fileName)
 
             auto prop = std::make_unique<ObjectProperty>();
             prop->name = p["name"].toString();
-            prop->value = ObjectValueBase::loadValue(p["value"].toObject());
+            auto values = p["values"].toObject();
+            for(const auto & v : values)
+                prop->values.push_back(ObjectValueBase::loadValue(v.toObject()));
             prop->inspectorVisibility = static_cast<InspectorVisibility>(p["iv"].toInt());
             prop->sceneVisibility = static_cast<SceneVisibility>(p["sv"].toInt());
+            prop->fixedSize = p["fixed"].toInt() > 0;
             push_back(std::move(prop));
         }
     }
@@ -82,9 +92,10 @@ void ObjectData::load(const QString & fileName)
 ObjectValueTransform & ObjectData::transform()
 {
     assert(!empty());
-    assert((*this)[0]->value->type() == ValueType::Transform);
+    assert(!(*this)[0]->values.empty());
+    assert((*this)[0]->values[0]->type() == ValueType::Transform);
 
-    return *dynamic_cast<ObjectValueTransform*>((*this)[0]->value.get());
+    return *dynamic_cast<ObjectValueTransform*>((*this)[0]->values[0].get());
 }
 
 std::unique_ptr<ObjectProperty> ObjectData::createDefaultTransform()
@@ -93,6 +104,14 @@ std::unique_ptr<ObjectProperty> ObjectData::createDefaultTransform()
     property->name = "Transform";
     property->inspectorVisibility = InspectorVisibility::Visible;
     property->sceneVisibility = SceneVisibility::All;
-    property->value = ObjectValueBase::createValue(ValueType::Transform);
+    property->values.push_back(ObjectValueBase::createValue(ValueType::Transform));
     return std::move(property);
+}
+
+void ObjectData::checkObjectIntegrity()
+{
+    erase(std::remove_if(begin(), end(), [](const auto & p){return p->values.empty();}), end());
+
+    if(empty() || (*this)[0]->values.empty() || (*this)[0]->values[0]->type() != ValueType::Transform)
+        insert(begin(), createDefaultTransform());
 }

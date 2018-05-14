@@ -5,6 +5,7 @@
 #include <QString>
 #include <QWidget>
 #include <memory>
+#include <vector>
 
 enum class InspectorVisibility
 {
@@ -35,9 +36,10 @@ public:
     ObjectProperty & operator=(ObjectProperty &&) = default;
 
     QString name;
-    std::unique_ptr<ObjectValueBase> value;
+    std::vector<std::unique_ptr<ObjectValueBase>> values;
     InspectorVisibility inspectorVisibility;
     SceneVisibility sceneVisibility;
+    bool fixedSize;
 };
 
 #endif // OBJECTPROPERTY_H

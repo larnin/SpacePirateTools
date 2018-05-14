@@ -34,6 +34,7 @@ public:
 private:
     void load(const QString & fileName);
     std::unique_ptr<ObjectProperty> createDefaultTransform();
+    void checkObjectIntegrity();
 
 };
 
