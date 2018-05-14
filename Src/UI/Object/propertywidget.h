@@ -12,7 +12,8 @@ class PropertyWidget : public QWidget
 {
     struct ValueInfo
     {
-        QWidget * button;
+        QWidget * parent;
+        QPushButton * button;
         QHBoxLayout * layout;
     };
 
@@ -39,6 +40,7 @@ private:
     QPushButton * m_addElementButton;
     QVBoxLayout * m_valuesLayout;
     std::vector<ValueInfo> m_values;
+    bool m_forceEdition;
 };
 
 #endif // PROPERTYWIDGET_H

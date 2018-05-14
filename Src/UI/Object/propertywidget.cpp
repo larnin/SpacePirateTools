@@ -11,6 +11,11 @@
 PropertyWidget::PropertyWidget(ObjectProperty &obj, bool forceEdition, QWidget *parent)
     : QWidget(parent)
     , m_property(obj)
+    , m_inspectorVisibility(nullptr)
+    , m_sceneVisibility(nullptr)
+    , m_addElementButton(nullptr)
+    , m_valuesLayout(nullptr)
+    , m_forceEdition(forceEdition)
 {
     QVBoxLayout * fullVisibilityLayout;
     if(forceEdition)
@@ -37,7 +42,7 @@ PropertyWidget::PropertyWidget(ObjectProperty &obj, bool forceEdition, QWidget *
         m_fixedSize = new QCheckBox(" ");
         m_fixedSize->setChecked(obj.fixedSize);
         m_addElementButton = new QPushButton("Ajouter une valeur");
-        m_addElementButton->setEnabled(!m_fixedSize);
+        m_addElementButton->setEnabled(!obj.fixedSize);
 
         QHBoxLayout * sizeLayout = new QHBoxLayout();
         sizeLayout->addWidget(new QLabel("Taille fixe : "));
@@ -91,36 +96,6 @@ PropertyWidget::PropertyWidget(ObjectProperty &obj, bool forceEdition, QWidget *
     }
     else if(!obj.fixedSize)
         connect(m_addElementButton, SIGNAL(clicked(bool)), this, SLOT(onAddElement()));
-/*
-    QGroupBox * box = new QGroupBox(obj.name + " - " + valueTypeToString(obj.value->type()));
-    QVBoxLayout* boxLayout = new QVBoxLayout();
-    if(forceEdition)
-    {
-        boxLayout->addLayout(visibilityLayout);
-        boxLayout->addWidget(new LineWidget(LineOrientation::Horizontal));
-    }
-    if(forceEdition || obj.inspectorVisibility == InspectorVisibility::Visible)
-        boxLayout->addWidget(obj.value->createUi());
-    else if(obj.inspectorVisibility == InspectorVisibility::AsString)
-        boxLayout->addWidget(new QLabel(obj.value->toString()));
-    if(obj.value->type() != ValueType::Transform && (forceEdition || obj.inspectorVisibility != InspectorVisibility::Hidden))
-    {
-        QPushButton* removeButton = new QPushButton("Supprimer");
-        boxLayout->addWidget(removeButton);
-        connect(removeButton, SIGNAL(clicked(bool)), this, SIGNAL(removeRequested()));
-    }
-    box->setLayout(boxLayout);
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->setMargin(0);
-    layout->addWidget(box);
-    setLayout(layout);
-
-    if(forceEdition)
-    {
-        connect(m_inspectorVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisibilityChange()));
-        connect(m_sceneVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisibilityChange()));
-    }*/
 }
 
 void PropertyWidget::onVisibilityChange()
@@ -131,20 +106,80 @@ void PropertyWidget::onVisibilityChange()
 
 void PropertyWidget::onDelete(QWidget * button)
 {
+    if(m_property.values.size() <= 1)
+        return;
 
+    auto it = std::find_if(m_values.begin(), m_values.end(), [button](const auto & v){return v.button == button;});
+    if(it == m_values.end())
+        return;
+    unsigned id = std::distance(m_values.begin(), it);
+
+    m_valuesLayout->removeWidget(m_values[id].parent);
+    delete m_values[id].parent;
+    m_values.erase(it);
 }
 
 void PropertyWidget::onAddElement()
 {
+    m_property.values.push_back(ObjectValueBase::createValue(m_property.values[0]->type()));
 
+    add(*(m_property.values.back()));
+    onFixedSizeChange();
 }
 
 void PropertyWidget::onFixedSizeChange()
 {
+    if(m_fixedSize != nullptr)
+        m_property.fixedSize = m_fixedSize->isChecked();
 
+    if(m_property.fixedSize)
+    {
+        for(auto & v : m_values)
+        {
+            if(v.button != nullptr)
+            {
+                v.layout->removeWidget(v.button);
+                delete v.button;
+                v.button = nullptr;
+            }
+        }
+    }
+    else
+    {
+        for(auto & v : m_values)
+        {
+            if(v.button == nullptr)
+            {
+                v.button = new QPushButton("X");
+                v.button->setFixedWidth(30);
+                v.layout->addWidget(v.button);
+                connect(v.button, &QPushButton::clicked, this, [this, button = v.button](bool){onDelete(button);});
+            }
+        }
+    }
+
+    if(m_addElementButton != nullptr)
+        m_addElementButton->setEnabled(!m_property.fixedSize);
 }
 
 void PropertyWidget::add(ObjectValueBase & value)
 {
+    ValueInfo v;
+    v.button = nullptr;
+    v.parent = new QWidget();
+    v.layout = new QHBoxLayout();
 
+    if(m_forceEdition || m_property.inspectorVisibility == InspectorVisibility::Visible)
+        v.layout->addWidget(value.createUi());
+    else if(m_property.inspectorVisibility == InspectorVisibility::AsString)
+        v.layout->addWidget(new QLabel(value.toString()));
+
+    QVBoxLayout * layout = new QVBoxLayout();
+    layout->addLayout(v.layout);
+    layout->addWidget(new LineWidget(LineOrientation::Horizontal));
+    layout->setMargin(0);
+    v.parent->setLayout(layout);
+
+    m_valuesLayout->addWidget(v.parent);
+    m_values.push_back(v);
 }

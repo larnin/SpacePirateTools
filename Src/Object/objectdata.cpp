@@ -78,7 +78,7 @@ void ObjectData::load(const QString & fileName)
 
             auto prop = std::make_unique<ObjectProperty>();
             prop->name = p["name"].toString();
-            auto values = p["values"].toObject();
+            auto values = p["values"].toArray();
             for(const auto & v : values)
                 prop->values.push_back(ObjectValueBase::loadValue(v.toObject()));
             prop->inspectorVisibility = static_cast<InspectorVisibility>(p["iv"].toInt());
