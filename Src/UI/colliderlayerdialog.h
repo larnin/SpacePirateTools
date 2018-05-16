@@ -12,23 +12,24 @@
 
 class ColliderLayerDialog : public QDialog
 {
+    Q_OBJECT
 public:
-    ColliderLayerDialog(QWidget * parent = nullptr);
+    ColliderLayerDialog(bool haveValidButton, QWidget * parent = nullptr);
 
     unsigned int get() const;
 
-    static unsigned int getNewLayerID(QWidget* parent, bool *ok = nullptr);
+    static unsigned int getNewLayerID(bool showButtons, QWidget* parent, bool *ok = nullptr);
+
+public slots:
+    void onCheck(unsigned int x, unsigned int y, Qt::CheckState state);
+    void onRightClickLayerList(QPoint point);
 
 private:
     void updateLayerList();
-    void updateColorButton(sf::Color color);
-    void addPoints(unsigned int index);
+    QIcon makeIcon(const sf::Color & color);
+    void setPoints();
 
     QListWidget * m_layerList;
-    QPushButton * m_colorbutton;
-    QSpinBox * m_r;
-    QSpinBox * m_g;
-    QSpinBox * m_b;
     QGridLayout * m_pointsLayout;
 
     std::vector<QWidget*> m_xLabels;

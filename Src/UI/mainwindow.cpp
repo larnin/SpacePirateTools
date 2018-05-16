@@ -203,7 +203,7 @@ void MainWindow::onShowAssetDocks()
 
 void MainWindow::onShowCollidersLayer()
 {
-    ColliderLayerDialog::getNewLayerID(this);
+    ColliderLayerDialog::getNewLayerID(false, this);
 }
 
 void MainWindow::openProject(const QString & dir)
