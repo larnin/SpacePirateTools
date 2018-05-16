@@ -59,6 +59,7 @@ unsigned int TileCollider::toInt() const
         value += 1<<1;
     value += static_cast<unsigned int>(rotation) << 2;
     value += static_cast<unsigned int>(type) << 4;
+    value += collisionLayer << 16;
 
     return value;
 }
@@ -68,7 +69,8 @@ void TileCollider::fromInt(unsigned int value)
     xFlipped = (value & 0b1) > 0;
     yFlipped = (value & 0b10) > 0;
     rotation = static_cast<TileColliderRotation>((value & 0b1100) >> 2);
-    type = static_cast<TileColliderType>((value & 0xFFFFFFF0) >> 4);
+    type = static_cast<TileColliderType>((value & 0xFFF0) >> 4);
+    collisionLayer = (value & 0xFFFF0000) >> 16;
 }
 
 sf::VertexArray TileCollider::drawShape(const sf::Color & color, const sf::Vector2f & offset, float scale) const

@@ -35,7 +35,8 @@ enum class TileColliderRotation : unsigned int
 /// [0] xFlipped
 /// [1] yFlipped
 /// [2-3] rotation
-/// [4-32] colliderType
+/// [4-15] colliderType
+/// [16-32] collisionLayer
 
 struct TileCollider
 {
@@ -50,6 +51,7 @@ struct TileCollider
     TileColliderRotation rotation;
     bool xFlipped;
     bool yFlipped;
+    int collisionLayer;
 
 private:
     static sf::VertexArray drawFull();

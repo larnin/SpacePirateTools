@@ -32,6 +32,7 @@ public slots:
 
     void onShowExplorer();
     void onShowAssetDocks();
+    void onShowCollidersLayer();
 
 private:
     void createMenus();

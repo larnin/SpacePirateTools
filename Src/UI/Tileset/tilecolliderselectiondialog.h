@@ -6,6 +6,7 @@
 #include <QDialog>
 #include <QCheckBox>
 #include <QRadioButton>
+#include <QComboBox>
 
 class TileColliderSelectionDialog : QDialog
 {
@@ -20,8 +21,11 @@ public:
 public slots:
     void onTileColliderSelect(const TileCollider & collider);
     void onCheckItem();
+    void onLayerChange(int index);
 
 private:
+    void setCollisionLayer();
+
     TileCollider m_value;
 
     QCheckBox * m_xFlipped;
@@ -30,6 +34,8 @@ private:
     QRadioButton * m_rot90;
     QRadioButton * m_rot180;
     QRadioButton * m_rot270;
+
+    QComboBox * m_collisionLayer;
 
     TileColliderSelectionWidget * m_tileSelect;
 };

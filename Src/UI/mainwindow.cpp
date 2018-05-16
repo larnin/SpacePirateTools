@@ -19,6 +19,7 @@
 #include "UI/Scene/centralscenewindow.h"
 #include "UI/Object/objectinfos.h"
 #include "UI/imagewidget.h"
+#include "UI/colliderlayerdialog.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -72,6 +73,7 @@ void MainWindow::createMenus()
     QMenu *windowMenu = menuBar()->addMenu("&Fenetre");
         auto showExplorer = windowMenu->addAction("Afficher l'explorer");
         auto showAssetDocks = windowMenu->addAction("Reafficher les docks");
+        auto showCollidersLayer = windowMenu->addAction("Afficher le menu des colliders");
 
     connect(newAction, SIGNAL(triggered(bool)), this, SLOT(onNew()));
     connect(loadAction, SIGNAL(triggered(bool)), this, SLOT(onLoad()));
@@ -87,6 +89,7 @@ void MainWindow::createMenus()
 
     connect(showExplorer, SIGNAL(triggered(bool)), this, SLOT(onShowExplorer()));
     connect(showAssetDocks, SIGNAL(triggered(bool)), this, SLOT(onShowAssetDocks()));
+    connect(showCollidersLayer, SIGNAL(triggered(bool)), this, SLOT(onShowCollidersLayer()));
 }
 
 void MainWindow::createDocks()
@@ -195,6 +198,12 @@ void MainWindow::onShowAssetDocks()
     for(auto d : m_assetDocks)
         if(d->isHidden())
             d->show();
+}
+
+
+void MainWindow::onShowCollidersLayer()
+{
+    ColliderLayerDialog::getNewLayerID(this);
 }
 
 void MainWindow::openProject(const QString & dir)

@@ -62,6 +62,22 @@ void ProjectInfos::save()
     obj.insert("tilesize", int(m_options.tileSize));
     obj.insert("delta", int(m_options.delta));
 
+    QJsonArray colliders;
+    for(const auto & c : m_options.colliderLayers)
+    {
+        QJsonObject cObj;
+        cObj.insert("r", c.color.r);
+        cObj.insert("g", c.color.g);
+        cObj.insert("b", c.color.b);
+        cObj.insert("name", c.name);
+        QJsonArray collisions;
+        for(const auto i : c.layerCollisions)
+            collisions.append(i);
+        cObj.insert("l", collisions);
+        colliders.append(cObj);
+    }
+    obj.insert("colliders", colliders);
+
     QFile file(m_projectDirectory + "/" + optionFilename);
     if(!file.open(QIODevice::WriteOnly))
         return;
@@ -89,6 +105,22 @@ void ProjectInfos::load()
 
     m_options.tileSize = obj["tilesize"].toInt();
     m_options.delta = obj["delta"].toInt();
+
+    for(const auto & c : obj["colliders"].toArray())
+    {
+        auto cObj = c.toObject();
+        ColliderLayer layer;
+        layer.color.r = cObj["r"].toInt();
+        layer.color.g = cObj["g"].toInt();
+        layer.color.b = cObj["b"].toInt();
+        layer.name = cObj["name"].toString();
+        for(const auto & v : cObj["l"].toArray())
+            layer.layerCollisions.push_back(v.toInt());
+        m_options.colliderLayers.push_back(layer);
+    }
+
+    if(m_options.colliderLayers.empty())
+        m_options.colliderLayers.push_back({"Default", sf::Color::Green, {}});
 }
 
 void ProjectInfos::onSave(const SaveEvent &)

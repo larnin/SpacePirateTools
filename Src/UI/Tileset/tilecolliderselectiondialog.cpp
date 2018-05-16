@@ -1,5 +1,6 @@
 #include "tilecolliderselectiondialog.h"
 #include "UI/linewidget.h"
+#include "ProjectInfos/projectinfos.h"
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -35,6 +36,12 @@ TileColliderSelectionDialog::TileColliderSelectionDialog(QWidget *parent)
     radioLayout->addWidget(m_rot270);
     radioGroup->setLayout(radioLayout);
 
+    m_collisionLayer = new QComboBox();
+    QHBoxLayout* layerLayout = new QHBoxLayout();
+    layerLayout->addWidget(new QLabel("Layer : "));
+    layerLayout->addWidget(m_collisionLayer, 1);
+    setCollisionLayer();
+
     m_tileSelect = new TileColliderSelectionWidget();
 
     QPushButton* validButton = new QPushButton("Valider");
@@ -50,6 +57,7 @@ TileColliderSelectionDialog::TileColliderSelectionDialog(QWidget *parent)
     layout->addLayout(flipLayout);
     layout->addSpacing(5);
     layout->addWidget(radioGroup);
+    layout->addLayout(layerLayout);
     layout->addWidget(new LineWidget(LineOrientation::Horizontal));
     layout->addWidget(m_tileSelect, 1);
     layout->addLayout(buttonsLayout);
@@ -64,6 +72,8 @@ TileColliderSelectionDialog::TileColliderSelectionDialog(QWidget *parent)
     connect(m_rot90, SIGNAL(clicked(bool)), this, SLOT(onCheckItem()));
     connect(m_rot180, SIGNAL(clicked(bool)), this, SLOT(onCheckItem()));
     connect(m_rot270, SIGNAL(clicked(bool)), this, SLOT(onCheckItem()));
+
+    connect(m_collisionLayer, SIGNAL(currentIndexChanged(int)), this, SLOT(onLayerChange(int)));
 
     connect(validButton, SIGNAL(clicked(bool)), this, SLOT(accept()));
     connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
@@ -85,6 +95,11 @@ void TileColliderSelectionDialog::onCheckItem()
     m_tileSelect->setColliderRotation(rot);
 }
 
+void TileColliderSelectionDialog::onLayerChange(int index)
+{
+
+}
+
 TileCollider TileColliderSelectionDialog::getTileCollider(QWidget* parent, bool *ok)
 {
     TileColliderSelectionDialog dialog(parent);
@@ -92,4 +107,22 @@ TileCollider TileColliderSelectionDialog::getTileCollider(QWidget* parent, bool 
     if(ok != nullptr)
         (*ok) = value == QDialog::Accepted;
     return dialog.get();
+}
+
+void TileColliderSelectionDialog::setCollisionLayer()
+{
+    m_collisionLayer->blockSignals(true);
+
+    auto index = m_collisionLayer->currentIndex();
+
+    m_collisionLayer->clear();
+    for(const auto & l : ProjectInfos::instance().options().colliderLayers)
+        m_collisionLayer->addItem(l.name);
+    m_collisionLayer->addItem("Configure ...");
+    m_collisionLayer->blockSignals(false);
+
+    if(index < 0 || index >= int(ProjectInfos::instance().options().colliderLayers.size()))
+        m_collisionLayer->setCurrentIndex(0);
+    else m_collisionLayer->setCurrentIndex(index);
+
 }

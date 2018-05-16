@@ -5,13 +5,22 @@
 #include "assettype.h"
 #include "Events/Event.h"
 #include "Events/Args/saveevent.h"
+#include <SFML/Graphics/Color.hpp>
 #include <QString>
 #include <vector>
+
+struct ColliderLayer
+{
+    QString name;
+    sf::Color color;
+    std::vector<int> layerCollisions;
+};
 
 struct ProjectOptions
 {
     unsigned int tileSize;
     unsigned int delta;
+    std::vector<ColliderLayer> colliderLayers;
 };
 
 class ProjectInfos
