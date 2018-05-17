@@ -9,11 +9,25 @@
 #include <QString>
 #include <vector>
 
+enum class LayerCollisionType
+{
+    None,
+    Trigger,
+    Collision,
+};
+
+/// layerCollisions
+/// [0 - 7] layerID
+/// [8 - 10] collisionType
 struct ColliderLayer
 {
     QString name;
     sf::Color color;
-    std::vector<int> layerCollisions;
+    std::vector<unsigned int> layerCollisions;
+
+    inline static LayerCollisionType typeOf(int value){return static_cast<LayerCollisionType>((value & 0xF00) >> 8);}
+    inline static unsigned int indexLayer(int value){return value & 0xFF;}
+    inline static unsigned int toLayerCollision(LayerCollisionType type, unsigned int index){return (static_cast<unsigned int>(type) << 8) + (index & 0xFF);}
 };
 
 struct ProjectOptions

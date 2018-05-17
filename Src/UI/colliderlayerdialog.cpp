@@ -7,6 +7,9 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QMenu>
+#include <QMessageBox>
+#include <QColorDialog>
+#include <QInputDialog>
 
 sf::Color defaultLayerColor(unsigned int layer);
 
@@ -56,6 +59,8 @@ ColliderLayerDialog::ColliderLayerDialog(bool showButtons, QWidget * parent)
 
     m_layerList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_layerList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClickLayerList(QPoint)));
+
+    setWindowTitle("Layers de collision");
 }
 
 unsigned int ColliderLayerDialog::get() const
@@ -127,8 +132,12 @@ void ColliderLayerDialog::setPoints()
 
         for(unsigned int i(0) ; i <= index ; i++)
         {
+            auto it = std::find_if(layer.layerCollisions.begin(), layer.layerCollisions.end(), [i](const auto & value){return ColliderLayer::indexLayer(value) == i;});
+            LayerCollisionType type = (it == layer.layerCollisions.end()) ? LayerCollisionType::None : ColliderLayer::typeOf(*it);
+
             QCheckBox * check = new QCheckBox("");
             check->setTristate(true);
+            check->setCheckState(type == LayerCollisionType::None ? Qt::Unchecked : type == LayerCollisionType::Trigger ? Qt::PartiallyChecked : Qt::Checked);
             m_checkboxs.push_back(std::make_pair(sf::Vector2u(index, i), check));
             m_pointsLayout->addWidget(check, i + 1, maxIndex - index);
 
@@ -139,7 +148,22 @@ void ColliderLayerDialog::setPoints()
 
 void ColliderLayerDialog::onCheck(unsigned int x, unsigned int y, Qt::CheckState state)
 {
+    auto & layers = ProjectInfos::instance().options().colliderLayers;
 
+    if(x >= layers.size() || y >= layers.size())
+        return;
+
+    auto func = [](unsigned int x, unsigned int y, auto & layers, Qt::CheckState state)
+    {
+        auto it = std::find_if(layers[x].layerCollisions.begin(), layers[x].layerCollisions.end(), [y](const auto & value){return ColliderLayer::indexLayer(value) == y;});
+
+        if(it != layers[x].layerCollisions.end() && state == Qt::Unchecked)
+            layers[x].layerCollisions.erase(it);
+        else *it = ColliderLayer::toLayerCollision(state == Qt::Checked ? LayerCollisionType::Collision : LayerCollisionType::Trigger, y);
+    };
+
+    func(x, y, layers, state);
+    func(y, x, layers, state);
 }
 
 void ColliderLayerDialog::onRightClickLayerList(QPoint point)
@@ -167,22 +191,59 @@ void ColliderLayerDialog::onRightClickLayerList(QPoint point)
 
     if(action == aDel)
     {
+        auto & currentItem = ProjectInfos::instance().options().colliderLayers[current];
+        auto value = QMessageBox::question(this, "Supprimer " + currentItem.name + " ?", "Voulez vous supprimer " + currentItem.name + " ?\n"
+                                           "Supprimer un layer de collision invalide tous les layers ayant un index superieur.");
+        if(value != QMessageBox::Yes)
+            return;
 
+        ProjectInfos::instance().options().colliderLayers.erase(ProjectInfos::instance().options().colliderLayers.begin() + current);
+
+        updateLayerList();
+        setPoints();
     }
 
     if(action == aRename)
     {
+        auto & currentItem = ProjectInfos::instance().options().colliderLayers[current];
+        bool ok = false;
+        auto value = QInputDialog::getText(this, "Renommer " + currentItem.name, "Indiquez un nouveau nom pour " + currentItem.name, QLineEdit::Normal, currentItem.name, &ok);
+        if(!ok || value.isEmpty())
+            return;
+        currentItem.name = value;
 
+        updateLayerList();
+        setPoints();
     }
 
     if(action == aColor)
     {
+        auto & currentItem = ProjectInfos::instance().options().colliderLayers[current];
+        auto value = QColorDialog::getColor(QColor(currentItem.color.r, currentItem.color.g, currentItem.color.b), this, "Couleur de " + currentItem.name);
+        if(!value.isValid())
+            return;
 
+        currentItem.color = sf::Color(value.red(), value.green(), value.blue());
+
+        updateLayerList();
+        setPoints();
     }
 
     if(action == aAdd)
     {
+        bool ok = false;
+        auto value = QInputDialog::getText(this, "Ajouter un layer", "Indiquer le nom du nouveau layer de collision", QLineEdit::Normal, "", &ok);
+        if(!ok || value.isEmpty())
+            return;
 
+        ColliderLayer layer;
+        layer.name = value;
+        layer.color = defaultLayerColor(ProjectInfos::instance().options().colliderLayers.size());
+
+        ProjectInfos::instance().options().colliderLayers.push_back(layer);
+
+        updateLayerList();
+        setPoints();
     }
 }
 

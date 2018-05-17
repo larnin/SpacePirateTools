@@ -72,7 +72,7 @@ void ProjectInfos::save()
         cObj.insert("name", c.name);
         QJsonArray collisions;
         for(const auto i : c.layerCollisions)
-            collisions.append(i);
+            collisions.append(int(i));
         cObj.insert("l", collisions);
         colliders.append(cObj);
     }
