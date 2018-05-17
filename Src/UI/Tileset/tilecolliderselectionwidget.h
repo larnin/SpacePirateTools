@@ -14,6 +14,8 @@ public:
     inline void setXFlipped(bool xFlipped) {m_xFlipped = xFlipped;}
     inline void setYFlipped(bool yFlipped) {m_yFlipped = yFlipped;}
     inline void setColliderRotation(TileColliderRotation rot) {m_rotation = rot;}
+    inline void setColliderLayer(unsigned int value) {m_colliderLayer = value;}
+    TileCollider get() const;
 
 signals:
     void onTileColliderSelect(const TileCollider & collider);
@@ -32,6 +34,7 @@ private:
     bool m_xFlipped;
     bool m_yFlipped;
     TileColliderRotation m_rotation;
+    unsigned int m_colliderLayer;
 
     int m_selectedCollider;
 

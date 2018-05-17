@@ -14,7 +14,7 @@ class TileColliderSelectionDialog : QDialog
 public:
     TileColliderSelectionDialog(QWidget *parent = nullptr);
 
-    inline TileCollider get() const { return m_value; }
+    inline TileCollider get() const { return m_tileSelect->get(); }
 
     static TileCollider getTileCollider(QWidget* parent, bool *ok = nullptr);
 

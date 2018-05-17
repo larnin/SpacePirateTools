@@ -1,5 +1,6 @@
 #include "tilecolliderselectionwidget.h"
 #include "enumiterators.h"
+#include "ProjectInfos/projectinfos.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -17,6 +18,7 @@ TileColliderSelectionWidget::TileColliderSelectionWidget(QWidget *parent)
     , m_xFlipped(false)
     , m_yFlipped(false)
     , m_rotation(TileColliderRotation::R_0)
+    , m_colliderLayer(0)
     , m_selectedCollider(-1)
     , m_mousePos(-10, -10)
 {
@@ -65,11 +67,25 @@ void TileColliderSelectionWidget::mousePressEvent(QMouseEvent * event)
     c.xFlipped = m_xFlipped;
     c.yFlipped = m_yFlipped;
     c.type = static_cast<TileColliderType>(id);
+    c.collisionLayer = m_colliderLayer;
 
     m_selectedCollider = id;
 
     emit onTileColliderSelect(c);
 }
+
+TileCollider TileColliderSelectionWidget::get() const
+{
+    TileCollider c;
+    c.rotation = m_rotation;
+    c.xFlipped = m_xFlipped;
+    c.yFlipped = m_yFlipped;
+    c.type = static_cast<TileColliderType>(m_selectedCollider);
+    c.collisionLayer = m_colliderLayer;
+
+    return c;
+}
+
 void TileColliderSelectionWidget::mouseMoveEvent(QMouseEvent *event)
 {
     m_mousePos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
@@ -100,7 +116,9 @@ void TileColliderSelectionWidget::drawAllShapes()
         auto i = static_cast<unsigned int>(v);
         sf::Vector2u pos(i % nbWidth, i / nbWidth);
         c.type = v;
-        RenderWindow::draw(c.drawShape(shapesColor, sf::Vector2f(pos * (colliderSize + colliderDelta)) + sf::Vector2f(colliderSize, colliderSize) / 2.0f, colliderSize));
+        auto & layers = ProjectInfos::instance().options().colliderLayers;
+        sf::Color color = layers[m_colliderLayer < layers.size() ? m_colliderLayer : 0].color;
+        RenderWindow::draw(c.drawShape(color, sf::Vector2f(pos * (colliderSize + colliderDelta)) + sf::Vector2f(colliderSize, colliderSize) / 2.0f, colliderSize));
     }
 }
 

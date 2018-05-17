@@ -71,7 +71,10 @@ void SingleTileView::drawSprite(const Texture & texture, unsigned int id, unsign
 void SingleTileView::drawCollider()
 {
     auto pos = totalSize / 2.0f;
-    RenderWindow::draw(TileCollider(m_colliderValue).drawShape(sf::Color::Green, sf::Vector2f(pos, pos), tileSize));
+    TileCollider value(m_colliderValue);
+    const auto & layers = ProjectInfos::instance().options().colliderLayers;
+    sf::Color color = value.collisionLayer < layers.size() ? layers[value.collisionLayer].color : layers[0].color;
+    RenderWindow::draw(value.drawShape(color, sf::Vector2f(pos, pos), tileSize));
 }
 
 void SingleTileView::mousePressEvent(QMouseEvent * e)

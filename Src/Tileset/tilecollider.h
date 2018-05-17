@@ -51,7 +51,7 @@ struct TileCollider
     TileColliderRotation rotation;
     bool xFlipped;
     bool yFlipped;
-    int collisionLayer;
+    unsigned int collisionLayer;
 
 private:
     static sf::VertexArray drawFull();

@@ -65,7 +65,7 @@ ColliderLayerDialog::ColliderLayerDialog(bool showButtons, QWidget * parent)
 
 unsigned int ColliderLayerDialog::get() const
 {
-    return 0;
+    return std::max(m_layerList->currentRow(), 0);
 }
 
 unsigned int ColliderLayerDialog::getNewLayerID(bool showButtons, QWidget* parent, bool *ok)

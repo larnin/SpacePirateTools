@@ -1,6 +1,7 @@
 #include "tilecolliderselectiondialog.h"
 #include "UI/linewidget.h"
 #include "ProjectInfos/projectinfos.h"
+#include "UI/colliderlayerdialog.h"
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -97,7 +98,18 @@ void TileColliderSelectionDialog::onCheckItem()
 
 void TileColliderSelectionDialog::onLayerChange(int index)
 {
-
+    if(index >= int(ProjectInfos::instance().options().colliderLayers.size()))
+    {
+        bool ok = false;
+        auto newIndex = ColliderLayerDialog::getNewLayerID(true, this, &ok);
+        if(!ok)
+            newIndex = m_value.collisionLayer;
+        setCollisionLayer();
+        m_collisionLayer->setCurrentIndex(newIndex);
+        index = newIndex;
+    };
+    m_value.collisionLayer = index;
+    m_tileSelect->setColliderLayer(index);
 }
 
 TileCollider TileColliderSelectionDialog::getTileCollider(QWidget* parent, bool *ok)
