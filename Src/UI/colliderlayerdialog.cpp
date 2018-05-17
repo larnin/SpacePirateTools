@@ -159,6 +159,8 @@ void ColliderLayerDialog::onCheck(unsigned int x, unsigned int y, Qt::CheckState
 
         if(it != layers[x].layerCollisions.end() && state == Qt::Unchecked)
             layers[x].layerCollisions.erase(it);
+        else if(it == layers[x].layerCollisions.end())
+            layers[x].layerCollisions.push_back(ColliderLayer::toLayerCollision(state == Qt::Checked ? LayerCollisionType::Collision : LayerCollisionType::Trigger, y));
         else *it = ColliderLayer::toLayerCollision(state == Qt::Checked ? LayerCollisionType::Collision : LayerCollisionType::Trigger, y);
     };
 
