@@ -2,7 +2,6 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonValue>
-#include <QJsonObject>
 #include <QJsonArray>
 #include <cassert>
 
@@ -14,7 +13,31 @@ ObjectData::ObjectData()
 
 ObjectData::ObjectData(const QString & fileName)
 {
-    load(fileName);
+    QFile file(fileName);
+    if(!file.exists())
+        return;
+    if(!file.open(QIODevice::ReadOnly))
+        return;
+
+    QJsonParseError error;
+    QJsonDocument doc(QJsonDocument::fromJson(file.readAll(), &error));
+    file.close();
+    if(error.error != QJsonParseError::NoError)
+        return;
+    if(!doc.isObject())
+        return;
+
+    QJsonObject obj(doc.object());
+    load(obj);
+
+    if(empty() || (*this)[0]->values.empty() || (*this)[0]->values[0]->type() != ValueType::Transform)
+        insert(begin(), createDefaultTransform());
+    checkObjectIntegrity();
+}
+
+ObjectData::ObjectData(const QJsonObject & obj)
+{
+    load(obj);
 
     if(empty() || (*this)[0]->values.empty() || (*this)[0]->values[0]->type() != ValueType::Transform)
         insert(begin(), createDefaultTransform());
@@ -22,6 +45,15 @@ ObjectData::ObjectData(const QString & fileName)
 }
 
 void ObjectData::save(const QString & fileName) const
+{
+    QFile file(fileName);
+    if(!file.open(QIODevice::WriteOnly))
+        return;
+    file.write(QJsonDocument(save()).toJson(QJsonDocument::Compact));
+    file.close();
+}
+
+QJsonObject ObjectData::save() const
 {
     QJsonObject obj;
 
@@ -42,32 +74,12 @@ void ObjectData::save(const QString & fileName) const
     }
     obj.insert("properties", properties);
 
-    QFile file(fileName);
-    if(!file.open(QIODevice::WriteOnly))
-        return;
-    file.write(QJsonDocument(obj).toJson(QJsonDocument::Compact));
-    file.close();
+    return obj;
 }
 
-void ObjectData::load(const QString & fileName)
+void ObjectData::load(const QJsonObject &obj)
 {
     clear();
-
-    QFile file(fileName);
-    if(!file.exists())
-        return;
-    if(!file.open(QIODevice::ReadOnly))
-        return;
-
-    QJsonParseError error;
-    QJsonDocument doc(QJsonDocument::fromJson(file.readAll(), &error));
-    file.close();
-    if(error.error != QJsonParseError::NoError)
-        return;
-    if(!doc.isObject())
-        return;
-
-    QJsonObject obj(doc.object());
 
     auto propertiesObj = obj.find("properties");
     if(propertiesObj != obj.end() && propertiesObj->isArray())

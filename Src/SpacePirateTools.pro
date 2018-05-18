@@ -111,7 +111,9 @@ SOURCES += \
     Object/Value/objectvaluetext.cpp \
     UI/Object/Value/textvaluewidget.cpp \
     UI/colliderlayerdialog.cpp \
-    UI/verticallabel.cpp
+    UI/verticallabel.cpp \
+    Prefab/prefabdata.cpp \
+    Scene/scenenode.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -227,19 +229,21 @@ HEADERS += \
     Object/Value/objectvaluetext.h \
     UI/Object/Value/textvaluewidget.h \
     UI/colliderlayerdialog.h \
-    UI/verticallabel.h
+    UI/verticallabel.h \
+    Prefab/prefabdata.h \
+    Scene/scenenode.h
 
 CONFIG += c++14
 
 # SFML
 DEFINES += SFML_STATIC
-LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
-INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
-DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
+#LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
+#INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
+#DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
 
-#LIBS += -LC:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/lib
-#INCLUDEPATH += C:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/include
-#DEPENDPATH += C:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/include
+LIBS += -LC:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/lib
+INCLUDEPATH += C:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/include
+DEPENDPATH += C:/Users/n.laurent/Desktop/Dev/SFML-2.4.2/include
 
 CONFIG(release, debug|release): LIBS += -lsfml-graphics-s \
                                         -lsfml-window-s \

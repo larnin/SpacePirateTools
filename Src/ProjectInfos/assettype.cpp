@@ -18,6 +18,8 @@ QString assetTypeToString(AssetType type)
         return "Tileset";
     case AssetType::Object:
         return "Object";
+    case AssetType::Prefab:
+        return "Prefab";
     default:
         break;
     }
@@ -42,6 +44,8 @@ QString assetTypeExtension(AssetType type)
         return "tile";
     case AssetType::Object:
         return "object";
+    case AssetType::Prefab:
+        return "prfb";
     default:
         break;
     }

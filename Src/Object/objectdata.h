@@ -4,6 +4,7 @@
 #include "objectproperty.h"
 #include "Value/objectvaluetransform.h"
 #include <QString>
+#include <QJsonObject>
 #include <memory>
 #include <vector>
 
@@ -12,6 +13,7 @@ class ObjectData : private std::vector<std::unique_ptr<ObjectProperty>>
 public:
     ObjectData();
     ObjectData(const QString & fileName);
+    ObjectData(const QJsonObject & obj);
 
     using std::vector<std::unique_ptr<ObjectProperty>>::push_back;
     using std::vector<std::unique_ptr<ObjectProperty>>::pop_back;
@@ -28,14 +30,14 @@ public:
     using std::vector<std::unique_ptr<ObjectProperty>>::empty;
 
     void save(const QString & fileName) const;
+    QJsonObject save() const;
 
     ObjectValueTransform & transform();
 
 private:
-    void load(const QString & fileName);
+    void load(const QJsonObject & obj);
     std::unique_ptr<ObjectProperty> createDefaultTransform();
     void checkObjectIntegrity();
-
 };
 
 #endif // OBJECTDATA_H

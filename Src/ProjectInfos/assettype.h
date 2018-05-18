@@ -11,7 +11,8 @@ enum class AssetType
     Animator,
     Scene,
     Object,
-    Max = Object,
+    Prefab,
+    Max = Prefab,
     Unknow = Max+1,
 };
 
