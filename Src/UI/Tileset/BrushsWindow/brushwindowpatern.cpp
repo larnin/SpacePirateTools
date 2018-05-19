@@ -56,7 +56,7 @@ BrushWindowPatern::BrushWindowPatern(BrushPatern * brush, QWidget * parent)
 void BrushWindowPatern::onLeftClick(unsigned int x, unsigned int y)
 {
     bool ok = false;
-    unsigned int value = TileSelectionDialog::getTileID(m_texture, m_delta, this, &ok);
+    unsigned int value = TileSelectionDialog::getTileID(m_texture, m_delta, m_size, this, &ok);
     if(!ok)
         return;
     unsigned int index(x + y * m_brush->getSize().x);
@@ -81,6 +81,7 @@ void BrushWindowPatern::onValueUpdate()
     {
         t->setTexture(m_texture);
         t->setDeltaTile(m_delta);
+        t->setTileSize(m_size);
     }
 }
 
@@ -124,6 +125,7 @@ std::pair<QWidget*, SingleTileView*> BrushWindowPatern::addWidget(unsigned int x
     tile->setTileColliderValue(tileValue.collider.toInt());
     tile->setTexture(m_texture);
     tile->setDeltaTile(m_delta);
+    tile->setTileSize(m_size);
 
     QFrame* frame = new QFrame();
     frame->setFrameShape(QFrame::Box);

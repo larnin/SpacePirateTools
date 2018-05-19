@@ -112,7 +112,8 @@ SOURCES += \
     UI/Object/Value/textvaluewidget.cpp \
     UI/colliderlayerdialog.cpp \
     UI/verticallabel.cpp \
-    Scene/scenenode.cpp
+    Scene/scenenode.cpp \
+    Tilemap/tilemapdata.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -229,7 +230,8 @@ HEADERS += \
     UI/Object/Value/textvaluewidget.h \
     UI/colliderlayerdialog.h \
     UI/verticallabel.h \
-    Scene/scenenode.h
+    Scene/scenenode.h \
+    Tilemap/tilemapdata.h
 
 CONFIG += c++14
 

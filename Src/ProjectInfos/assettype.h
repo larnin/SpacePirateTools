@@ -7,6 +7,7 @@ enum class AssetType
 {
     Image,
     Tileset,
+    Tilemap,
     Animation,
     Animator,
     Scene,

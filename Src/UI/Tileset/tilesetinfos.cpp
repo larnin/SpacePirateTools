@@ -46,9 +46,6 @@ void TilesetInfos::initializeWidgets()
     deltaLayout->addWidget(new QLabel("Delta entre tile :"));
     deltaLayout->addWidget(m_delta);
 
-    QLabel *tileSizeLabel = new QLabel("La taille de tile et le delta est global à la scene");
-    tileSizeLabel->setStyleSheet("font-weight: bold; color: red");
-
     m_texture = new QComboBox();
     QHBoxLayout *textureLayout = new QHBoxLayout();
     textureLayout->addWidget(new QLabel("Texture :"));
@@ -57,7 +54,6 @@ void TilesetInfos::initializeWidgets()
     m_listTile = new QListWidget;
 
     QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(tileSizeLabel);
     layout->addLayout(tileSizeLayout);
     layout->addLayout(deltaLayout);
     layout->addWidget(new LineWidget(LineOrientation::Horizontal));
@@ -120,8 +116,8 @@ void TilesetInfos::updateValues()
     m_delta->blockSignals(true);
     m_tileSize->blockSignals(true);
 
-    m_delta->setValue(ProjectInfos::instance().options().delta);
-    m_tileSize->setValue(ProjectInfos::instance().options().tileSize);
+    m_delta->setValue(m_datas.tileDelta);
+    m_tileSize->setValue(m_datas.tileSize);
 
     m_delta->blockSignals(false);
     m_tileSize->blockSignals(false);
@@ -214,14 +210,16 @@ void TilesetInfos::onRightClickBrush(QPoint point)
 
 void TilesetInfos::onTileSizeChanged()
 {
-    ProjectInfos::instance().options().tileSize = m_tileSize->value();
+    m_datas.tileSize = m_tileSize->value();
+    if(m_centralWindow != nullptr)
+        m_centralWindow->setTileSize(m_datas.tileSize);
 }
 
 void TilesetInfos::onDeltaChanged()
 {
-    ProjectInfos::instance().options().delta = m_delta->value();
+    m_datas.tileDelta = m_delta->value();
     if(m_centralWindow != nullptr)
-        m_centralWindow->setDeltaTile(ProjectInfos::instance().options().delta);
+        m_centralWindow->setDeltaTile(m_datas.tileDelta);
 }
 
 void TilesetInfos::onImageSelected(int index)
@@ -237,5 +235,6 @@ void TilesetInfos::setCentralTilesetWindow(CentralTilesetWindow * w)
 {
     m_centralWindow = w;
     w->setTexture(m_datas.imageName);
-    w->setDeltaTile(ProjectInfos::instance().options().delta);
+    w->setDeltaTile(m_datas.tileDelta);
+    w->setTileSize(m_datas.tileSize);
 }

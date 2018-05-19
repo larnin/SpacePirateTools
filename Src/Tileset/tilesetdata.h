@@ -15,6 +15,8 @@ public:
 
     QString imageName;
     std::vector<std::unique_ptr<BrushBase>> brushs;
+    unsigned int tileSize;
+    unsigned int tileDelta;
 
 private:
     void load(const QString & fileName);

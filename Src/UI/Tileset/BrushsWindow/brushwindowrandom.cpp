@@ -59,7 +59,7 @@ BrushWindowRandom::BrushWindowRandom(BrushRandom *brush, QWidget *parent)
 void BrushWindowRandom::onLeftClick(QWidget *parent)
 {
     bool ok = false;
-    unsigned int value = TileSelectionDialog::getTileID(m_texture, m_delta, this, &ok);
+    unsigned int value = TileSelectionDialog::getTileID(m_texture, m_delta, m_size, this, &ok);
     if(!ok)
         return;
 
@@ -105,6 +105,7 @@ void BrushWindowRandom::onValueUpdate()
     {
         t->setTexture(m_texture);
         t->setDeltaTile(m_delta);
+        t->setTileSize(m_size);
     }
 }
 
@@ -115,6 +116,7 @@ void BrushWindowRandom::addWidget(TileRandomInfo tileValue)
     tile->setTileID(tileValue.id);
     tile->setTexture(m_texture);
     tile->setDeltaTile(m_delta);
+    tile->setTileSize(m_size);
 
     QDoubleSpinBox * probability = new QDoubleSpinBox();
     probability->setRange(0, 1000);

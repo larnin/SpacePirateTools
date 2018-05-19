@@ -14,6 +14,7 @@ public:
 
     void setTexture(const QString & textureName);
     void setDeltaTile(unsigned int delta);
+    void setTileSize(unsigned int size);
     void setBrushWindow(BrushWindowBase * window);
 
 private:
@@ -22,6 +23,7 @@ private:
     QVBoxLayout *m_layout;
     Texture m_texture;
     unsigned int m_delta;
+    unsigned int m_size;
 };
 
 #endif // CENTRALTILESETWINDOW_H

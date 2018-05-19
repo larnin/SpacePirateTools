@@ -13,6 +13,7 @@ public:
     inline void setTexture(const Texture & texture) {m_texture = texture;}
     inline void setTileID(unsigned int id) {m_id = id;}
     inline void setDeltaTile(unsigned int delta) {m_deltaTile = delta;}
+    inline void setTileSize(unsigned int size) {m_tileSize = size;}
     inline void setTileColliderValue(unsigned int value) {m_colliderValue = value;}
 
 signals:
@@ -34,6 +35,7 @@ private:
     TileShape m_shape;
     unsigned int m_id;
     unsigned int m_deltaTile;
+    unsigned int m_tileSize;
     unsigned int m_colliderValue;
 };
 

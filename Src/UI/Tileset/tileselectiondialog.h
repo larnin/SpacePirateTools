@@ -8,11 +8,11 @@
 class TileSelectionDialog : public QDialog
 {
 public:
-    TileSelectionDialog(Texture texture, unsigned int delta, QWidget * parent = nullptr);
+    TileSelectionDialog(Texture texture, unsigned int delta, unsigned int size, QWidget * parent = nullptr);
 
     inline unsigned int get() const { return m_value; }
 
-    static unsigned int getTileID(Texture texture, unsigned int delta, QWidget* parent, bool *ok = nullptr);
+    static unsigned int getTileID(Texture texture, unsigned int delta, unsigned int size, QWidget* parent, bool *ok = nullptr);
 
 public slots:
     void onTileSelect(unsigned int value);

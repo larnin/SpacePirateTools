@@ -16,6 +16,8 @@ QString assetTypeToString(AssetType type)
         return "Scene";
     case AssetType::Tileset:
         return "Tileset";
+    case AssetType::Tilemap:
+        return "Tilemap";
     case AssetType::Object:
         return "Object";
     default:
@@ -40,6 +42,8 @@ QString assetTypeExtension(AssetType type)
         return "scene";
     case AssetType::Tileset:
         return "tile";
+    case AssetType::Tilemap:
+        return "tmap";
     case AssetType::Object:
         return "object";
     default:

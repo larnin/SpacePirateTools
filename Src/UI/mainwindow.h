@@ -46,6 +46,7 @@ private:
     void openTileset(const QString & filename);
     void openScene(const QString & filename);
     void openObject(const QString & filename);
+    void openTilemap(const QString & filename);
 
     void onOpenRessource(const OpenRessourceEvent & e);
     void clearDocks();

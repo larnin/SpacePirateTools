@@ -6,6 +6,7 @@ CentralTilesetWindow::CentralTilesetWindow(TilesetInfos *infos, QWidget *parent)
     , m_infos(infos)
     , m_brushWindow(nullptr)
     , m_delta(0)
+    , m_size(0)
 {
     m_infos->setCentralTilesetWindow(this);
 
@@ -41,6 +42,13 @@ void CentralTilesetWindow::setDeltaTile(unsigned int delta)
         m_brushWindow->setDeltaTile(delta);
 }
 
+void CentralTilesetWindow::setTileSize(unsigned int size)
+{
+    m_size = size;
+    if(m_brushWindow)
+        m_brushWindow->setTileSize(size);
+}
+
 void CentralTilesetWindow::setBrushWindow(BrushWindowBase * window)
 {
     if(m_brushWindow != nullptr)
@@ -55,6 +63,7 @@ void CentralTilesetWindow::setBrushWindow(BrushWindowBase * window)
     {
         m_brushWindow->setTexture(m_texture);
         m_brushWindow->setDeltaTile(m_delta);
+        m_brushWindow->setTileSize(m_size);
         m_layout->addWidget(m_brushWindow);
     }
 }

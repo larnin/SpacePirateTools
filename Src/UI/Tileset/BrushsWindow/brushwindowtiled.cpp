@@ -43,13 +43,14 @@ void BrushWindowTiled::onValueUpdate()
     {
         t->setTexture(m_texture);
         t->setDeltaTile(m_delta);
+        t->setTileSize(m_size);
     }
 }
 
 void BrushWindowTiled::onLeftClick(unsigned int index)
 {
     bool ok = false;
-    unsigned int value = TileSelectionDialog::getTileID(m_texture, m_delta, this, &ok);
+    unsigned int value = TileSelectionDialog::getTileID(m_texture, m_delta, m_size, this, &ok);
     if(!ok)
         return;
 

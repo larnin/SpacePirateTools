@@ -10,9 +10,10 @@ const sf::Color selectColor(sf::Color::Green);
 const sf::Color fillColor(sf::Color::Transparent);
 constexpr unsigned int outline(2);
 
-TileSelectionWidget::TileSelectionWidget(Texture texture, unsigned int delta, QWidget *parent)
+TileSelectionWidget::TileSelectionWidget(Texture texture, unsigned int delta, unsigned int size, QWidget *parent)
     : ImageWidget(texture, parent)
     , m_delta(delta)
+    , m_size(size)
     , m_mousePos(0, 0)
 {
     setMouseTracking(true);
@@ -31,13 +32,12 @@ void TileSelectionWidget::OnUpdate()
 
     auto textureSize = textureTileSize();
     sf::Vector2u pos(id % textureSize.x, id / textureSize.x);
-    auto tileSize = ProjectInfos::instance().options().tileSize;
 
-    sf::RectangleShape shape(sf::Vector2f(tileSize, tileSize));
+    sf::RectangleShape shape(sf::Vector2f(m_size, m_size));
     shape.setFillColor(fillColor);
     shape.setOutlineColor(selectColor);
     shape.setOutlineThickness(outline);
-    shape.setPosition(sf::Vector2f(pos * (tileSize + m_delta)));
+    shape.setPosition(sf::Vector2f(pos * (m_size + m_delta)));
 
     RenderWindow::draw(shape);
 }
@@ -67,9 +67,7 @@ void TileSelectionWidget::mouseMoveEvent(QMouseEvent *event)
 
 int TileSelectionWidget::index() const
 {
-    auto tileSize = ProjectInfos::instance().options().tileSize;
-
-    sf::Vector2f relativePos(m_mousePos / float(tileSize + m_delta));
+    sf::Vector2f relativePos(m_mousePos / float(m_size + m_delta));
     auto textureSize = textureTileSize();
     if(relativePos.x < 0 || relativePos.y < 0 || relativePos.x >= textureSize.x || relativePos.y >= textureSize.y)
         return -1;
@@ -82,7 +80,5 @@ sf::Vector2u TileSelectionWidget::textureTileSize() const
     if(!texture.isValid())
         return {0, 0};
 
-    auto tileSize = ProjectInfos::instance().options().tileSize;
-
-    return sf::Vector2u((texture->getSize().x + m_delta) / (tileSize + m_delta), (texture->getSize().y + m_delta) / (tileSize + m_delta));
+    return sf::Vector2u((texture->getSize().x + m_delta) / (m_size + m_delta), (texture->getSize().y + m_delta) / (m_size + m_delta));
 }

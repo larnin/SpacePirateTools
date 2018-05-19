@@ -8,7 +8,7 @@ class TileSelectionWidget : public ImageWidget
 {
     Q_OBJECT
 public:
-    TileSelectionWidget(Texture texture, unsigned int delta, QWidget * parent = nullptr);
+    TileSelectionWidget(Texture texture, unsigned int delta, unsigned int size, QWidget * parent = nullptr);
 
 signals:
     void onTileSelect(unsigned int id);
@@ -22,6 +22,7 @@ private:
     int index() const;
     sf::Vector2u textureTileSize() const;
     unsigned int m_delta;
+    unsigned int m_size;
 
     sf::Vector2f m_mousePos;
 };
