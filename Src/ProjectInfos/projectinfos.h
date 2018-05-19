@@ -32,8 +32,6 @@ struct ColliderLayer
 
 struct ProjectOptions
 {
-    unsigned int tileSize;
-    unsigned int delta;
     std::vector<ColliderLayer> colliderLayers;
 };
 

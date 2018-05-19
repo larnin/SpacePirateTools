@@ -14,6 +14,9 @@ public:
     BlockView(QWidget * parent = nullptr);
 
      void setTexture(Texture texture);
+     void setTileSize(unsigned int size);
+     void setTileDelta(unsigned int delta);
+
      inline unsigned int getCurrentBlock() {return m_selectedId;}
 
 signals:
@@ -42,6 +45,8 @@ private:
     sf::VertexArray m_array;
     bool m_selected;
     unsigned int m_selectedId;
+    unsigned int m_tileSize;
+    unsigned int m_tileDelta;
 
     float m_botomTiles;
 };

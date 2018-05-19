@@ -38,6 +38,33 @@ TilemapInfos::~TilemapInfos()
 
 void TilemapInfos::initializeWidgets()
 {
+    m_sizeX = new QSpinBox();
+    m_sizeX->setRange(1, 1000);
+    m_sizeX->setValue(m_data.tiles.getSize().x);
+    m_sizeY = new QSpinBox();
+    m_sizeY->setRange(1, 1000);
+    m_sizeY->setValue(m_data.tiles.getSize().y);
+    QHBoxLayout * sizeLayout = new QHBoxLayout();
+    sizeLayout->addWidget(new QLabel("Taille : "));
+    sizeLayout->addWidget(new QLabel("X"));
+    sizeLayout->addWidget(m_sizeX, 1);
+    sizeLayout->addSpacing(10);
+    sizeLayout->addWidget(new QLabel("Y"));
+    sizeLayout->addWidget(m_sizeY, 1);
+
+    m_tileSize = new QSpinBox();
+    m_tileSize->setRange(1, 1024);
+    m_tileSize->setValue(m_data.tileSize);
+    m_tileDelta = new QSpinBox();
+    m_tileDelta->setRange(0, 1024);
+    m_tileDelta->setValue(m_data.tileDelta);
+    QHBoxLayout * tileSizeLayout = new QHBoxLayout();
+    tileSizeLayout->addWidget(new QLabel("Taille tile : "));
+    tileSizeLayout->addWidget(m_tileSize, 1);
+    QHBoxLayout * tileDeltaLayout = new QHBoxLayout();
+    tileDeltaLayout->addWidget(new QLabel("Delta tile : "));
+    tileDeltaLayout->addWidget(m_tileDelta, 1);
+
     m_texture = new QComboBox();
     QHBoxLayout * textureLayout = new QHBoxLayout();
     textureLayout->addWidget(new QLabel("Texture : "));
@@ -58,6 +85,8 @@ void TilemapInfos::initializeWidgets()
 
     m_blockView = new BlockView();
     m_blockView->setTexture(m_tilesTexture);
+    m_blockView->setTileSize(m_data.tileSize);
+    m_blockView->setTileDelta(m_data.tileDelta);
     QFrame * blockViewFrame = new QFrame();
     blockViewFrame->setFrameShape(QFrame::Box);
     QVBoxLayout * blockviewLayout = new QVBoxLayout();
@@ -101,13 +130,17 @@ void TilemapInfos::initializeWidgets()
     colliderGroup->setLayout(colliderLayout);
 
     QPushButton * selectButton = new QPushButton("Select");
+    m_autoSelect = new QCheckBox("auto");
+    QHBoxLayout * buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(selectButton, 1);
+    buttonLayout->addWidget(m_autoSelect);
 
     QWidget * singleTileHolder = new QWidget();
     QVBoxLayout * singleTileLayout = new QVBoxLayout();
     singleTileLayout->addWidget(new QLabel("Tile :"));
     singleTileLayout->addWidget(blockViewFrame, 1);
     singleTileLayout->addWidget(colliderGroup);
-    singleTileLayout->addWidget(selectButton);
+    singleTileLayout->addLayout(buttonLayout);
     singleTileHolder->setLayout(singleTileLayout);
 
     QTabWidget * tab = new QTabWidget();
@@ -115,11 +148,18 @@ void TilemapInfos::initializeWidgets()
     tab->addTab(singleTileHolder, "Tile seul");
 
     QVBoxLayout * layout = new QVBoxLayout();
+    layout->addLayout(sizeLayout);
     layout->addLayout(textureLayout);
+    layout->addLayout(tileSizeLayout);
+    layout->addLayout(tileDeltaLayout);
     layout->addWidget(tab);
 
     setLayout(layout);
 
+    connect(m_sizeX, SIGNAL(editingFinished()), this, SLOT(onSizeChanged()));
+    connect(m_sizeY, SIGNAL(editingFinished()), this, SLOT(onSizeChanged()));
+    connect(m_tileSize, SIGNAL(editingFinished()), this, SLOT(onTileSizeChanged()));
+    connect(m_tileDelta, SIGNAL(editingFinished()), this, SLOT(onTileSizeChanged()));
     connect(m_texture, SIGNAL(currentIndexChanged(int)), this, SLOT(onTextureIndexChanged(int)));
     connect(m_brushs, SIGNAL(currentIndexChanged(int)), this, SLOT(onBrushIndexChanged(int)));
     connect(m_brushList, SIGNAL(currentRowChanged(int)), this, SLOT(onSelectBrush(int)));
@@ -230,14 +270,16 @@ void TilemapInfos::onSelectBrush(int value)
     else m_centralScene->setTool(m_tileset->brushs[value]->getSceneTool(m_layer));*/
 }
 
-void TilemapInfos::onSelectTile(unsigned int id)
+void TilemapInfos::onSelectTile(unsigned int)
 {
-    //todo
+    if(m_autoSelect->isChecked())
+        onTileValidSelection();
 }
 
 void TilemapInfos::onColliderValueChanged()
 {
-    //todo
+    if(m_autoSelect->isChecked())
+        onTileValidSelection();
 }
 
 void TilemapInfos::onTileValidSelection()
@@ -252,6 +294,21 @@ void TilemapInfos::onTileValidSelection()
                       : TileColliderRotation::R270));
 
     //m_centralScene->setTool(std::make_unique<SingleTileSceneTool>(m_layer, TileInfos{m_blockView->getCurrentBlock(), collider}));
+}
+
+
+void TilemapInfos::onSizeChanged()
+{
+    m_data.tiles.resize(sf::Vector2u(m_sizeX->value(), m_sizeY->value()));
+}
+
+void TilemapInfos::onTileSizeChanged()
+{
+    m_data.tileSize = m_tileSize->value();
+    m_data.tileDelta = m_tileDelta->value();
+
+    m_blockView->setTileSize(m_data.tileSize);
+    m_blockView->setTileDelta(m_data.tileDelta);
 }
 
 void TilemapInfos::onRename(const RenamedFileEvent &)

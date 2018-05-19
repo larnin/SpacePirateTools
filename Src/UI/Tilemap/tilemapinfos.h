@@ -14,6 +14,7 @@
 #include <QWidget>
 #include <QCheckBox>
 #include <QListWidget>
+#include <QSpinBox>
 
 class CentralTilemapWidget;
 
@@ -30,9 +31,12 @@ public slots:
     void onTextureIndexChanged(int index);
     void onBrushIndexChanged(int index);
     void onSelectBrush(int value);
-    void onSelectTile(unsigned int id);
+    void onSelectTile(unsigned int);
     void onColliderValueChanged();
     void onTileValidSelection();
+
+    void onSizeChanged();
+    void onTileSizeChanged();
 
 private:
     void initializeWidgets();
@@ -55,7 +59,12 @@ private:
     std::unique_ptr<TilesetData> m_tileset;
     Texture m_tilesTexture;
 
+    QSpinBox * m_sizeX;
+    QSpinBox * m_sizeY;
+
     QComboBox * m_texture;
+    QSpinBox * m_tileSize;
+    QSpinBox * m_tileDelta;
     QComboBox * m_brushs;
 
     QListWidget * m_brushList;
@@ -68,6 +77,7 @@ private:
     QRadioButton * m_rot270;
     QCheckBox * m_xFlipped;
     QCheckBox * m_yFlipped;
+    QCheckBox * m_autoSelect;
 
     EventHolder<RenamedFileEvent> renameHolder;
     EventHolder<RemovedFileEvent> removedHolder;

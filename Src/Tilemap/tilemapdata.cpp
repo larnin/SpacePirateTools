@@ -7,7 +7,8 @@
 
 TilemapData::TilemapData(const sf::Vector2u & size, const TileInfos & defaultTile)
     : tiles(size, defaultTile)
-    , tileSize(16, 16)
+    , tileSize(16)
+    , tileDelta(0)
 {
 
 }
@@ -35,8 +36,8 @@ void TilemapData::save(const QString & fileName) const
     obj.insert("brush", brushName);
     obj.insert("sizeX", int(tiles.getSize().x));
     obj.insert("sizeY", int(tiles.getSize().y));
-    obj.insert("tileX", int(tileSize.x));
-    obj.insert("tileY", int(tileSize.y));
+    obj.insert("tile", int(tileSize));
+    obj.insert("delta", int(tileDelta));
 
     QFile file(fileName);
     if(!file.open(QIODevice::WriteOnly))
@@ -65,8 +66,8 @@ void TilemapData::load(const QString & fileName)
 
     textureName = obj["texture"].toString();
     brushName = obj["brush"].toString();
-    tileSize.x = obj["tileX"].toInt();
-    tileSize.y = obj["tileY"].toInt();
+    tileSize = obj["tile"].toInt();
+    tileDelta = obj["delta"].toInt();
 
     sf::Vector2u size(obj["sizeX"].toInt(), obj["sizeY"].toInt());
 

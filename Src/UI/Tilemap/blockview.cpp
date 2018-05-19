@@ -1,5 +1,4 @@
 #include "blockview.h"
-#include "ProjectInfos/projectinfos.h"
 #include <QWheelEvent>
 #include <QMouseEvent>
 
@@ -8,6 +7,8 @@ BlockView::BlockView(QWidget * parent)
     , m_array(sf::Quads)
     , m_selected(false)
     , m_selectedId(0)
+    , m_tileSize(0)
+    , m_tileDelta(0)
 {
     setMouseTracking(true);
 
@@ -17,6 +18,18 @@ BlockView::BlockView(QWidget * parent)
 void BlockView::setTexture(Texture texture)
 {
     m_texture = texture;
+    drawTiles();
+}
+
+void BlockView::setTileSize(unsigned int size)
+{
+    m_tileSize = size;
+    drawTiles();
+}
+
+void BlockView::setTileDelta(unsigned int delta)
+{
+    m_tileDelta = delta;
     drawTiles();
 }
 
@@ -46,10 +59,8 @@ void BlockView::mouseReleaseEvent(QMouseEvent * event)
     if(event->button() != Qt::LeftButton)
         return;
 
-    auto tileSize = ProjectInfos::instance().options().tileSize;
-
-    sf::Vector2i realPos(sf::Vector2i(RenderWindow::mapPixelToCoords(sf::Vector2i(event->localPos().x(), event->localPos().y())))/int(tileSize+2));
-    int index(realPos.x + realPos.y*(width()/2/(tileSize+2)));
+    sf::Vector2i realPos(sf::Vector2i(RenderWindow::mapPixelToCoords(sf::Vector2i(event->localPos().x(), event->localPos().y())))/int(m_tileSize+2));
+    int index(realPos.x + realPos.y*(width()/2/(m_tileSize+2)));
     if(index >= int(textureTileCount()) || index < 0)
         return;
     emit selectBlock(index);
@@ -91,16 +102,14 @@ void BlockView::resizeEvent(QResizeEvent * event)
 void BlockView::drawTiles()
 {
     m_array.clear();
-    if(!m_texture.isValid())
+    if(!m_texture.isValid() || m_tileSize == 0)
         return;
 
     auto tileCount = textureTileCount();
-    auto delta = ProjectInfos::instance().options().delta;
-    auto size = ProjectInfos::instance().options().tileSize;
-    auto tileCountInWidth = (m_texture->getSize().x + delta) / (size + delta);
+    auto tileCountInWidth = (m_texture->getSize().x + m_tileDelta) / (m_tileSize + m_tileDelta);
     m_array.resize(tileCount*4);
 
-    const unsigned int caseWidth(size+2);
+    const unsigned int caseWidth(m_tileSize+2);
     unsigned int nbWidth(width() / 2 / caseWidth);
     if(nbWidth == 0)
         return;
@@ -111,8 +120,8 @@ void BlockView::drawTiles()
         auto y(i / tileCountInWidth);
 
         sf::Vector2f pos(i%nbWidth*caseWidth+1, i/nbWidth*caseWidth+1);
-        sf::FloatRect tex(x * (size + delta), y * (size + delta), size, size);
-        drawQuad(&(m_array[i*4]), sf::FloatRect(pos, sf::Vector2f(size, size)), tex);
+        sf::FloatRect tex(x * (m_tileSize + m_tileDelta), y * (m_tileSize + m_tileDelta), m_tileSize, m_tileSize);
+        drawQuad(&(m_array[i*4]), sf::FloatRect(pos, sf::Vector2f(m_tileSize, m_tileSize)), tex);
     }
 
     m_botomTiles = tileCount/nbWidth*caseWidth+1+caseWidth;
@@ -126,9 +135,8 @@ void BlockView::setBlock(unsigned int id)
 
 sf::RectangleShape BlockView::generactSelector() const
 {
-    auto tileSize = ProjectInfos::instance().options().tileSize;
     sf::RectangleShape sharp;
-    sharp.setSize(sf::Vector2f(tileSize, tileSize));
+    sharp.setSize(sf::Vector2f(m_tileSize, m_tileSize));
     sharp.setOutlineColor(sf::Color::Red);
     sharp.setFillColor(sf::Color::Transparent);
     sharp.setOutlineThickness(2);
@@ -136,11 +144,11 @@ sf::RectangleShape BlockView::generactSelector() const
     auto tileCount = textureTileCount();
     if(m_selectedId >= tileCount)
     {
-        sharp.setPosition(sf::Vector2f(-2*tileSize, -2*tileSize));
+        sharp.setPosition(sf::Vector2f(-2*m_tileSize, -2*m_tileSize));
         return sharp;
     }
 
-    const unsigned int caseWidth(tileSize+2);
+    const unsigned int caseWidth(m_tileSize+2);
     unsigned int nbWidth(width() / 2 / caseWidth);
     sharp.setPosition(m_selectedId % nbWidth * caseWidth + 1, m_selectedId / nbWidth * caseWidth + 1);
 
@@ -174,11 +182,8 @@ void BlockView::drawQuad(sf::Vertex* quad, const sf::FloatRect & rect, const sf:
 
 unsigned int BlockView::textureTileCount() const
 {
-    if(!m_texture.isValid())
+    if(!m_texture.isValid() || m_tileSize == 0)
         return 0;
 
-    auto size = ProjectInfos::instance().options().tileSize;
-    auto delta = ProjectInfos::instance().options().delta;
-
-    return (m_texture->getSize().x + delta) / (size + delta) * (m_texture->getSize().y + delta) / (size + delta);
+    return (m_texture->getSize().x + m_tileDelta) / (m_tileSize + m_tileDelta) * (m_texture->getSize().y + m_tileDelta) / (m_tileSize + m_tileDelta);
 }

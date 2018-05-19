@@ -115,7 +115,8 @@ SOURCES += \
     Tilemap/tilemapdata.cpp \
     UI/Tilemap/tilemapinfos.cpp \
     UI/Tilemap/blockview.cpp \
-    UI/Tilemap/centraltilemapwidget.cpp
+    UI/Tilemap/centraltilemapwidget.cpp \
+    UI/Tilemap/tilemaprenderer.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -236,7 +237,8 @@ HEADERS += \
     UI/Tilemap/tilemapinfos.h \
     UI/Tilemap/blockview.h \
     UI/Tilemap/centraltilemapwidget.h \
-    Tilemap/tileinfos.h
+    Tilemap/tileinfos.h \
+    UI/Tilemap/tilemaprenderer.h
 
 CONFIG += c++14
 

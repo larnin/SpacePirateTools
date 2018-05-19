@@ -59,8 +59,6 @@ void ProjectInfos::save()
         return;
 
     QJsonObject obj;
-    obj.insert("tilesize", int(m_options.tileSize));
-    obj.insert("delta", int(m_options.delta));
 
     QJsonArray colliders;
     for(const auto & c : m_options.colliderLayers)
@@ -102,9 +100,6 @@ void ProjectInfos::load()
         return;
 
     QJsonObject obj(doc.object());
-
-    m_options.tileSize = obj["tilesize"].toInt();
-    m_options.delta = obj["delta"].toInt();
 
     for(const auto & c : obj["colliders"].toArray())
     {

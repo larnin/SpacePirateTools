@@ -1,7 +1,6 @@
 #ifndef TILEMAPDATA_H
 #define TILEMAPDATA_H
 
-#include "ressource.h"
 #include "matrix.h"
 #include "tileinfos.h"
 #include <QString>
@@ -17,7 +16,8 @@ public:
     QString textureName;
     QString brushName;
     Matrix<TileInfos> tiles;
-    sf::Vector2u tileSize;
+    unsigned int tileSize;
+    unsigned int tileDelta;
 
 private:
     void load(const QString & fileName);
