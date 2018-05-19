@@ -32,6 +32,7 @@ void TilemapData::save(const QString & fileName) const
     }
     obj.insert("tiles", tilesArray);
     obj.insert("texture", textureName);
+    obj.insert("brush", brushName);
     obj.insert("sizeX", int(tiles.getSize().x));
     obj.insert("sizeY", int(tiles.getSize().y));
     obj.insert("tileX", int(tileSize.x));
@@ -63,6 +64,7 @@ void TilemapData::load(const QString & fileName)
     QJsonObject obj(doc.object());
 
     textureName = obj["texture"].toString();
+    brushName = obj["brush"].toString();
     tileSize.x = obj["tileX"].toInt();
     tileSize.y = obj["tileY"].toInt();
 

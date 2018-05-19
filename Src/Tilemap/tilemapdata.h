@@ -3,14 +3,8 @@
 
 #include "ressource.h"
 #include "matrix.h"
-#include "Tileset/tilecollider.h"
+#include "tileinfos.h"
 #include <QString>
-
-struct TileInfos
-{
-    unsigned int id = 0;
-    TileCollider collider;
-};
 
 class TilemapData
 {
@@ -21,6 +15,7 @@ public:
     void save(const QString & fileName) const;
 
     QString textureName;
+    QString brushName;
     Matrix<TileInfos> tiles;
     sf::Vector2u tileSize;
 

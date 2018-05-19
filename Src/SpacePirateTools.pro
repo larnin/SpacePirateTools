@@ -56,26 +56,25 @@ SOURCES += \
     UI/Tileset/tileselectiondialog.cpp \
     UI/Tileset/tilecolliderselectionwidget.cpp \
     UI/Tileset/tilecolliderselectiondialog.cpp \
-    Scene/scenedata.cpp \
-    Scene/Layers/layerbase.cpp \
-    UI/Scene/sceneinfos.cpp \
-    UI/Scene/newlayerdialog.cpp \
-    Scene/Layers/tilesetlayer.cpp \
-    Scene/Layers/objectslayer.cpp \
-    UI/Scene/centralscenewindow.cpp \
-    UI/Scene/layertoolholder.cpp \
-    UI/Scene/LayerToolWindow/tilesetlayertoolwindow.cpp \
-    UI/Scene/blockview.cpp \
-    Scene/Tools/basetilesetscenetool.cpp \
-    Scene/Tools/singletilescenetool.cpp \
-    Scene/Tools/randomscenetool.cpp \
-    Scene/Tools/paternscenetool.cpp \
-    Scene/Tools/verticalbrushscenetool.cpp \
-    Scene/Tools/horizontalbrushscenetool.cpp \
-    Scene/Tools/squarebrushscenetool.cpp \
-    Scene/Tools/fullbrushscrenetool.cpp \
-    Scene/Tools/copytilesetscenetool.cpp \
-    Scene/Tools/pastetilesetscenetool.cpp \
+    #Scene/scenedata.cpp \
+    #Scene/Layers/layerbase.cpp \
+    #UI/Scene/sceneinfos.cpp \
+    #UI/Scene/newlayerdialog.cpp \
+    #Scene/Layers/tilesetlayer.cpp \
+    #Scene/Layers/objectslayer.cpp \
+    #UI/Scene/centralscenewindow.cpp \
+    #UI/Scene/layertoolholder.cpp \
+    #UI/Scene/LayerToolWindow/tilesetlayertoolwindow.cpp \
+    #Scene/Tools/basetilesetscenetool.cpp \
+    #Scene/Tools/singletilescenetool.cpp \
+    #Scene/Tools/randomscenetool.cpp \
+    #Scene/Tools/paternscenetool.cpp \
+    #Scene/Tools/verticalbrushscenetool.cpp \
+    #Scene/Tools/horizontalbrushscenetool.cpp \
+    #Scene/Tools/squarebrushscenetool.cpp \
+    #Scene/Tools/fullbrushscrenetool.cpp \
+    #Scene/Tools/copytilesetscenetool.cpp \
+    #Scene/Tools/pastetilesetscenetool.cpp \
     Object/objectdata.cpp \
     Object/objectproperty.cpp \
     Object/Value/objectvaluebase.cpp \
@@ -112,8 +111,11 @@ SOURCES += \
     UI/Object/Value/textvaluewidget.cpp \
     UI/colliderlayerdialog.cpp \
     UI/verticallabel.cpp \
-    Scene/scenenode.cpp \
-    Tilemap/tilemapdata.cpp
+    #Scene/scenenode.cpp \
+    Tilemap/tilemapdata.cpp \
+    UI/Tilemap/tilemapinfos.cpp \
+    UI/Tilemap/blockview.cpp \
+    UI/Tilemap/centraltilemapwidget.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -171,29 +173,28 @@ HEADERS += \
     UI/Tileset/tilecolliderselectionwidget.h \
     UI/Tileset/tilecolliderselectiondialog.h \
     matrix.h \
-    Scene/scenedata.h \
-    Scene/Layers/layerbase.h \
-    UI/Scene/sceneinfos.h \
-    UI/Scene/newlayerdialog.h \
+    #Scene/scenedata.h \
+    #Scene/Layers/layerbase.h \
+    #UI/Scene/sceneinfos.h \
+    #UI/Scene/newlayerdialog.h \
     enumiterators.h \
-    Scene/Layers/tilesetlayer.h \
-    Scene/Layers/objectslayer.h \
-    UI/Scene/centralscenewindow.h \
-    UI/Scene/layertoolholder.h \
-    UI/Scene/LayerToolWindow/tilesetlayertoolwindow.h \
-    UI/Scene/blockview.h \
-    Scene/Tools/basescenetool.h \
-    Scene/Tools/basetilesetscenetool.h \
-    Scene/Tools/singletilescenetool.h \
-    Scene/Tools/randomscenetool.h \
-    Scene/Tools/paternscenetool.h \
-    Scene/Tools/verticalbrushscenetool.h \
-    Scene/Tools/horizontalbrushscenetool.h \
-    Scene/Tools/squarebrushscenetool.h \
-    Scene/Tools/fullbrushscrenetool.h \
+    #Scene/Layers/tilesetlayer.h \
+    #Scene/Layers/objectslayer.h \
+    #UI/Scene/centralscenewindow.h \
+    #UI/Scene/layertoolholder.h \
+    #UI/Scene/LayerToolWindow/tilesetlayertoolwindow.h \
+    #Scene/Tools/basescenetool.h \
+    #Scene/Tools/basetilesetscenetool.h \
+    #Scene/Tools/singletilescenetool.h \
+    #Scene/Tools/randomscenetool.h \
+    #Scene/Tools/paternscenetool.h \
+    #Scene/Tools/verticalbrushscenetool.h \
+    #Scene/Tools/horizontalbrushscenetool.h \
+    #Scene/Tools/squarebrushscenetool.h \
+    #Scene/Tools/fullbrushscrenetool.h \
     Events/Args/editionevents.h \
-    Scene/Tools/copytilesetscenetool.h \
-    Scene/Tools/pastetilesetscenetool.h \
+    #Scene/Tools/copytilesetscenetool.h \
+    #Scene/Tools/pastetilesetscenetool.h \
     Object/objectdata.h \
     Object/objectproperty.h \
     Object/Value/objectvaluebase.h \
@@ -230,8 +231,12 @@ HEADERS += \
     UI/Object/Value/textvaluewidget.h \
     UI/colliderlayerdialog.h \
     UI/verticallabel.h \
-    Scene/scenenode.h \
-    Tilemap/tilemapdata.h
+    #Scene/scenenode.h \
+    Tilemap/tilemapdata.h \
+    UI/Tilemap/tilemapinfos.h \
+    UI/Tilemap/blockview.h \
+    UI/Tilemap/centraltilemapwidget.h \
+    Tilemap/tileinfos.h
 
 CONFIG += c++14
 

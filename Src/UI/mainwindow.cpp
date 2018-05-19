@@ -14,12 +14,11 @@
 #include "UI/Animator/centralanimatorwidget.h"
 #include "UI/Tileset/tilesetinfos.h"
 #include "UI/Tileset/centraltilesetwindow.h"
-#include "UI/Scene/sceneinfos.h"
-#include "UI/Scene/layertoolholder.h"
-#include "UI/Scene/centralscenewindow.h"
 #include "UI/Object/objectinfos.h"
 #include "UI/imagewidget.h"
 #include "UI/colliderlayerdialog.h"
+#include "UI/Tilemap/centraltilemapwidget.h"
+#include "UI/Tilemap/tilemapinfos.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -301,15 +300,7 @@ void MainWindow::openTileset(const QString & filename)
 
 void MainWindow::openScene(const QString & filename)
 {
-    SceneInfos *a = new SceneInfos(filename);
-    LayerToolHolder *l = new LayerToolHolder();
-    a->setLayerHolder(l);
-    CentralSceneWindow *sceneWidget = new CentralSceneWindow(a);
-    setCentralWidget(sceneWidget);
-    m_assetDocks.push_back(new Dock<SceneInfos>(a, "Scene", false));
-    addDockWidget(Qt::LeftDockWidgetArea, m_assetDocks.back());
-    m_assetDocks.push_back(new Dock<LayerToolHolder>(l, "Layer tool", false));
-    addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
+
 }
 
 void MainWindow::openObject(const QString & filename)
@@ -319,7 +310,11 @@ void MainWindow::openObject(const QString & filename)
 
 void MainWindow::openTilemap(const QString & filename)
 {
-
+    TilemapInfos *a = new TilemapInfos(filename);
+    CentralTilemapWidget *tilemap = new CentralTilemapWidget(a);
+    setCentralWidget(tilemap);
+    m_assetDocks.push_back(new Dock<TilemapInfos>(a, "Tilemap", false));
+    addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
 }
 
 void MainWindow::clearDocks()
