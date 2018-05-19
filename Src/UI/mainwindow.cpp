@@ -246,9 +246,6 @@ void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
     case AssetType::Object:
         openObject(fullName);
         break;
-    case AssetType::Prefab:
-        openPrefab(fullName);
-        break;
     default:
         closeCurrentWidget();
         break;
@@ -315,11 +312,6 @@ void MainWindow::openScene(const QString & filename)
 void MainWindow::openObject(const QString & filename)
 {
     setCentralWidget(new ObjectInfos(filename));
-}
-
-void MainWindow::openPrefab(const QString & filename)
-{
-
 }
 
 void MainWindow::clearDocks()
