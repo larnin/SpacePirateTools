@@ -63,9 +63,10 @@ void BlockView::mouseReleaseEvent(QMouseEvent * event)
     int index(realPos.x + realPos.y*(width()/2/(m_tileSize+2)));
     if(index >= int(textureTileCount()) || index < 0)
         return;
-    emit selectBlock(index);
     m_selectedId = index;
     m_selected = true;
+
+    emit selectBlock(index);
 }
 
 void BlockView::wheelEvent(QWheelEvent * event)

@@ -13,7 +13,8 @@ class CentralTilemapWidget : public QSFMLCanvas
 public:
     CentralTilemapWidget(TilemapInfos * tilemap, QWidget * parent = nullptr);
 
-    inline void setTool(std::unique_ptr<BaseMapTool> && tool) { m_tool = std::move(tool); }
+    void setTool(std::unique_ptr<BaseMapTool> && tool);
+    void setTexture(const Texture & texture);
 
 protected:
     void OnUpdate() override;
@@ -44,6 +45,7 @@ private:
     bool m_showGrid;
     bool m_drawColliders;
     std::unique_ptr<BaseMapTool> m_tool;
+    Texture m_texture;
 };
 
 #endif // CENTRALTILEMAPWIDGET_H

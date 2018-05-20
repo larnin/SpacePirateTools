@@ -3,6 +3,9 @@
 #include "UI/linewidget.h"
 #include "enumiterators.h"
 #include "centraltilemapwidget.h"
+#include "MapTool/singletilemaptool.h"
+#include "UI/colliderlayerdialog.h"
+#include "ProjectInfos/projectinfos.h"
 #include <QTabWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -16,6 +19,7 @@ TilemapInfos::TilemapInfos(const QString &filename, QWidget* parent)
     , m_centralWidget(nullptr)
     , m_filename(filename)
     , m_data(filename)
+    , m_blockView(nullptr)
     , renameHolder(Event<RenamedFileEvent>::connect([this](const auto & e){onRename(e);}))
     , removedHolder(Event<RemovedFileEvent>::connect([this](const auto & e){onRemove(e);}))
     , addedHolder(Event<AddedFileEvent>::connect([this](const auto & e){onAdd(e);}))
@@ -27,6 +31,7 @@ TilemapInfos::TilemapInfos(const QString &filename, QWidget* parent)
 
     updateBrushList();
     updateImageList();
+    updateLayerList();
     createBrushList();
     createTileColliderList();
 }
@@ -98,6 +103,11 @@ void TilemapInfos::initializeWidgets()
     colliderTypeLayout->addWidget(new QLabel("Collider type :"));
     colliderTypeLayout->addWidget(m_colliderType, 1);
 
+    m_colliderLayer = new QComboBox();
+    QHBoxLayout* layerLayout = new QHBoxLayout();
+    layerLayout->addWidget(new QLabel("Collision layer :"));
+    layerLayout->addWidget(m_colliderLayer, 1);
+
     m_xFlipped = new QCheckBox("X");
     m_yFlipped = new QCheckBox("Y");
 
@@ -124,6 +134,7 @@ void TilemapInfos::initializeWidgets()
     QGroupBox* colliderGroup = new QGroupBox("Collider");
     QVBoxLayout * colliderLayout = new QVBoxLayout();
     colliderLayout->addLayout(colliderTypeLayout);
+    colliderLayout->addLayout(layerLayout);
     colliderLayout->addWidget(new LineWidget(LineOrientation::Horizontal));
     colliderLayout->addLayout(flipLayout);
     colliderLayout->addWidget(radioGroup);
@@ -165,6 +176,7 @@ void TilemapInfos::initializeWidgets()
     connect(m_brushList, SIGNAL(currentRowChanged(int)), this, SLOT(onSelectBrush(int)));
     connect(m_blockView, SIGNAL(selectBlock(uint)), this, SLOT(onSelectTile(uint)));
     connect(m_colliderType, SIGNAL(currentIndexChanged(int)), this, SLOT(onColliderValueChanged()));
+    connect(m_colliderLayer, SIGNAL(currentIndexChanged(int)), this, SLOT(onLayerChange(int)));
     connect(m_rot0, SIGNAL(clicked(bool)), this, SLOT(onColliderValueChanged()));
     connect(m_rot90, SIGNAL(clicked(bool)), this, SLOT(onColliderValueChanged()));
     connect(m_rot180, SIGNAL(clicked(bool)), this, SLOT(onColliderValueChanged()));
@@ -172,6 +184,12 @@ void TilemapInfos::initializeWidgets()
     connect(m_xFlipped, SIGNAL(toggled(bool)), this, SLOT(onColliderValueChanged()));
     connect(m_yFlipped, SIGNAL(toggled(bool)), this, SLOT(onColliderValueChanged()));
     connect(selectButton, SIGNAL(clicked(bool)), this, SLOT(onTileValidSelection()));
+}
+
+void TilemapInfos::setCentralWidget(CentralTilemapWidget * widget)
+{
+    m_centralWidget = widget;
+    m_centralWidget->setTexture(m_tilesTexture);
 }
 
 void TilemapInfos::createBrushList()
@@ -246,6 +264,23 @@ void TilemapInfos::updateBrushList()
     m_brushs->blockSignals(false);
 }
 
+void TilemapInfos::updateLayerList()
+{
+    m_colliderLayer->blockSignals(true);
+
+    auto index = m_colliderLayer->currentIndex();
+
+    m_colliderLayer->clear();
+    for(const auto & l : ProjectInfos::instance().options().colliderLayers)
+        m_colliderLayer->addItem(l.name);
+    m_colliderLayer->addItem("Configure ...");
+    m_colliderLayer->blockSignals(false);
+
+    if(index < 0 || index >= int(ProjectInfos::instance().options().colliderLayers.size()))
+        m_colliderLayer->setCurrentIndex(0);
+    else m_colliderLayer->setCurrentIndex(index);
+}
+
 void TilemapInfos::onTextureIndexChanged(int index)
 {
     if(index <= 0)
@@ -282,6 +317,20 @@ void TilemapInfos::onColliderValueChanged()
         onTileValidSelection();
 }
 
+void TilemapInfos::onLayerChange(int index)
+{
+    if(index >= int(ProjectInfos::instance().options().colliderLayers.size()))
+    {
+        bool ok = false;
+        auto newIndex = ColliderLayerDialog::getNewLayerID(true, this, &ok);
+        updateLayerList();
+        m_colliderLayer->setCurrentIndex(newIndex);
+        index = newIndex;
+    }
+    if(m_autoSelect->isChecked())
+        onTileValidSelection();
+}
+
 void TilemapInfos::onTileValidSelection()
 {
     TileCollider collider;
@@ -292,10 +341,10 @@ void TilemapInfos::onTileValidSelection()
                       : (m_rot90->isChecked() ? TileColliderRotation::R_90
                       : (m_rot180->isChecked() ? TileColliderRotation::R180
                       : TileColliderRotation::R270));
+    collider.collisionLayer = m_colliderLayer->currentIndex();
 
-    //m_centralScene->setTool(std::make_unique<SingleTileSceneTool>(m_layer, TileInfos{m_blockView->getCurrentBlock(), collider}));
+    m_centralWidget->setTool(std::make_unique<SingleTileMapTool>(m_data, TileInfos{m_blockView->getCurrentBlock(), collider}));
 }
-
 
 void TilemapInfos::onSizeChanged()
 {
@@ -340,4 +389,9 @@ void TilemapInfos::loadTexture()
     if(m_data.textureName == "")
         m_tilesTexture = Texture();
     else m_tilesTexture = Texture((ProjectInfos::instance().projectDirectory() + "/" + assetTypeToString(AssetType::Image) + "/" + m_data.textureName).toStdString());
+
+    if(m_centralWidget != nullptr)
+        m_centralWidget->setTexture(m_tilesTexture);
+    if(m_blockView != nullptr)
+        m_blockView->setTexture(m_tilesTexture);
 }

@@ -25,6 +25,21 @@ CentralTilemapWidget::CentralTilemapWidget(TilemapInfos *tilemap, QWidget *paren
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClick(QPoint)));
 }
 
+void CentralTilemapWidget::setTool(std::unique_ptr<BaseMapTool> && tool)
+{
+    m_tool = std::move(tool);
+    if(m_tool)
+        m_tool->setTexture(m_texture);
+}
+
+void CentralTilemapWidget::setTexture(const Texture & texture)
+{
+    m_texture = texture;
+    m_renderer.setTexture(texture);
+    if(m_tool)
+        m_tool->setTexture(texture);
+}
+
 void CentralTilemapWidget::OnUpdate()
 {
     RenderWindow::clear(sf::Color::Black);
@@ -65,7 +80,11 @@ void CentralTilemapWidget::mouseMoveEvent(QMouseEvent * event)
     }
 
     if(m_tool)
+    {
+        auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+        event->setLocalPos(QPointF(pos.x, pos.y));
         m_tool->mouseMoveEvent(event);
+    }
 }
 
 void CentralTilemapWidget::mousePressEvent(QMouseEvent * event)
@@ -79,7 +98,11 @@ void CentralTilemapWidget::mousePressEvent(QMouseEvent * event)
         m_draging = true;
 
     if(m_tool)
+    {
+        auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+        event->setLocalPos(QPointF(pos.x, pos.y));
         m_tool->mousePressEvent(event);
+    }
 }
 
 void CentralTilemapWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -88,7 +111,11 @@ void CentralTilemapWidget::mouseReleaseEvent(QMouseEvent *event)
             m_draging = false;
 
     if(m_tool)
+    {
+        auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+        event->setLocalPos(QPointF(pos.x, pos.y));
         m_tool->mouseReleaseEvent(event);
+    }
 }
 
 void CentralTilemapWidget::resizeEvent(QResizeEvent * event)

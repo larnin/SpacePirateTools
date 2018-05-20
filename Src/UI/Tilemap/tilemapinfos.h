@@ -25,7 +25,7 @@ public:
     TilemapInfos(const QString & filename, QWidget* parent = nullptr);
     ~TilemapInfos();
 
-    inline void setCentralWidget(CentralTilemapWidget * widget) {m_centralWidget = widget;}
+    void setCentralWidget(CentralTilemapWidget * widget);
     inline TilemapData & getData() {return m_data;}
 
 public slots:
@@ -35,6 +35,7 @@ public slots:
     void onSelectTile(unsigned int);
     void onColliderValueChanged();
     void onTileValidSelection();
+    void onLayerChange(int index);
 
     void onSizeChanged();
     void onTileSizeChanged();
@@ -45,6 +46,7 @@ private:
     void createTileColliderList();
     void updateImageList();
     void updateBrushList();
+    void updateLayerList();
 
     void onRename(const RenamedFileEvent &);
     void onRemove(const RemovedFileEvent &);
@@ -72,6 +74,7 @@ private:
 
     BlockView * m_blockView;
     QComboBox * m_colliderType;
+    QComboBox * m_colliderLayer;
     QRadioButton * m_rot0;
     QRadioButton * m_rot90;
     QRadioButton * m_rot180;
