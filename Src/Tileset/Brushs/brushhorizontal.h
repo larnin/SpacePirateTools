@@ -9,7 +9,7 @@ public:
     BrushHorizontal(const QJsonObject & obj, const QString & _name);
     BrushHorizontal(const QString & _name);
 
-    //std::unique_ptr<BaseSceneTool> getSceneTool(TilesetLayer & layer) const override;
+    std::unique_ptr<BaseMapTool> getMapTool(TilemapData & data) const override;
 };
 
 #endif // BRUSHHORIZONTAL_H

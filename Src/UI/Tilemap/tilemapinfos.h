@@ -25,7 +25,8 @@ public:
     TilemapInfos(const QString & filename, QWidget* parent = nullptr);
     ~TilemapInfos();
 
-    void setCentralWidget(CentralTilemapWidget * widget) {m_centralWidget = widget;}
+    inline void setCentralWidget(CentralTilemapWidget * widget) {m_centralWidget = widget;}
+    inline TilemapData & getData() {return m_data;}
 
 public slots:
     void onTextureIndexChanged(int index);

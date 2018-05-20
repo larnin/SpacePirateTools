@@ -8,8 +8,11 @@
 class TilemapRenderer
 {
 public:
-    TilemapRenderer(const TilemapData & data);
-    void setTexture(Texture texture){m_texture = texture;}
+    TilemapRenderer();
+    TilemapRenderer(TilemapData & data);
+
+    inline void setTexture(Texture texture){m_texture = texture;}
+    inline void setData(TilemapData & data){m_data = &data;}
 
     void drawTiles(sf::RenderTarget & target) const;
     void drawColliders(sf::RenderTarget & target) const;
@@ -17,7 +20,7 @@ public:
 private:
     static void drawQuad(sf::Vertex* quad, const sf::FloatRect & rect, const sf::FloatRect & texRect);
 
-    const TilemapData & m_data;
+    TilemapData * m_data;
     Texture m_texture;
 };
 

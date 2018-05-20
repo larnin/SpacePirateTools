@@ -3,39 +3,45 @@
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/Rect.hpp>
 
-TilemapRenderer::TilemapRenderer(const TilemapData &data)
-    : m_data(data)
+TilemapRenderer::TilemapRenderer()
+    : m_data(nullptr)
+{
+
+}
+
+TilemapRenderer::TilemapRenderer(TilemapData &data)
+    : m_data(&data)
 {
 
 }
 
 void TilemapRenderer::drawTiles(sf::RenderTarget & target)const
 {
-    if(!m_texture.isValid() || m_data.tileSize == 0)
+    if(!m_texture.isValid() || m_data == nullptr || m_data->tileSize == 0)
         return;
 
     unsigned int tiles(0);
-    for(const auto & t : m_data.tiles)
+    for(const auto & t : m_data->tiles)
         if(t.id != 0)
             tiles++;
 
     sf::VertexArray array(sf::Quads, tiles * 4);
 
-    auto tileByRow = (m_texture->getSize().x + m_data.tileDelta) / (m_data.tileSize + m_data.tileDelta);
+    auto tileByRow = (m_texture->getSize().x + m_data->tileDelta) / (m_data->tileSize + m_data->tileDelta);
 
     unsigned int index(0);
 
-    for(unsigned int i(0) ; i < m_data.tiles.getSize().x ; i++)
-        for(unsigned int j(0) ; j < m_data.tiles.getSize().y ; j++)
+    for(unsigned int i(0) ; i < m_data->tiles.getSize().x ; i++)
+        for(unsigned int j(0) ; j < m_data->tiles.getSize().y ; j++)
         {
-            unsigned int id(m_data.tiles({i, j}).id);
+            unsigned int id(m_data->tiles({i, j}).id);
             if(id == 0)
                 continue;
             unsigned int x(id % tileByRow);
             unsigned int y(id / tileByRow);
 
-            drawQuad(&array[index * 4], sf::FloatRect(i * m_data.tileSize - m_data.tileSize / 2.0f, j * m_data.tileSize - m_data.tileSize / 2.0f, m_data.tileSize, m_data.tileSize)
-                                , sf::FloatRect(x * (m_data.tileSize + m_data.tileDelta), y * (m_data.tileSize + m_data.tileDelta), m_data.tileSize, m_data.tileSize));
+            drawQuad(&array[index * 4], sf::FloatRect(i * m_data->tileSize - m_data->tileSize / 2.0f, j * m_data->tileSize - m_data->tileSize / 2.0f, m_data->tileSize, m_data->tileSize)
+                                , sf::FloatRect(x * (m_data->tileSize + m_data->tileDelta), y * (m_data->tileSize + m_data->tileDelta), m_data->tileSize, m_data->tileSize));
 
             index++;
         }
@@ -45,17 +51,20 @@ void TilemapRenderer::drawTiles(sf::RenderTarget & target)const
 
 void TilemapRenderer::drawColliders(sf::RenderTarget & target) const
 {
+    if(m_data == nullptr)
+        return;
+
     sf::VertexArray array(sf::Lines);
 
     auto list = ProjectInfos::instance().options().colliderLayers;
 
-    for(unsigned int i(0) ; i < m_data.tiles.getSize().x ; i++)
-        for(unsigned int j(0) ; j < m_data.tiles.getSize().y ; j++)
+    for(unsigned int i(0) ; i < m_data->tiles.getSize().x ; i++)
+        for(unsigned int j(0) ; j < m_data->tiles.getSize().y ; j++)
         {
-            const auto & collider(m_data.tiles({i, j}).collider);
+            const auto & collider(m_data->tiles({i, j}).collider);
             sf::Color color = collider.collisionLayer < list.size() ? list[collider.collisionLayer].color : list[0].color;
 
-            collider.drawShape(color, sf::Vector2f(i * m_data.tileSize, j * m_data.tileSize), m_data.tileSize, array);
+            collider.drawShape(color, sf::Vector2f(i * m_data->tileSize, j * m_data->tileSize), m_data->tileSize, array);
         }
 
     target.draw(array);

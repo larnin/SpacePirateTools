@@ -2,7 +2,7 @@
 #include "ProjectInfos/projectinfos.h"
 #include "UI/linewidget.h"
 #include "enumiterators.h"
-//#include "Scene/Tools/singletilescenetool.h"
+#include "centraltilemapwidget.h"
 #include <QTabWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -265,9 +265,9 @@ void TilemapInfos::onBrushIndexChanged(int index)
 
 void TilemapInfos::onSelectBrush(int value)
 {
-    /*if(value >= int(m_tileset->brushs.size()) || value < 0)
-        m_centralScene->setTool({});
-    else m_centralScene->setTool(m_tileset->brushs[value]->getSceneTool(m_layer));*/
+    if(value >= int(m_tileset->brushs.size()) || value < 0)
+        m_centralWidget->setTool({});
+    else m_centralWidget->setTool(m_tileset->brushs[value]->getMapTool(m_data));
 }
 
 void TilemapInfos::onSelectTile(unsigned int)
