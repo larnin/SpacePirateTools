@@ -1,5 +1,6 @@
 #include "brushrandom.h"
 #include "UI/Tileset/BrushsWindow/brushwindowrandom.h"
+#include "UI/Tilemap/MapTool/randommaptool.h"
 #include <QJsonArray>
 
 BrushRandom::BrushRandom(const QJsonObject & obj, const QString & _name)
@@ -48,5 +49,5 @@ BrushWindowBase* BrushRandom::getBrushWindows()
 
 std::unique_ptr<BaseMapTool> BrushRandom::getMapTool(TilemapData & data) const
 {
-    return {};
+    return std::make_unique<RandomMapTool>(data, *this);
 }

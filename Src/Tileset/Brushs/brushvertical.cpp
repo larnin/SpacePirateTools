@@ -1,4 +1,5 @@
 #include "brushvertical.h"
+#include "UI/Tilemap/MapTool/verticalbrushmaptool.h"
 
 BrushVertical::BrushVertical(const QJsonObject & obj, const QString & _name)
     : BrushTiled(obj, _name, BrushType::Vertical)
@@ -14,5 +15,5 @@ BrushVertical::BrushVertical(const QString & _name)
 
 std::unique_ptr<BaseMapTool> BrushVertical::getMapTool(TilemapData & data) const
 {
-    return {};
+    return std::make_unique<VerticalBrushMapTool>(data, *this);
 }

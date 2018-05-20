@@ -45,12 +45,14 @@ void BaseMapTool::mouseReleaseEvent(QMouseEvent * event)
 
 void BaseMapTool::keyPressEvent(QKeyEvent * event)
 {
-    //todo
+    if(event->key() == Qt::Key_Shift)
+        m_altButtonPressed = true;
 }
 
 void BaseMapTool::keyReleaseEvent(QKeyEvent * event)
 {
-    //todo
+    if(event->key() == Qt::Key_Shift)
+        m_altButtonPressed = false;
 }
 
 void BaseMapTool::draw(sf::RenderTarget &target, sf::RenderStates) const

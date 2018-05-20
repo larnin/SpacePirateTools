@@ -118,7 +118,13 @@ SOURCES += \
     UI/Tilemap/centraltilemapwidget.cpp \
     UI/Tilemap/tilemaprenderer.cpp \
     UI/Tilemap/MapTool/basemaptool.cpp \
-    UI/Tilemap/MapTool/singletilemaptool.cpp
+    UI/Tilemap/MapTool/singletilemaptool.cpp \
+    UI/Tilemap/MapTool/randommaptool.cpp \
+    UI/Tilemap/MapTool/fullbrushmaptool.cpp \
+    UI/Tilemap/MapTool/horizontalbrushmaptool.cpp \
+    UI/Tilemap/MapTool/paternmaptool.cpp \
+    UI/Tilemap/MapTool/squarebrushmaptool.cpp \
+    UI/Tilemap/MapTool/verticalbrushmaptool.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -242,7 +248,13 @@ HEADERS += \
     Tilemap/tileinfos.h \
     UI/Tilemap/tilemaprenderer.h \
     UI/Tilemap/MapTool/basemaptool.h \
-    UI/Tilemap/MapTool/singletilemaptool.h
+    UI/Tilemap/MapTool/singletilemaptool.h \
+    UI/Tilemap/MapTool/randommaptool.h \
+    UI/Tilemap/MapTool/fullbrushmaptool.h \
+    UI/Tilemap/MapTool/horizontalbrushmaptool.h \
+    UI/Tilemap/MapTool/paternmaptool.h \
+    UI/Tilemap/MapTool/squarebrushmaptool.h \
+    UI/Tilemap/MapTool/verticalbrushmaptool.h
 
 CONFIG += c++14
 
