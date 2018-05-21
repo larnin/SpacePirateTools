@@ -5,6 +5,8 @@
 #include "UI/qsfmlcanvas.h"
 #include "tilemaprenderer.h"
 #include "MapTool/basemaptool.h"
+#include "Events/Event.h"
+#include "Events/Args/editionevents.h"
 #include <memory>
 
 class CentralTilemapWidget : public QSFMLCanvas
@@ -35,6 +37,8 @@ private:
     float zoom();
     void rebuildView();
     void drawGrid();
+    void setSelectionTool();
+    void onPaste(const PasteEvent &);
 
     TilemapInfos * m_infos;
     TilemapRenderer m_renderer;
@@ -44,8 +48,11 @@ private:
     bool m_draging;
     bool m_showGrid;
     bool m_drawColliders;
+    bool m_selectionMode;
     std::unique_ptr<BaseMapTool> m_tool;
     Texture m_texture;
+
+    EventHolder<PasteEvent> m_pasteHolder;
 };
 
 #endif // CENTRALTILEMAPWIDGET_H

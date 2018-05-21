@@ -1,11 +1,12 @@
 #include "basemaptool.h"
 #include <SFML/Graphics/RenderTarget.hpp>
 
-BaseMapTool::BaseMapTool(TilemapData &data)
+BaseMapTool::BaseMapTool(TilemapData &data, bool selectionTool)
     : m_data(data)
     , m_altButtonPressed(false)
     , m_onSelection(false)
     , m_mousePos(-1, -1)
+    , m_selectionTool(selectionTool)
 {
 
 }

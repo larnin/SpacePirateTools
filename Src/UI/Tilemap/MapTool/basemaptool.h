@@ -16,10 +16,11 @@ class BaseMapTool : public sf::Drawable
     };
 
 public:
-    BaseMapTool(TilemapData & data);
+    BaseMapTool(TilemapData & data, bool selectionTool = false);
     virtual ~BaseMapTool() = default;
 
     inline void setTexture(const Texture & t){m_texture = t;}
+    inline bool isSelectionTool() const { return m_selectionTool; }
 
     void mouseMoveEvent(QMouseEvent * event);
     void mousePressEvent(QMouseEvent * event);
@@ -50,6 +51,7 @@ private:
     void drawQuad(sf::Vertex* quad, const sf::FloatRect & rect, const sf::FloatRect & texRect) const;
 
     sf::Vector2u m_mousePos;
+    bool m_selectionTool;
 };
 
 #endif // BASEMAPTOOL_H

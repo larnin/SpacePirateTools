@@ -124,7 +124,9 @@ SOURCES += \
     UI/Tilemap/MapTool/horizontalbrushmaptool.cpp \
     UI/Tilemap/MapTool/paternmaptool.cpp \
     UI/Tilemap/MapTool/squarebrushmaptool.cpp \
-    UI/Tilemap/MapTool/verticalbrushmaptool.cpp
+    UI/Tilemap/MapTool/verticalbrushmaptool.cpp \
+    UI/Tilemap/MapTool/copymaptool.cpp \
+    UI/Tilemap/MapTool/pastemaptool.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -254,7 +256,9 @@ HEADERS += \
     UI/Tilemap/MapTool/horizontalbrushmaptool.h \
     UI/Tilemap/MapTool/paternmaptool.h \
     UI/Tilemap/MapTool/squarebrushmaptool.h \
-    UI/Tilemap/MapTool/verticalbrushmaptool.h
+    UI/Tilemap/MapTool/verticalbrushmaptool.h \
+    UI/Tilemap/MapTool/copymaptool.h \
+    UI/Tilemap/MapTool/pastemaptool.h
 
 CONFIG += c++14
 

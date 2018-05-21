@@ -65,9 +65,6 @@ void MainWindow::createMenus()
         auto pastAction = editMenu->addAction("Coller");
         pastAction->setShortcut(QKeySequence("Ctrl+V"));
         editMenu->addSeparator();
-        auto selectModeAction = editMenu->addAction("Mode de &selection");
-        selectModeAction->setCheckable(true);
-        selectModeAction->setShortcut(QKeySequence("Tab"));
 
     QMenu *windowMenu = menuBar()->addMenu("&Fenetre");
         auto showExplorer = windowMenu->addAction("Afficher l'explorer");
@@ -84,7 +81,6 @@ void MainWindow::createMenus()
     connect(copyAction, SIGNAL(triggered(bool)), this, SLOT(onCopy()));
     connect(cutAction, SIGNAL(triggered(bool)), this, SLOT(onCut()));
     connect(pastAction, SIGNAL(triggered(bool)), this, SLOT(onPaste()));
-    connect(selectModeAction, SIGNAL(toggled(bool)), this, SLOT(onSelectMode(bool)));
 
     connect(showExplorer, SIGNAL(triggered(bool)), this, SLOT(onShowExplorer()));
     connect(showAssetDocks, SIGNAL(triggered(bool)), this, SLOT(onShowAssetDocks()));
@@ -176,13 +172,7 @@ void MainWindow::onCut()
 
 void MainWindow::onPaste()
 {
-    onSelectMode(true);
     Event<PasteEvent>::send({});
-}
-
-void MainWindow::onSelectMode(bool mode)
-{
-    Event<SelectModeSwitchEvent>::send({mode});
 }
 
 void MainWindow::onShowExplorer()

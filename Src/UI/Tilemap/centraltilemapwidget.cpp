@@ -1,4 +1,6 @@
 #include "centraltilemapwidget.h"
+#include "MapTool/copymaptool.h"
+#include "MapTool/pastemaptool.h"
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -17,6 +19,8 @@ CentralTilemapWidget::CentralTilemapWidget(TilemapInfos *tilemap, QWidget *paren
     , m_draging(false)
     , m_showGrid(false)
     , m_drawColliders(false)
+    , m_selectionMode(false)
+    , m_pasteHolder(Event<PasteEvent>::connect([this](const auto & e){onPaste(e);}))
 {
     tilemap->setCentralWidget(this);
     setMouseTracking(true);
@@ -29,7 +33,12 @@ void CentralTilemapWidget::setTool(std::unique_ptr<BaseMapTool> && tool)
 {
     m_tool = std::move(tool);
     if(m_tool)
+    {
         m_tool->setTexture(m_texture);
+        m_selectionMode = m_tool->isSelectionTool();
+    }
+    else if(m_selectionMode)
+        setSelectionTool();
 }
 
 void CentralTilemapWidget::setTexture(const Texture & texture)
@@ -126,6 +135,16 @@ void CentralTilemapWidget::resizeEvent(QResizeEvent * event)
 
 void CentralTilemapWidget::keyPressEvent(QKeyEvent * event)
 {
+    if(event->key() == Qt::Key_S)
+    {
+        m_selectionMode = !m_selectionMode;
+        if(m_selectionMode)
+            setSelectionTool();
+        else setTool({});
+    }
+    if(event->key() == Qt::Key_Escape && !m_selectionMode)
+        setTool({});
+
     if(m_tool)
         m_tool->keyPressEvent(event);
 }
@@ -201,11 +220,17 @@ void CentralTilemapWidget::drawGrid()
     RenderWindow::draw(array);
 }
 
+void CentralTilemapWidget::setSelectionTool()
+{
+    setTool(std::make_unique<CopyMapTool>(m_infos->getData()));
+}
+
 void CentralTilemapWidget::onRightClick(QPoint point)
 {
     QMenu menu;
     QAction *aGrid(menu.addAction(m_showGrid ? "Cacher la grille" : "Afficher la grille"));
     QAction *aColliders(menu.addAction(m_drawColliders ? "Cacher les colliders" : "Afficher les colliders"));
+    QAction *aSelect(menu.addAction(m_selectionMode ? "Mode dessin" : "Mode de selection"));
 
     QAction* action = menu.exec(point + QWidget::mapToGlobal(QPoint(0, 0)));
     if(action == nullptr)
@@ -215,4 +240,17 @@ void CentralTilemapWidget::onRightClick(QPoint point)
         m_showGrid = !m_showGrid;
     if(action == aColliders)
         m_drawColliders = !m_drawColliders;
+    if(action == aSelect)
+    {
+        m_selectionMode = !m_selectionMode;
+        if(m_selectionMode)
+            setSelectionTool();
+        else setTool({});
+    }
+}
+
+void CentralTilemapWidget::onPaste(const PasteEvent &)
+{
+    if(!CopyMapTool::copyBuffer().empty())
+        setTool(std::make_unique<PasteMapTool>(m_infos->getData(), CopyMapTool::copyBuffer()));
 }

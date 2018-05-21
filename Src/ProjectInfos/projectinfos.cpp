@@ -85,6 +85,8 @@ void ProjectInfos::save()
 
 void ProjectInfos::load()
 {
+    m_options = ProjectOptions();
+
     QFile file(m_projectDirectory + "/" + optionFilename);
     if(!file.exists())
         return;
@@ -115,7 +117,7 @@ void ProjectInfos::load()
     }
 
     if(m_options.colliderLayers.empty())
-        m_options.colliderLayers.push_back({"Default", sf::Color::Green, {}});
+        m_options.colliderLayers.push_back({"Default", sf::Color::Red, {}});
 }
 
 void ProjectInfos::onSave(const SaveEvent &)

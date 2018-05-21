@@ -27,9 +27,4 @@ struct RedoEvent
 
 };
 
-struct SelectModeSwitchEvent
-{
-    bool selectMode;
-};
-
 #endif // EDITIONEVENTS_H

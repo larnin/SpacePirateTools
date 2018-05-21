@@ -28,7 +28,6 @@ public slots:
     void onCopy();
     void onCut();
     void onPaste();
-    void onSelectMode(bool mode);
 
     void onShowExplorer();
     void onShowAssetDocks();
