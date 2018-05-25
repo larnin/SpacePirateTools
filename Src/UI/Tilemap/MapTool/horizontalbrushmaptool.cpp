@@ -17,7 +17,91 @@ void HorizontalBrushMapTool::onAddTile(const sf::Vector2u & pos)
     if(it == m_blocks.end())
         m_blocks.push_back({pos, m_brush.tile(TileShape::Full).toTileInfos()});
 
+    addTileConnexions(BlockConnexions(pos));
+
+    if(m_altButtonPressed)
+    {
+        checkTileOnMap(sf::Vector2u(pos.x - 1, pos.y));
+        checkTileOnMap(sf::Vector2u(pos.x + 1, pos.y));
+    }
+
     updateTile(pos, true);
+}
+
+void HorizontalBrushMapTool::addTileConnexions(const BlockConnexions & block)
+{
+    auto pos = block.pos;
+
+    auto itCurrent = std::find_if(m_connexions.begin(), m_connexions.end(), [pos](const auto & b){return b.pos == pos;});
+    if(itCurrent == m_connexions.end())
+    {
+        m_connexions.emplace_back(block);
+        itCurrent = m_connexions.end() - 1;
+    }
+    else
+    {
+       if(block.left)
+           itCurrent->left = true;
+       if(block.right)
+           itCurrent->right = true;
+    }
+
+    auto itLeft = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x - 1, pos.y)](const auto & b){return b.pos == pos;});
+    auto itRight = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x + 1, pos.y)](const auto & b){return b.pos == pos;});
+
+    if(itLeft != m_connexions.end())
+    {
+        itCurrent->left = true;
+        itLeft->right = true;
+    }
+    if(itRight != m_connexions.end())
+    {
+        itCurrent->right = true;
+        itRight->left = true;
+    }
+}
+
+void HorizontalBrushMapTool::checkTileOnMap(const sf::Vector2u & pos)
+{
+    if(pos.x >= m_data.tiles.getSize().x)
+        return;
+
+    auto tile = m_data.tiles(pos);
+    bool ok = false;
+    TileShape shape;
+    for(const auto & s : m_brush.validShapes())
+    {
+        if(tile.id == m_brush.tile(s).id)
+        {
+            shape = s;
+            ok = true;
+        }
+    }
+    if(!ok)
+        return;
+
+    BlockConnexions b(pos);
+    switch (shape)
+    {
+    case TileShape::Horizontal:
+        b.left = true;
+        b.right = true;
+        break;
+    case TileShape::Left3:
+        b.right = true;
+        break;
+    case TileShape::Right3:
+        b.left = true;
+        break;
+    default:
+        break;
+    }
+
+    auto it = std::find_if(m_blocks.begin(), m_blocks.end(), [pos](const auto & b){return b.pos == pos;});
+    if(it == m_blocks.end())
+        m_blocks.push_back({pos, m_brush.tile(TileShape::Full).toTileInfos()});
+
+    addTileConnexions(b);
 }
 
 void HorizontalBrushMapTool::updateTile(const sf::Vector2u & pos, bool updateNext)
@@ -25,8 +109,10 @@ void HorizontalBrushMapTool::updateTile(const sf::Vector2u & pos, bool updateNex
     auto it = std::find_if(m_blocks.begin(), m_blocks.end(), [pos](const auto & b){return b.pos == pos;});
     if(it == m_blocks.end())
         return;
-    bool haveItemLeft = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x - 1, pos.y)](const auto & b){return b.pos == pos;}) != m_blocks.end();
-    bool haveItemRight = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x + 1, pos.y)](const auto & b){return b.pos == pos;}) != m_blocks.end();
+    auto shape = std::find_if(m_connexions.begin(), m_connexions.end(), [pos](const auto & b){return b.pos == pos;});
+    assert(shape != m_connexions.end());
+    bool haveItemLeft = shape->left;
+    bool haveItemRight = shape->right;
 
     if(haveItemLeft && haveItemRight)
         it->tile = m_brush.tile(TileShape::Horizontal).toTileInfos();
@@ -71,4 +157,9 @@ void HorizontalBrushMapTool::drawCursor(sf::RenderTarget &target, const sf::Vect
     sprite.setColor(sf::Color(255, 255, 255, a));
 
     target.draw(sprite);
+}
+
+void HorizontalBrushMapTool::beforeSelectionEnd()
+{
+    m_connexions.clear();
 }
