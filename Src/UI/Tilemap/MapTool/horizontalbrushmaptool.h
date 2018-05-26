@@ -24,9 +24,10 @@ protected:
 
 private:
     void updateTile(const sf::Vector2u & pos, bool updateNext);
-    const BrushHorizontal & m_brush;
     void addTileConnexions(const BlockConnexions & block);
     void checkTileOnMap(const sf::Vector2u & pos);
+
+    const BrushHorizontal & m_brush;
 
     std::vector<BlockConnexions> m_connexions;
 };

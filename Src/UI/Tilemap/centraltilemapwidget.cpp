@@ -24,6 +24,7 @@ CentralTilemapWidget::CentralTilemapWidget(TilemapInfos *tilemap, QWidget *paren
 {
     tilemap->setCentralWidget(this);
     setMouseTracking(true);
+    //grabKeyboard();
 
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClick(QPoint)));

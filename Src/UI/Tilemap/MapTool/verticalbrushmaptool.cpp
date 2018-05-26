@@ -17,7 +17,91 @@ void VerticalBrushMapTool::onAddTile(const sf::Vector2u & pos)
     if(it == m_blocks.end())
         m_blocks.push_back({pos, m_brush.tile(TileShape::Full).toTileInfos()});
 
+    addTileConnexions(BlockConnexions(pos));
+
+    if(m_altButtonPressed)
+    {
+        checkTileOnMap(sf::Vector2u(pos.x, pos.y - 1));
+        checkTileOnMap(sf::Vector2u(pos.x, pos.y + 1));
+    }
+
     updateTile(pos, true);
+}
+
+void VerticalBrushMapTool::addTileConnexions(const BlockConnexions & block)
+{
+    auto pos = block.pos;
+
+    auto itCurrent = std::find_if(m_connexions.begin(), m_connexions.end(), [pos](const auto & b){return b.pos == pos;});
+    if(itCurrent == m_connexions.end())
+    {
+        m_connexions.emplace_back(block);
+        itCurrent = m_connexions.end() - 1;
+    }
+    else
+    {
+       if(block.top)
+           itCurrent->top = true;
+       if(block.bottom)
+           itCurrent->bottom = true;
+    }
+
+    auto itTop = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x, pos.y-1)](const auto & b){return b.pos == pos;});
+    auto itBottom = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x, pos.y+1)](const auto & b){return b.pos == pos;});
+
+    if(itTop != m_connexions.end())
+    {
+        itCurrent->top = true;
+        itTop->bottom = true;
+    }
+    if(itBottom != m_connexions.end())
+    {
+        itCurrent->bottom = true;
+        itBottom->top = true;
+    }
+}
+
+void VerticalBrushMapTool::checkTileOnMap(const sf::Vector2u & pos)
+{
+    if(pos.y >= m_data.tiles.getSize().y)
+        return;
+
+    auto tile = m_data.tiles(pos);
+    bool ok = false;
+    TileShape shape;
+    for(const auto & s : m_brush.validShapes())
+    {
+        if(tile.id == m_brush.tile(s).id)
+        {
+            shape = s;
+            ok = true;
+        }
+    }
+    if(!ok)
+        return;
+
+    BlockConnexions b(pos);
+    switch (shape)
+    {
+    case TileShape::Vertical:
+        b.top = true;
+        b.bottom = true;
+        break;
+    case TileShape::Top3:
+        b.bottom = true;
+        break;
+    case TileShape::Down3:
+        b.top = true;
+        break;
+    default:
+        break;
+    }
+
+    auto it = std::find_if(m_blocks.begin(), m_blocks.end(), [pos](const auto & b){return b.pos == pos;});
+    if(it == m_blocks.end())
+        m_blocks.push_back({pos, m_brush.tile(TileShape::Full).toTileInfos()});
+
+    addTileConnexions(b);
 }
 
 void VerticalBrushMapTool::updateTile(const sf::Vector2u & pos, bool updateNext)
@@ -25,8 +109,10 @@ void VerticalBrushMapTool::updateTile(const sf::Vector2u & pos, bool updateNext)
     auto it = std::find_if(m_blocks.begin(), m_blocks.end(), [pos](const auto & b){return b.pos == pos;});
     if(it == m_blocks.end())
         return;
-    bool haveItemTop = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x, pos.y - 1)](const auto & b){return b.pos == pos;}) != m_blocks.end();
-    bool haveItemBottom = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x, pos.y + 1)](const auto & b){return b.pos == pos;}) != m_blocks.end();
+    auto shape = std::find_if(m_connexions.begin(), m_connexions.end(), [pos](const auto & b){return b.pos == pos;});
+    assert(shape != m_connexions.end());
+    bool haveItemTop = shape->top;
+    bool haveItemBottom = shape->bottom;
 
     if(haveItemTop && haveItemBottom)
         it->tile = m_brush.tile(TileShape::Vertical).toTileInfos();
@@ -71,4 +157,10 @@ void VerticalBrushMapTool::drawCursor(sf::RenderTarget &target, const sf::Vector
     sprite.setColor(sf::Color(255, 255, 255, a));
 
     target.draw(sprite);
+}
+
+
+void VerticalBrushMapTool::beforeSelectionEnd()
+{
+    m_connexions.clear();
 }
