@@ -17,6 +17,20 @@ void FullBrushMapTool::onAddTile(const sf::Vector2u & pos)
     if(it == m_blocks.end())
         m_blocks.push_back({pos, m_brush.tile(TileShape::Full).toTileInfos()});
 
+    addTileConnexions(BlockConnexions(pos));
+
+    if(m_altButtonPressed)
+    {
+        checkTileOnMap(sf::Vector2u(pos.x - 1, pos.y));
+        checkTileOnMap(sf::Vector2u(pos.x + 1, pos.y));
+        checkTileOnMap(sf::Vector2u(pos.x, pos.y - 1));
+        checkTileOnMap(sf::Vector2u(pos.x, pos.y + 1));
+        checkTileOnMap(sf::Vector2u(pos.x - 1, pos.y - 1));
+        checkTileOnMap(sf::Vector2u(pos.x + 1, pos.y - 1));
+        checkTileOnMap(sf::Vector2u(pos.x - 1, pos.y + 1));
+        checkTileOnMap(sf::Vector2u(pos.x + 1, pos.y + 1));
+    }
+
     updateTile(pos, true);
 }
 
@@ -25,14 +39,17 @@ void FullBrushMapTool::updateTile(const sf::Vector2u & pos, bool updateNext)
     auto it = std::find_if(m_blocks.begin(), m_blocks.end(), [pos](const auto & b){return b.pos == pos;});
     if(it == m_blocks.end())
         return;
-    bool l = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x - 1, pos.y)](const auto & b){return b.pos == pos;}) != m_blocks.end();
-    bool r = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x + 1, pos.y)](const auto & b){return b.pos == pos;}) != m_blocks.end();
-    bool t = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x, pos.y - 1)](const auto & b){return b.pos == pos;}) != m_blocks.end();
-    bool d = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x, pos.y + 1)](const auto & b){return b.pos == pos;}) != m_blocks.end();
-    bool tl = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x - 1, pos.y - 1)](const auto & b){return b.pos == pos;}) != m_blocks.end();
-    bool tr = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x + 1, pos.y - 1)](const auto & b){return b.pos == pos;}) != m_blocks.end();
-    bool dl = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x - 1, pos.y + 1)](const auto & b){return b.pos == pos;}) != m_blocks.end();
-    bool dr = std::find_if(m_blocks.begin(), m_blocks.end(), [pos = sf::Vector2u(pos.x + 1, pos.y + 1)](const auto & b){return b.pos == pos;}) != m_blocks.end();
+    auto shape = std::find_if(m_connexions.begin(), m_connexions.end(), [pos](const auto & b){return b.pos == pos;});
+    assert(shape != m_connexions.end());
+
+    bool l = shape->left;
+    bool r = shape->right;
+    bool t = shape->top;
+    bool d = shape->bottom;
+    bool tl = shape->topLeft;
+    bool tr = shape->topRight;
+    bool dl = shape->bottomLeft;
+    bool dr = shape->bottomRight;
 
     //full
     if(!l && !r && !t && !d)
@@ -155,6 +172,400 @@ void FullBrushMapTool::updateTile(const sf::Vector2u & pos, bool updateNext)
     }
 }
 
+void FullBrushMapTool::addTileConnexions(const BlockConnexions & block)
+{
+    auto pos = block.pos;
+
+    auto itCurrent = std::find_if(m_connexions.begin(), m_connexions.end(), [pos](const auto & b){return b.pos == pos;});
+    if(itCurrent == m_connexions.end())
+    {
+        m_connexions.emplace_back(block);
+        itCurrent = m_connexions.end() - 1;
+    }
+    else
+    {
+       if(block.left)
+           itCurrent->left = true;
+       if(block.right)
+           itCurrent->right = true;
+       if(block.top)
+           itCurrent->top = true;
+       if(block.bottom)
+           itCurrent->bottom = true;
+       if(block.topLeft)
+           itCurrent->topLeft = true;
+       if(block.topRight)
+           itCurrent->topRight = true;
+       if(block.bottomLeft)
+           itCurrent->bottomLeft = true;
+       if(block.bottomRight)
+           itCurrent->bottomRight = true;
+    }
+
+    auto itLeft = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x - 1, pos.y)](const auto & b){return b.pos == pos;});
+    auto itRight = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x + 1, pos.y)](const auto & b){return b.pos == pos;});
+    auto itTop = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x, pos.y - 1)](const auto & b){return b.pos == pos;});
+    auto itBottom = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x, pos.y + 1)](const auto & b){return b.pos == pos;});
+    auto itTopLeft = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x - 1, pos.y - 1)](const auto & b){return b.pos == pos;});
+    auto itTopRight = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x + 1, pos.y - 1)](const auto & b){return b.pos == pos;});
+    auto itBottomLeft = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x - 1, pos.y + 1)](const auto & b){return b.pos == pos;});
+    auto itBottomRight = std::find_if(m_connexions.begin(), m_connexions.end(), [pos = sf::Vector2u(pos.x + 1, pos.y + 1)](const auto & b){return b.pos == pos;});
+
+    if(itLeft != m_connexions.end())
+    {
+        itCurrent->left = true;
+        itLeft->right = true;
+    }
+    if(itRight != m_connexions.end())
+    {
+        itCurrent->right = true;
+        itRight->left = true;
+    }
+    if(itTop != m_connexions.end())
+    {
+        itCurrent->top = true;
+        itTop->bottom = true;
+    }
+    if(itBottom != m_connexions.end())
+    {
+        itCurrent->bottom = true;
+        itBottom->top = true;
+    }
+    if(itTopLeft != m_connexions.end())
+    {
+        itCurrent->topLeft = true;
+        itTopLeft->bottomRight = true;
+    }
+    if(itTopRight != m_connexions.end())
+    {
+        itCurrent->topRight = true;
+        itTopRight->bottomLeft = true;
+    }
+    if(itBottomLeft != m_connexions.end())
+    {
+        itCurrent->bottomLeft = true;
+        itBottomLeft->topRight = true;
+    }
+    if(itBottomRight != m_connexions.end())
+    {
+        itCurrent->bottomRight = true;
+        itBottomRight->topLeft = true;
+    }
+}
+
+void FullBrushMapTool::checkTileOnMap(const sf::Vector2u & pos)
+{
+    if(pos.x >= m_data.tiles.getSize().x || pos.y >= m_data.tiles.getSize().y)
+        return;
+
+    auto tile = m_data.tiles(pos);
+    bool ok = false;
+    TileShape shape;
+    for(const auto & s : m_brush.validShapes())
+    {
+        if(tile.id == m_brush.tile(s).id)
+        {
+            shape = s;
+            ok = true;
+        }
+    }
+    if(!ok)
+        return;
+
+    BlockConnexions b(pos);
+    switch (shape)
+    {
+    case TileShape::Empty:
+        b.bottom = true;
+        b.bottomLeft = true;
+        b.bottomRight = true;
+        b.left = true;
+        b.right = true;
+        b.top = true;
+        b.topLeft = true;
+        b.topRight = true;
+        break;
+    case TileShape::Left3:
+        b.right = true;
+        break;
+    case TileShape::Right3:
+        b.left = true;
+        break;
+    case TileShape::Top3:
+        b.bottom = true;
+        break;
+    case TileShape::Down3:
+        b.top = true;
+        break;
+    case TileShape::Horizontal:
+        b.left = true;
+        b.right = true;
+        break;
+    case TileShape::Vertical:
+        b.top = true;
+        b.bottom = true;
+        break;
+    case TileShape::TopLeft:
+        b.bottom = true;
+        b.bottomRight = true;
+        b.right = true;
+        break;
+    case TileShape::TopRight:
+        b.bottom = true;
+        b.left = true;
+        b.bottomLeft = true;
+        break;
+    case TileShape::DownLeft:
+        b.right = true;
+        b.top = true;
+        b.topRight = true;
+        break;
+    case TileShape::DownRight:
+        b.left = true;
+        b.top = true;
+        b.topLeft = true;
+        break;
+    case TileShape::Left:
+        b.bottom = true;
+        b.bottomRight = true;
+        b.right = true;
+        b.top = true;
+        b.topRight = true;
+        break;
+    case TileShape::Right:
+        b.bottom = true;
+        b.bottomLeft = true;
+        b.left = true;
+        b.top = true;
+        b.topLeft = true;
+        break;
+    case TileShape::Top:
+        b.bottom = true;
+        b.bottomLeft = true;
+        b.bottomRight = true;
+        b.left = true;
+        b.right = true;
+        break;
+    case TileShape::Down:
+        b.left = true;
+        b.right = true;
+        b.top = true;
+        b.topLeft = true;
+        b.topRight = true;
+        break;
+    case TileShape::QuadCorners:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        break;
+    case TileShape::TopLeftCorners3:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomRight = true;
+        break;
+    case TileShape::TopRightCorners3:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomLeft = true;
+        break;
+    case TileShape::DownLeftCorners3:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.topRight = true;
+        break;
+    case TileShape::DownRightCorners3:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.topLeft = true;
+        break;
+    case TileShape::DiagonalTopLeft:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomLeft = true;
+        b.topRight = true;
+        break;
+    case TileShape::DiagonalTopRight:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.topLeft = true;
+        b.bottomRight = true;
+        break;
+    case TileShape::LeftCorners:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomRight = true;
+        b.topRight = true;
+        break;
+    case TileShape::RightCorners:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomLeft = true;
+        b.topLeft = true;
+        break;
+    case TileShape::TopCorners:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomLeft = true;
+        b.bottomRight = true;
+        break;
+    case TileShape::DownCorners:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.topLeft = true;
+        b.topRight = true;
+        break;
+    case TileShape::TopLeftCorner:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomLeft = true;
+        b.bottomRight = true;
+        b.topRight = true;
+        break;
+    case TileShape::TopRightCorner:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomLeft = true;
+        b.bottomRight = true;
+        b.topLeft = true;
+        break;
+    case TileShape::DownLeftCorner:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomRight = true;
+        b.topLeft = true;
+        b.topRight = true;
+        break;
+    case TileShape::DownRightCorner:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.bottomLeft = true;
+        b.topLeft = true;
+        b.topRight = true;
+        break;
+    case TileShape::TopLeftWithCorner:
+        b.bottom = true;
+        b.right = true;
+        break;
+    case TileShape::TopRightWithCorner:
+        b.bottom = true;
+        b.left = true;
+        break;
+    case TileShape::DownLeftWithCorner:
+        b.top = true;
+        b.right = true;
+        break;
+    case TileShape::DownRightWithCorner:
+        b.top = true;
+        b.left = true;
+        break;
+    case TileShape::LeftCorners2:
+        b.bottom = true;
+        b.top = true;
+        b.right = true;
+        break;
+    case TileShape::RightCorners2:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        break;
+    case TileShape::TopCorners2:
+        b.bottom = true;
+        b.left = true;
+        b.right = true;
+        break;
+    case TileShape::DownCorners2:
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        break;
+    case TileShape::LeftCornerTop:
+        b.bottom = true;
+        b.top = true;
+        b.right = true;
+        b.bottomRight = true;
+        break;
+    case TileShape::RightCornerTop:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.topLeft = true;
+        break;
+    case TileShape::TopCornerTop:
+        b.bottom = true;
+        b.left = true;
+        b.right = true;
+        b.bottomLeft = true;
+        break;
+    case TileShape::DownCornerTop:
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.topRight = true;
+        break;
+    case TileShape::LeftCornerDown:
+        b.bottom = true;
+        b.top = true;
+        b.right = true;
+        b.topRight = true;
+        break;
+    case TileShape::RightCornerDown:
+        b.bottom = true;
+        b.top = true;
+        b.left = true;
+        b.bottomLeft = true;
+        break;
+    case TileShape::TopCornerDown:
+        b.bottom = true;
+        b.left = true;
+        b.right = true;
+        b.bottomRight = true;
+        break;
+    case TileShape::DownCornerDown:
+        b.top = true;
+        b.left = true;
+        b.right = true;
+        b.topLeft = true;
+        break;
+    default:
+        break;
+    }
+
+    auto it = std::find_if(m_blocks.begin(), m_blocks.end(), [pos](const auto & b){return b.pos == pos;});
+    if(it == m_blocks.end())
+        m_blocks.push_back({pos, m_brush.tile(TileShape::Full).toTileInfos()});
+
+    addTileConnexions(b);
+}
+
 void FullBrushMapTool::drawCursor(sf::RenderTarget &target, const sf::Vector2u & pos) const
 {
     auto t = std::chrono::system_clock::now().time_since_epoch();
@@ -185,3 +596,9 @@ void FullBrushMapTool::drawCursor(sf::RenderTarget &target, const sf::Vector2u &
 
     target.draw(sprite);
 }
+
+void FullBrushMapTool::beforeSelectionEnd()
+{
+    m_connexions.clear();
+}
+
