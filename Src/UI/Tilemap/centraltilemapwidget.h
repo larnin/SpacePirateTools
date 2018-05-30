@@ -49,6 +49,7 @@ private:
     bool m_showGrid;
     bool m_drawColliders;
     bool m_selectionMode;
+    bool m_pickMode;
     std::unique_ptr<BaseMapTool> m_tool;
     Texture m_texture;
 

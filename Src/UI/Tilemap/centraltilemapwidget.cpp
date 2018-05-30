@@ -1,6 +1,7 @@
 #include "centraltilemapwidget.h"
 #include "MapTool/copymaptool.h"
 #include "MapTool/pastemaptool.h"
+#include "MapTool/singletilemaptool.h"
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -20,6 +21,7 @@ CentralTilemapWidget::CentralTilemapWidget(TilemapInfos *tilemap, QWidget *paren
     , m_showGrid(false)
     , m_drawColliders(false)
     , m_selectionMode(false)
+    , m_pickMode(false)
     , m_pasteHolder(Event<PasteEvent>::connect([this](const auto & e){onPaste(e);}))
 {
     tilemap->setCentralWidget(this);
@@ -105,7 +107,25 @@ void CentralTilemapWidget::mousePressEvent(QMouseEvent * event)
     m_mouseOldPos = sf::Vector2i(event->x(), event->y());
 
     if(event->button() == Qt::MiddleButton)
+    {
         m_draging = true;
+        return;
+    }
+
+    if(event->button() == Qt::LeftButton && m_pickMode)
+    {
+        auto eventPos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+        auto tileSize = m_infos->getData().tileSize;
+        auto size = m_infos->getData().tiles.getSize();
+
+        sf::Vector2i pos((eventPos.x + tileSize / 2) / tileSize, (eventPos.y + tileSize / 2) / tileSize);
+        if(pos.x >= int(size.x) || pos.y > int(size.y) || pos.x < 0 || pos.y < 0)
+            return;
+
+        setTool(std::make_unique<SingleTileMapTool>(m_infos->getData(), m_infos->getData().tiles(sf::Vector2u(pos))));
+
+        return;
+    }
 
     if(m_tool)
     {
@@ -146,12 +166,18 @@ void CentralTilemapWidget::keyPressEvent(QKeyEvent * event)
     if(event->key() == Qt::Key_Escape && !m_selectionMode)
         setTool({});
 
+    if(event->key() == Qt::Key_Shift)
+        m_pickMode = true;
+
     if(m_tool)
         m_tool->keyPressEvent(event);
 }
 
 void CentralTilemapWidget::keyReleaseEvent(QKeyEvent * event)
 {
+    if(event->key() == Qt::Key_Shift)
+        m_pickMode = false;
+
     if(m_tool)
         m_tool->keyReleaseEvent(event);
 }
