@@ -103,7 +103,7 @@ void PropertyWidget::onVisibilityChange()
     m_property.inspectorVisibility = static_cast<InspectorVisibility>(m_inspectorVisibility->currentIndex());
     m_property.sceneVisibility = static_cast<SceneVisibility>(m_sceneVisibility->currentIndex());
 }
-
+#include <iostream>
 void PropertyWidget::onDelete(QWidget * button)
 {
     if(m_property.values.size() <= 1)
@@ -116,7 +116,9 @@ void PropertyWidget::onDelete(QWidget * button)
 
     m_valuesLayout->removeWidget(m_values[id].parent);
     delete m_values[id].parent;
+
     m_values.erase(it);
+    m_property.values.erase(m_property.values.begin() + id);
 }
 
 void PropertyWidget::onAddElement()

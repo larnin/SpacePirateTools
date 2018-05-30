@@ -116,6 +116,7 @@ std::unique_ptr<ObjectProperty> ObjectData::createDefaultTransform()
     property->name = "Transform";
     property->inspectorVisibility = InspectorVisibility::Visible;
     property->sceneVisibility = SceneVisibility::All;
+    property->fixedSize = true;
     property->values.push_back(ObjectValueBase::createValue(ValueType::Transform));
     return std::move(property);
 }
