@@ -88,18 +88,20 @@ void ProjectInfos::load()
     m_options = ProjectOptions();
 
     QFile file(m_projectDirectory + "/" + optionFilename);
-    if(!file.exists())
+    if(!file.exists() || !file.open(QIODevice::ReadOnly))
+    {
+        validData();
         return;
-    if(!file.open(QIODevice::ReadOnly))
-        return;
+    }
 
     QJsonParseError error;
     QJsonDocument doc(QJsonDocument::fromJson(file.readAll(), &error));
     file.close();
-    if(error.error != QJsonParseError::NoError)
+    if(error.error != QJsonParseError::NoError || !doc.isObject())
+    {
+        validData();
         return;
-    if(!doc.isObject())
-        return;
+    }
 
     QJsonObject obj(doc.object());
 
@@ -116,6 +118,11 @@ void ProjectInfos::load()
         m_options.colliderLayers.push_back(layer);
     }
 
+    validData();
+}
+
+void ProjectInfos::validData()
+{
     if(m_options.colliderLayers.empty())
         m_options.colliderLayers.push_back({"Default", sf::Color::Red, {}});
 }

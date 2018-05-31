@@ -16,7 +16,7 @@ SingleTileView::SingleTileView(TileShape shape, QWidget *parent)
     , m_shape(shape)
     , m_id(0)
     , m_deltaTile(0)
-    , m_tileSize(0)
+    , m_tileSize(1)
     , m_colliderValue(0)
 {
     updateView();

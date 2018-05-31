@@ -55,6 +55,7 @@ public:
 private:
     void load();
     void onSave(const SaveEvent &);
+    void validData();
 
     static ProjectInfos m_instance;
 

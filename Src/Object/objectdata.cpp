@@ -14,24 +14,24 @@ ObjectData::ObjectData()
 ObjectData::ObjectData(const QString & fileName)
 {
     QFile file(fileName);
-    if(!file.exists())
+    if(!file.exists() || !file.open(QIODevice::ReadOnly))
+    {
+        checkObjectIntegrity();
         return;
-    if(!file.open(QIODevice::ReadOnly))
-        return;
+    }
 
     QJsonParseError error;
     QJsonDocument doc(QJsonDocument::fromJson(file.readAll(), &error));
     file.close();
-    if(error.error != QJsonParseError::NoError)
+    if(error.error != QJsonParseError::NoError || !doc.isObject())
+    {
+        checkObjectIntegrity();
         return;
-    if(!doc.isObject())
-        return;
+    }
 
     QJsonObject obj(doc.object());
     load(obj);
 
-    if(empty() || (*this)[0]->values.empty() || (*this)[0]->values[0]->type() != ValueType::Transform)
-        insert(begin(), createDefaultTransform());
     checkObjectIntegrity();
 }
 
@@ -39,8 +39,6 @@ ObjectData::ObjectData(const QJsonObject & obj)
 {
     load(obj);
 
-    if(empty() || (*this)[0]->values.empty() || (*this)[0]->values[0]->type() != ValueType::Transform)
-        insert(begin(), createDefaultTransform());
     checkObjectIntegrity();
 }
 
