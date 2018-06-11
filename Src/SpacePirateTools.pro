@@ -106,7 +106,10 @@ SOURCES += \
     UI/Tilemap/MapTool/squarebrushmaptool.cpp \
     UI/Tilemap/MapTool/verticalbrushmaptool.cpp \
     UI/Tilemap/MapTool/copymaptool.cpp \
-    UI/Tilemap/MapTool/pastemaptool.cpp
+    UI/Tilemap/MapTool/pastemaptool.cpp \
+    Scene/scenedata.cpp \
+    Scene/scenelayer.cpp \
+    Scene/scenenode.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -217,7 +220,10 @@ HEADERS += \
     UI/Tilemap/MapTool/squarebrushmaptool.h \
     UI/Tilemap/MapTool/verticalbrushmaptool.h \
     UI/Tilemap/MapTool/copymaptool.h \
-    UI/Tilemap/MapTool/pastemaptool.h
+    UI/Tilemap/MapTool/pastemaptool.h \
+    Scene/scenedata.h \
+    Scene/scenelayer.h \
+    Scene/scenenode.h
 
 CONFIG += c++14
 
