@@ -108,6 +108,15 @@ ObjectValueTransform & ObjectData::transform()
     return *dynamic_cast<ObjectValueTransform*>((*this)[0]->values[0].get());
 }
 
+ObjectValueTransform const & ObjectData::transform() const
+{
+    assert(!empty());
+    assert(!(*this)[0]->values.empty());
+    assert((*this)[0]->values[0]->type() == ValueType::Transform);
+
+    return *dynamic_cast<ObjectValueTransform*>((*this)[0]->values[0].get());
+}
+
 std::unique_ptr<ObjectProperty> ObjectData::createDefaultTransform()
 {
     auto property = std::make_unique<ObjectProperty>();

@@ -33,6 +33,7 @@ public:
     QJsonObject save() const;
 
     ObjectValueTransform & transform();
+    ObjectValueTransform const & transform() const;
 
 private:
     void load(const QJsonObject & obj);

@@ -5,25 +5,26 @@
 #include <QString>
 #include <QJsonObject>
 #include <vector>
+#include <memory>
 
-class SceneLayer : private std::vector<SceneNode>
+class SceneLayer : private std::vector<std::unique_ptr<SceneNode>>
 {
 public:
     SceneLayer() = default;
     SceneLayer(const QJsonObject & obj);
-    using std::vector<SceneNode>::push_back;
-    using std::vector<SceneNode>::pop_back;
-    using std::vector<SceneNode>::begin;
-    using std::vector<SceneNode>::end;
-    using std::vector<SceneNode>::front;
-    using std::vector<SceneNode>::back;
-    using std::vector<SceneNode>::insert;
-    using std::vector<SceneNode>::erase;
-    using std::vector<SceneNode>::emplace_back;
-    using std::vector<SceneNode>::clear;
-    using std::vector<SceneNode>::operator [];
-    using std::vector<SceneNode>::size;
-    using std::vector<SceneNode>::empty;
+    using std::vector<std::unique_ptr<SceneNode>>::push_back;
+    using std::vector<std::unique_ptr<SceneNode>>::pop_back;
+    using std::vector<std::unique_ptr<SceneNode>>::begin;
+    using std::vector<std::unique_ptr<SceneNode>>::end;
+    using std::vector<std::unique_ptr<SceneNode>>::front;
+    using std::vector<std::unique_ptr<SceneNode>>::back;
+    using std::vector<std::unique_ptr<SceneNode>>::insert;
+    using std::vector<std::unique_ptr<SceneNode>>::erase;
+    using std::vector<std::unique_ptr<SceneNode>>::emplace_back;
+    using std::vector<std::unique_ptr<SceneNode>>::clear;
+    using std::vector<std::unique_ptr<SceneNode>>::operator [];
+    using std::vector<std::unique_ptr<SceneNode>>::size;
+    using std::vector<std::unique_ptr<SceneNode>>::empty;
 
     QJsonObject save() const;
 

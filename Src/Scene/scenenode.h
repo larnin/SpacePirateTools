@@ -3,12 +3,16 @@
 
 #include "Object/objectdata.h"
 #include <SFML/Graphics/Transform.hpp>
+#include <QJsonObject>
 #include <vector>
 
 class SceneNode
 {
 public:
     SceneNode();
+    SceneNode(const QJsonObject & obj);
+
+    QJsonObject save() const;
 
     ObjectValueTransform getLocalTransform() const;
     ObjectValueTransform getTransform() const;
