@@ -1,18 +1,29 @@
 #include "scenenode.h"
+#include "ProjectInfos/projectinfos.h"
 
-SceneNode::SceneNode()
+SceneNode::SceneNode(const QString &_name, const QString &_objectName)
+    : name(_name)
 {
-
+    loadObject(_objectName);
 }
 
 SceneNode::SceneNode(const QJsonObject & obj)
+    : object(obj["object"].toObject())
 {
-
+    name = obj["name"].toString();
+    objectName = obj["objectName"].toString();
+    prefabName = obj["prefabName"].toString();
 }
 
 QJsonObject SceneNode::save() const
 {
-    return {};
+    QJsonObject obj;
+    obj.insert("object", object.save());
+    obj.insert("name", name);
+    obj.insert("objectName", objectName);
+    obj.insert("prefabName", prefabName);
+
+    return obj;
 }
 
 ObjectValueTransform SceneNode::getLocalTransform() const
@@ -31,4 +42,11 @@ ObjectValueTransform SceneNode::getTransform() const
     //todo child transform transformed with parent transform
 
     return transform;
+}
+
+void SceneNode::loadObject(const QString & _objectName)
+{
+    objectName = _objectName;
+    auto fullName = ProjectInfos::instance().projectDirectory() + "/" + assetTypeToString(AssetType::Object) + "/" + objectName;
+    object = ObjectData(fullName);
 }

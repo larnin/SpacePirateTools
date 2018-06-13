@@ -9,7 +9,7 @@
 class SceneNode
 {
 public:
-    SceneNode();
+    SceneNode(const QString & _name, const QString & _objectName);
     SceneNode(const QJsonObject & obj);
 
     QJsonObject save() const;
@@ -17,12 +17,17 @@ public:
     ObjectValueTransform getLocalTransform() const;
     ObjectValueTransform getTransform() const;
 
+    void loadObject(const QString & _objectName);
+
     SceneNode * parent;
     std::vector<SceneNode> * childrens;
 
     ObjectData object;
 
     QString name;
+
+    QString objectName;
+    QString prefabName;
 };
 
 #endif // SCENENODE_H
