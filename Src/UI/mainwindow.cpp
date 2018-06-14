@@ -19,6 +19,7 @@
 #include "UI/colliderlayerdialog.h"
 #include "UI/Tilemap/centraltilemapwidget.h"
 #include "UI/Tilemap/tilemapinfos.h"
+#include "UI/Scene/scenelayersinfos.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -290,7 +291,9 @@ void MainWindow::openTileset(const QString & filename)
 
 void MainWindow::openScene(const QString & filename)
 {
-
+    SceneLayersinfos *a = new SceneLayersinfos(filename);
+    m_assetDocks.push_back(new Dock<SceneLayersinfos>(a, "Layers", false));
+    addDockWidget(Qt::LeftDockWidgetArea, m_assetDocks.back());
 }
 
 void MainWindow::openObject(const QString & filename)

@@ -109,7 +109,8 @@ SOURCES += \
     UI/Tilemap/MapTool/pastemaptool.cpp \
     Scene/scenedata.cpp \
     Scene/scenelayer.cpp \
-    Scene/scenenode.cpp
+    Scene/scenenode.cpp \
+    UI/Scene/scenelayersinfos.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -223,7 +224,8 @@ HEADERS += \
     UI/Tilemap/MapTool/pastemaptool.h \
     Scene/scenedata.h \
     Scene/scenelayer.h \
-    Scene/scenenode.h
+    Scene/scenenode.h \
+    UI/Scene/scenelayersinfos.h
 
 CONFIG += c++14
 

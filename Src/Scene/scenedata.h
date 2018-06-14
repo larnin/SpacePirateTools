@@ -2,6 +2,7 @@
 #define SCENEDATA_H
 
 #include "scenelayer.h"
+#include <SFML/Graphics/Color.hpp>
 #include <QString>
 #include <vector>
 
@@ -25,6 +26,8 @@ public:
     using std::vector<SceneLayer>::empty;
 
     void save(const QString & fileName) const;
+
+    sf::Color backgroundColor;
 
 private:
     void load(const QString & fileName);
