@@ -5,6 +5,12 @@
 #include <QJsonValue>
 #include <QJsonArray>
 
+SceneLayer::SceneLayer(const QString & _name)
+    : name(_name)
+{
+
+}
+
 SceneLayer::SceneLayer(const QJsonObject & obj)
 {
     load(obj);
@@ -33,12 +39,15 @@ QJsonObject SceneLayer::save() const
     }
     obj.insert("nodes", nodes);
     obj.insert("indexs", indexs);
+    obj.insert("name", name);
 
     return obj;
 }
 
 void SceneLayer::load(const QJsonObject & obj)
 {
+    name = obj["name"].toString();
+
     for(const auto & jsonNode : obj["nodes"].toArray())
         push_back(std::make_unique<SceneNode>(jsonNode.toObject()));
 

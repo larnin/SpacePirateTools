@@ -10,7 +10,7 @@
 class SceneLayer : private std::vector<std::unique_ptr<SceneNode>>
 {
 public:
-    SceneLayer() = default;
+    SceneLayer(const QString & _name);
     SceneLayer(const QJsonObject & obj);
     using std::vector<std::unique_ptr<SceneNode>>::push_back;
     using std::vector<std::unique_ptr<SceneNode>>::pop_back;
@@ -27,6 +27,10 @@ public:
     using std::vector<std::unique_ptr<SceneNode>>::empty;
 
     QJsonObject save() const;
+
+    QString name;
+    bool hidden = false;
+    bool showGizmos = false;
 
 private:
     void load(const QJsonObject & obj);

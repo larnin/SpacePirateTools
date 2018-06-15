@@ -55,5 +55,5 @@ void SceneData::load(const QString & fileName)
     backgroundColor.b = obj["b"].toInt();
 
     for(const auto & l : obj["layers"].toArray())
-        push_back(SceneLayer(l.toObject()));
+        emplace_back(l.toObject());
 }

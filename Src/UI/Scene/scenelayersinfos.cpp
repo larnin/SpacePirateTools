@@ -3,6 +3,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QColorDialog>
+#include <QInputDialog>
+#include <QMessageBox>
 #include <QMenu>
 
 SceneLayersinfos::SceneLayersinfos(const QString &assetName, QWidget *parent)
@@ -56,7 +58,43 @@ void SceneLayersinfos::updateColorButton()
 
 void SceneLayersinfos::updateLayerList()
 {
+    m_layers->blockSignals(true);
 
+   m_layers->clear();
+
+   for(unsigned int i(0) ; i < m_datas.size() ; i++)
+   {
+       const auto & layer = m_datas[i];
+       m_layers->addItem(layer.name);
+       auto item = m_layers->item(m_layers->count() - 1);
+
+       QWidget* widget = new QWidget();
+       QPushButton* showButton = new QPushButton(QIcon("Img/View.png"), "");
+       showButton->setFixedSize(24, 24);
+       showButton->setCheckable(true);
+       showButton->setChecked(!layer.hidden);
+       QPushButton* gizmoButton = new QPushButton(QIcon("Img/Gizmos.png"), "");
+       gizmoButton->setFixedSize(24, 24);
+       gizmoButton->setCheckable(true);
+       gizmoButton->setChecked(layer.showGizmos);
+       QHBoxLayout* layout = new QHBoxLayout();
+       layout->addStretch(1);
+       layout->addWidget(showButton);
+       layout->addWidget(gizmoButton);
+       layout->setContentsMargins(0, 0, 0, 0);
+       widget->setLayout(layout);
+       item->setSizeHint(widget->sizeHint());
+       m_layers->setItemWidget(item, widget);
+
+       connect(showButton, &QPushButton::toggled, this, [this, i](bool value){updateVisibility(i, value);});
+       connect(gizmoButton, &QPushButton::toggled, this, [this, i](bool value){updateGizmos(i, value);});
+   }
+
+   m_layers->blockSignals(false);
+
+   if(m_currentIndex < m_layers->count())
+       m_layers->setCurrentRow(m_currentIndex);
+   onLayerIndexChange(m_layers->currentRow());
 }
 
 void SceneLayersinfos::onSave(const SaveEvent &)
@@ -123,36 +161,70 @@ void SceneLayersinfos::onLayerRightClick(QPoint point)
 
 void SceneLayersinfos::updateGizmos(unsigned int index, bool value)
 {
+    if(m_datas.size() <= index)
+            return;
 
+    m_datas[index].showGizmos = value;
 }
 
 void SceneLayersinfos::updateVisibility(unsigned int index, bool value)
 {
+    if(m_datas.size() <= index)
+            return;
 
+    m_datas[index].hidden = !value;
 }
 
 void SceneLayersinfos::addLayer()
 {
+    bool ok = true;
+    auto layerName = QInputDialog::getText(this, "Nouveau layer", "Indiquez le nom du nouveau layer", QLineEdit::Normal, "", &ok);
 
+    if(!ok)
+        return;
+
+    m_datas.emplace_back(layerName);
+    updateLayerList();
 }
 
 void SceneLayersinfos::delLayer(unsigned int index)
 {
+    auto answer = QMessageBox::question(this, "Supprimer un layer", "Etes vous sur de vouloir supprimer ce layer ?");
+    if(answer != QMessageBox::Yes)
+        return;
 
+    m_datas.erase(m_datas.begin() + index);
+    updateLayerList();
 }
 
 void SceneLayersinfos::upLayer(unsigned int index)
 {
+    if(index == 0)
+        return;
 
+    std::swap(m_datas[index], m_datas[index - 1]);
+    updateLayerList();
 }
 
 void SceneLayersinfos::downLayer(unsigned int index)
 {
+    if(index >= m_datas.size() - 1)
+        return;
 
+    std::swap(m_datas[index], m_datas[index + 1]);
+    updateLayerList();
 }
 
 void SceneLayersinfos::renameLayer(unsigned int index)
 {
+    auto & l = m_datas[index];
+    bool ok = true;
+    auto name = QInputDialog::getText(this, "Renommer un layer", "Indiquez le nouveau nom du layer", QLineEdit::Normal, l.name, &ok);
 
+    if(ok)
+    {
+        l.name = name;
+        updateLayerList();
+    }
 }
 
