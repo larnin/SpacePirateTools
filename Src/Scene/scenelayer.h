@@ -27,6 +27,7 @@ public:
     using std::vector<std::unique_ptr<SceneNode>>::empty;
 
     QJsonObject save() const;
+    unsigned int indexOf(SceneNode * node) const;
 
     QString name;
     bool hidden = false;

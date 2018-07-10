@@ -110,7 +110,9 @@ SOURCES += \
     Scene/scenedata.cpp \
     Scene/scenelayer.cpp \
     Scene/scenenode.cpp \
-    UI/Scene/scenelayersinfos.cpp
+    UI/Scene/scenelayersinfos.cpp \
+    UI/Scene/scenelayerinfos.cpp \
+    UI/Scene/scenenodeinfos.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -225,7 +227,9 @@ HEADERS += \
     Scene/scenedata.h \
     Scene/scenelayer.h \
     Scene/scenenode.h \
-    UI/Scene/scenelayersinfos.h
+    UI/Scene/scenelayersinfos.h \
+    UI/Scene/scenelayerinfos.h \
+    UI/Scene/scenenodeinfos.h
 
 CONFIG += c++14
 

@@ -20,6 +20,7 @@
 #include "UI/Tilemap/centraltilemapwidget.h"
 #include "UI/Tilemap/tilemapinfos.h"
 #include "UI/Scene/scenelayersinfos.h"
+#include "UI/Scene/scenelayerinfos.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -292,8 +293,11 @@ void MainWindow::openTileset(const QString & filename)
 void MainWindow::openScene(const QString & filename)
 {
     SceneLayersinfos *a = new SceneLayersinfos(filename);
+    SceneLayerInfos * layer = new SceneLayerInfos();
     m_assetDocks.push_back(new Dock<SceneLayersinfos>(a, "Layers", false));
     addDockWidget(Qt::LeftDockWidgetArea, m_assetDocks.back());
+    m_assetDocks.push_back(new Dock<SceneLayerInfos>(layer, "Layer", false));
+    addDockWidget(Qt::RightDockWidgetArea, m_assetDocks.back());
 }
 
 void MainWindow::openObject(const QString & filename)

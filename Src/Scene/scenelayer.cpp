@@ -61,3 +61,12 @@ void SceneLayer::load(const QJsonObject & obj)
             (*this)[current]->parent = (*this)[parent].get();
     }
 }
+
+
+unsigned int SceneLayer::indexOf(SceneNode * node) const
+{
+    auto it = std::find_if(begin(), end(), [node](const auto & n){return n.get() == node;});
+    if(it == end())
+        return -1;
+    return std::distance(begin(), it);
+}
