@@ -7,10 +7,11 @@
 #include <QMessageBox>
 #include <QMenu>
 
-SceneLayersinfos::SceneLayersinfos(const QString &assetName, QWidget *parent)
+SceneLayersinfos::SceneLayersinfos(const QString &assetName, SceneLayerInfos * layerInfosWidget, QWidget *parent)
     : QWidget(parent)
     , m_datas(assetName)
     , m_assetName(assetName)
+    , m_layerInfosWidget(layerInfosWidget)
     , saveHolder(Event<SaveEvent>::connect([this](const auto & e){onSave(e);}))
     , m_currentIndex(-1)
 {

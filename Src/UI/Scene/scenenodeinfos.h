@@ -14,16 +14,25 @@ class SceneNodeInfos : public QWidget
     Q_OBJECT
 public:
     SceneNodeInfos(QWidget * parent = nullptr);
+
+public slots:
     void setNode(SceneNode * node);
+    void onRevertObjectClick();
+    void onRevertPrefabClick();
+
+signals:
+    void requestRevert(SceneNode * n);
 
 private:
     void updatePropertiesList();
+    void clearPropertiesList();
     void updateButtonsState();
+    void updateName();
 
     SceneNode * m_node;
     QLineEdit* m_nameWidget;
     QVBoxLayout* m_propertiesLayout;
-    std::vector<PropertyWidget> m_properties;
+    std::vector<PropertyWidget*> m_properties;
     QPushButton* m_revertObjectButton;
     QPushButton* m_revertPrefabButton;
 };

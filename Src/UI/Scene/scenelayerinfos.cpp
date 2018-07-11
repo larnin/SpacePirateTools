@@ -4,8 +4,9 @@
 #include <vector>
 #include <iostream>
 
-SceneLayerInfos::SceneLayerInfos(QWidget *parent)
+SceneLayerInfos::SceneLayerInfos(SceneNodeInfos *nodeWidget, QWidget *parent)
     : QWidget(parent)
+    , m_nodeWidget(nodeWidget)
     , m_layer(nullptr)
 {
     m_objects = new QTreeWidget();

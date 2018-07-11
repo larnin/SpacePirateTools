@@ -4,6 +4,7 @@
 #include "Scene/scenedata.h"
 #include "Events/Args/saveevent.h"
 #include "Events/Event.h"
+#include "scenelayerinfos.h"
 #include <QWidget>
 #include <QListWidget>
 #include <QPushButton>
@@ -12,7 +13,7 @@ class SceneLayersinfos : public QWidget
 {
     Q_OBJECT
 public:
-    SceneLayersinfos(const QString &assetName, QWidget * parent = nullptr);
+    SceneLayersinfos(const QString &assetName, SceneLayerInfos * layerInfosWidget, QWidget * parent = nullptr);
     ~SceneLayersinfos();
 
     inline SceneData & getSceneData(){return m_datas;}
@@ -37,6 +38,8 @@ private:
 
     SceneData m_datas;
     QString m_assetName;
+
+    SceneLayerInfos* m_layerInfosWidget;
 
     EventHolder<SaveEvent> saveHolder;
 
