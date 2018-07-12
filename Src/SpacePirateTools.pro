@@ -112,7 +112,8 @@ SOURCES += \
     Scene/scenenode.cpp \
     UI/Scene/scenelayersinfos.cpp \
     UI/Scene/scenelayerinfos.cpp \
-    UI/Scene/scenenodeinfos.cpp
+    UI/Scene/scenenodeinfos.cpp \
+    UI/Scene/addnodedialog.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -229,7 +230,8 @@ HEADERS += \
     Scene/scenenode.h \
     UI/Scene/scenelayersinfos.h \
     UI/Scene/scenelayerinfos.h \
-    UI/Scene/scenenodeinfos.h
+    UI/Scene/scenenodeinfos.h \
+    UI/Scene/addnodedialog.h
 
 CONFIG += c++14
 

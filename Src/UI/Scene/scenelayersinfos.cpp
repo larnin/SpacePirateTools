@@ -117,6 +117,12 @@ void SceneLayersinfos::onColorClicked()
 void SceneLayersinfos::onLayerIndexChange(int index)
 {
     m_currentIndex = index;
+    if(m_layerInfosWidget != nullptr)
+    {
+        if(m_currentIndex >= 0 && m_currentIndex <= int(m_datas.size()))
+            m_layerInfosWidget->setCurrentLayer(&m_datas[m_currentIndex]);
+        else m_layerInfosWidget->setCurrentLayer(nullptr);
+    }
 }
 
 void SceneLayersinfos::onLayerRightClick(QPoint point)

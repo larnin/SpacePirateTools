@@ -1,6 +1,8 @@
 #include "scenelayerinfos.h"
+#include "addnodedialog.h"
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QMenu>
 #include <vector>
 #include <iostream>
 
@@ -17,6 +19,9 @@ SceneLayerInfos::SceneLayerInfos(SceneNodeInfos *nodeWidget, QWidget *parent)
 
     setLayout(layout);
     updateTree();
+
+    m_objects->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_objects, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClick(QPoint)));
 }
 
 void SceneLayerInfos::setCurrentLayer(SceneLayer *layer)
@@ -28,6 +33,7 @@ void SceneLayerInfos::setCurrentLayer(SceneLayer *layer)
 void SceneLayerInfos::updateTree()
 {
     m_objects->clear();
+    m_itemsinfos.clear();
 
     if(m_layer == nullptr)
     {
@@ -64,6 +70,7 @@ void SceneLayerInfos::updateTree()
             {
                 items[i] = new QTreeWidgetItem(m_objects);
                 items[i]->setText(0, obj->name);
+                m_itemsinfos.push_back({items[i], obj.get()});
                 continue;
             }
             unsigned int parentIndex = m_layer->indexOf((*m_layer)[i]->parent);
@@ -74,6 +81,45 @@ void SceneLayerInfos::updateTree()
             }
             items[i] = new QTreeWidgetItem(items[parentIndex]);
             items[i]->setText(0, obj->name);
+            m_itemsinfos.push_back({items[i], obj.get()});
         }
     }
+}
+
+void SceneLayerInfos::onRightClick(QPoint point)
+{
+    QPoint globalPos(m_objects->viewport()->mapToGlobal(point));
+
+    QMenu menu;
+    QAction *aDel(nullptr);
+    QAction *aAddHere(menu.addAction("Ajouter ici"));
+    QAction *addRoot(menu.addAction("Ajouter racine"));
+
+    auto item = m_objects->currentItem();
+    if(item != nullptr)
+        aDel = menu.addAction("Supprimer");
+
+    QAction* action = menu.exec(globalPos);
+    if(action == nullptr)
+        return;
+
+    if(action == aDel)
+        removeElement(item);
+
+    if(action == aAddHere)
+        addElement(item);
+
+    if(action == addRoot)
+        addElement(nullptr);
+}
+
+void SceneLayerInfos::removeElement(QTreeWidgetItem * widget)
+{
+
+}
+
+void SceneLayerInfos::addElement(QTreeWidgetItem * parent)
+{
+    bool ok = false;
+    AddNodeDialog::getNewAsset(this, &ok);
 }
