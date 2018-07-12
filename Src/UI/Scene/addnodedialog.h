@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QComboBox>
+#include <QLineEdit>
 #include <QString>
 
 class AddNodeDialog : public QDialog
@@ -14,6 +15,7 @@ public:
     {
         bool isPrefab;
         QString assetName;
+        QString name;
     };
 
     AddNodeDialog(QWidget * parent = nullptr);
@@ -30,6 +32,7 @@ private:
     void updateAssetBox();
     void updateTypeBox();
 
+    QLineEdit* m_nodeName;
     QComboBox* m_typeBox;
     QComboBox* m_assetBox;
 };

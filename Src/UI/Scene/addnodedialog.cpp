@@ -8,8 +8,12 @@
 AddNodeDialog::AddNodeDialog(QWidget *parent)
     : QDialog(parent)
 {
+    m_nodeName = new QLineEdit();
     m_typeBox = new QComboBox();
     m_assetBox = new QComboBox();
+    QHBoxLayout * nameLayout = new QHBoxLayout();
+    nameLayout->addWidget(new QLabel("Nom : "));
+    nameLayout->addWidget(m_nodeName);
     QHBoxLayout * typeLayout = new QHBoxLayout();
     typeLayout->addWidget(new QLabel("Type d'asset : "));
     typeLayout->addWidget(m_typeBox);
@@ -26,6 +30,8 @@ AddNodeDialog::AddNodeDialog(QWidget *parent)
 
     QVBoxLayout * layout = new QVBoxLayout();
     layout->addWidget(new QLabel("Ajouter un nouveau noeud"));
+    layout->addSpacing(10);
+    layout->addLayout(nameLayout);
     layout->addLayout(typeLayout);
     layout->addLayout(assetLayout);
     layout->addSpacing(10);
@@ -35,6 +41,7 @@ AddNodeDialog::AddNodeDialog(QWidget *parent)
 
     connect(validButton, SIGNAL(clicked(bool)), this, SLOT(accept()));
     connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
+    connect(m_typeBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onTypeAssetChanged()));
 
     updateTypeBox();
     updateAssetBox();
@@ -56,7 +63,7 @@ void AddNodeDialog::updateTypeBox()
 
 AddNodeDialog::ReturnValue AddNodeDialog::get() const
 {
-    return {isPrefabType(), m_assetBox->currentText()};
+    return {isPrefabType(), m_assetBox->currentText(), m_nodeName->text()};
 }
 
 AddNodeDialog::ReturnValue AddNodeDialog::getNewAsset(QWidget* parent, bool *ok)

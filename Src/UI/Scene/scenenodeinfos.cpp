@@ -1,17 +1,21 @@
 #include "scenenodeinfos.h"
 #include "UI/linewidget.h"
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QScrollArea>
 
 SceneNodeInfos::SceneNodeInfos(QWidget *parent)
     : QWidget(parent)
 {
+    m_objectLabel = new QLabel("none");
     m_revertObjectButton = new QPushButton("Revert object");
+    m_prefabLabel = new QLabel("none");
     m_revertPrefabButton = new QPushButton("Revert prefab");
-    QHBoxLayout * revertLayout = new QHBoxLayout();
-    revertLayout->addWidget(m_revertObjectButton);
-    revertLayout->addWidget(m_revertPrefabButton);
+    QHBoxLayout * revertObjectLayout = new QHBoxLayout();
+    revertObjectLayout->addWidget(m_objectLabel);
+    revertObjectLayout->addWidget(m_revertObjectButton);
+    QHBoxLayout * revertPrefabLayout = new QHBoxLayout();
+    revertPrefabLayout->addWidget(m_prefabLabel);
+    revertPrefabLayout->addWidget(m_revertPrefabButton);
 
     m_nameWidget = new QLineEdit();
     QHBoxLayout* nameLayout = new QHBoxLayout();
@@ -28,9 +32,10 @@ SceneNodeInfos::SceneNodeInfos(QWidget *parent)
     area->setWidget(w);
 
     QVBoxLayout * layout = new QVBoxLayout();
-    layout->addLayout(revertLayout);
-    layout->addLayout(nameLayout);
+    layout->addLayout(revertObjectLayout);
+    layout->addLayout(revertPrefabLayout);
     layout->addWidget(new LineWidget(LineOrientation::Horizontal));
+    layout->addLayout(nameLayout);
     layout->addWidget(area);
 
     setLayout(layout);
@@ -80,10 +85,18 @@ void SceneNodeInfos::updateButtonsState()
     {
         m_revertObjectButton->setEnabled(false);
         m_revertPrefabButton->setEnabled(false);
+        m_objectLabel->setEnabled(false);
+        m_prefabLabel->setEnabled(false);
+        m_objectLabel->setText("none");
+        m_prefabLabel->setText("none");
         return;
     }
     m_revertObjectButton->setEnabled(true);
     m_revertObjectButton->setEnabled(!m_node->prefabName.isEmpty());
+    m_objectLabel->setEnabled(true);
+    m_prefabLabel->setEnabled(!m_node->prefabName.isEmpty());
+    m_objectLabel->setText(m_node->objectName);
+    m_prefabLabel->setText(!m_node->prefabName.isEmpty() ? "none" : m_node->prefabName);
 }
 
 void SceneNodeInfos::updateName()

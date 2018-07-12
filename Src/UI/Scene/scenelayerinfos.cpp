@@ -88,6 +88,9 @@ void SceneLayerInfos::updateTree()
 
 void SceneLayerInfos::onRightClick(QPoint point)
 {
+    if(m_layer == nullptr)
+        return;
+
     QPoint globalPos(m_objects->viewport()->mapToGlobal(point));
 
     QMenu menu;

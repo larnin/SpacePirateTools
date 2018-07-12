@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QLineEdit>
+#include <QLabel>
 #include <vector>
 
 class SceneNodeInfos : public QWidget
@@ -34,7 +35,9 @@ private:
     QVBoxLayout* m_propertiesLayout;
     std::vector<PropertyWidget*> m_properties;
     QPushButton* m_revertObjectButton;
+    QLabel * m_objectLabel;
     QPushButton* m_revertPrefabButton;
+    QLabel * m_prefabLabel;
 };
 
 #endif // SCENENODEINFOS_H
