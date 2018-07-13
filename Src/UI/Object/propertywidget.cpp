@@ -68,13 +68,14 @@ PropertyWidget::PropertyWidget(ObjectProperty &obj, bool forceEdition, QWidget *
     m_valuesLayout = new QVBoxLayout();
     for(auto & v : obj.values)
         add(*v);
-    onFixedSizeChange();
+    if(forceEdition)
+        onFixedSizeChange();
 
     QVBoxLayout * boxLayout = new QVBoxLayout();
     if(forceEdition || !obj.fixedSize)
         boxLayout->addLayout(fullVisibilityLayout);
     boxLayout->addLayout(m_valuesLayout);
-    if(obj.values[0]->type() != ValueType::Transform && (forceEdition || obj.inspectorVisibility != InspectorVisibility::Hidden))
+    if(obj.values[0]->type() != ValueType::Transform && forceEdition)
     {
         QPushButton* removeButton = new QPushButton("Supprimer");
         boxLayout->addWidget(removeButton);

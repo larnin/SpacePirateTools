@@ -44,6 +44,7 @@ public:
 
     inline bool projectLoaded() const { return m_projectLoaded; }
     std::vector<QString> fileInfos(AssetType type) const;
+    bool fileExist(const QString & name, AssetType type) const;
     inline const QString & projectDirectory() const { return m_projectDirectory; }
     void reloadFileList();
 

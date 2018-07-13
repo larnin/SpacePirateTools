@@ -23,13 +23,14 @@ public:
 
 public slots:
     void onRightClick(QPoint point);
+    void onElementSelect(QTreeWidgetItem * item);
 
 private:
     void updateTree();
     void removeElement(QTreeWidgetItem *widget);
     void addElement(QTreeWidgetItem * parent);
 
-    SceneNodeInfos m_nodeWidget;
+    SceneNodeInfos* m_nodeWidget;
 
     SceneLayer * m_layer;
     QTreeWidget * m_objects;

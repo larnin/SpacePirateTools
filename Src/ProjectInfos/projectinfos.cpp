@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QFile>
+#include <algorithm>
 
 const QString optionFilename = "options.json";
 
@@ -46,6 +47,12 @@ std::vector<QString> ProjectInfos::fileInfos(AssetType type) const
             validFiles.push_back(f);
 
     return validFiles;
+}
+
+bool ProjectInfos::fileExist(const QString & name, AssetType type) const
+{
+    auto list = fileInfos(type);
+    return std::find_if(list.begin(), list.end(), [name](const auto & value){return value == name;}) != list.end();
 }
 
 void ProjectInfos::reloadFileList()

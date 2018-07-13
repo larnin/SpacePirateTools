@@ -5,6 +5,7 @@
 #include <QMenu>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 SceneLayerInfos::SceneLayerInfos(SceneNodeInfos *nodeWidget, QWidget *parent)
     : QWidget(parent)
@@ -22,6 +23,7 @@ SceneLayerInfos::SceneLayerInfos(SceneNodeInfos *nodeWidget, QWidget *parent)
 
     m_objects->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_objects, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClick(QPoint)));
+    connect(m_objects, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)), this, SLOT(onElementSelect(QTreeWidgetItem*)));
 }
 
 void SceneLayerInfos::setCurrentLayer(SceneLayer *layer)
@@ -123,6 +125,35 @@ void SceneLayerInfos::removeElement(QTreeWidgetItem * widget)
 
 void SceneLayerInfos::addElement(QTreeWidgetItem * parent)
 {
+    if(m_layer == nullptr)
+        return;
+
     bool ok = false;
-    AddNodeDialog::getNewAsset(this, &ok);
+    auto asset = AddNodeDialog::getNewAsset(this, &ok);
+    if(!ok)
+        return;
+
+    auto item = std::find_if(m_itemsinfos.begin(), m_itemsinfos.end(), [parent](const auto it){return it.item == parent;});
+    auto parentNode = item == m_itemsinfos.end() ? nullptr : item->node;
+
+    if(!asset.isPrefab)
+    {
+        m_layer->emplace_back(std::make_unique<SceneNode>(asset.name, asset.assetName));
+        if(parentNode != nullptr)
+            m_layer->back()->parent = parentNode;
+        updateTree();
+
+        return;
+    }
+
+}
+
+void SceneLayerInfos::onElementSelect(QTreeWidgetItem *item)
+{
+    auto infos = std::find_if(m_itemsinfos.begin(), m_itemsinfos.end(), [item](const auto it){return it.item == item;});
+    if(infos == m_itemsinfos.end())
+        return;
+
+    if(m_nodeWidget != nullptr)
+        m_nodeWidget->setNode(infos->node);
 }

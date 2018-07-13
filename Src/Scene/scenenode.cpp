@@ -2,17 +2,36 @@
 #include "ProjectInfos/projectinfos.h"
 
 SceneNode::SceneNode(const QString &_name, const QString &_objectName)
-    : name(_name)
+    : parent(nullptr)
+    , name(_name)
 {
     loadObject(_objectName);
 }
 
 SceneNode::SceneNode(const QJsonObject & obj)
-    : object(obj["object"].toObject())
+    : parent(nullptr)
+    , object(obj["object"].toObject())
 {
     name = obj["name"].toString();
     objectName = obj["objectName"].toString();
     prefabName = obj["prefabName"].toString();
+}
+
+
+void SceneNode::revertObject(const QString & modelName)
+{
+    if(ProjectInfos::instance().fileExist(modelName, AssetType::Object))
+        return;
+
+    SceneNode tempNode("Temp", modelName);
+
+    //remove everything else the Transform at index 0
+    for(unsigned int i(0) ; i < object.size() ; i++)
+        object.pop_back();
+
+    //temp node vampirisation
+    for(unsigned int i(1) ; i < tempNode.object.size() ; i++)
+        object.emplace_back(std::move(tempNode.object[i]));
 }
 
 QJsonObject SceneNode::save() const

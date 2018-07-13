@@ -12,6 +12,8 @@ public:
     SceneNode(const QString & _name, const QString & _objectName);
     SceneNode(const QJsonObject & obj);
 
+    void revertObject(const QString & modelName);
+
     QJsonObject save() const;
 
     ObjectValueTransform getLocalTransform() const;
