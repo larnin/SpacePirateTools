@@ -7,6 +7,8 @@
 #include <iostream>
 #include <algorithm>
 
+constexpr char* noName = "[NoName]";
+
 SceneLayerInfos::SceneLayerInfos(SceneNodeInfos *nodeWidget, QWidget *parent)
     : QWidget(parent)
     , m_nodeWidget(nodeWidget)
@@ -24,6 +26,12 @@ SceneLayerInfos::SceneLayerInfos(SceneNodeInfos *nodeWidget, QWidget *parent)
     m_objects->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_objects, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClick(QPoint)));
     connect(m_objects, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)), this, SLOT(onElementSelect(QTreeWidgetItem*)));
+
+    if(m_nodeWidget != nullptr)
+    {
+        connect(m_nodeWidget, SIGNAL(requestRevert(SceneNode*)), this, SLOT(onRevertPrefab(SceneNode*)));
+        connect(m_nodeWidget, SIGNAL(nameChanged(SceneNode*)), this, SLOT(onNameChanged(SceneNode*)));
+    }
 }
 
 void SceneLayerInfos::setCurrentLayer(SceneLayer *layer)
@@ -71,7 +79,7 @@ void SceneLayerInfos::updateTree()
             if(obj->parent == nullptr)
             {
                 items[i] = new QTreeWidgetItem(m_objects);
-                items[i]->setText(0, obj->name);
+                items[i]->setText(0, obj->name.isEmpty() ? noName : obj->name);
                 m_itemsinfos.push_back({items[i], obj.get()});
                 continue;
             }
@@ -82,7 +90,7 @@ void SceneLayerInfos::updateTree()
                 continue;
             }
             items[i] = new QTreeWidgetItem(items[parentIndex]);
-            items[i]->setText(0, obj->name);
+            items[i]->setText(0, obj->name.isEmpty() ? noName : obj->name);
             m_itemsinfos.push_back({items[i], obj.get()});
         }
     }
@@ -156,4 +164,16 @@ void SceneLayerInfos::onElementSelect(QTreeWidgetItem *item)
 
     if(m_nodeWidget != nullptr)
         m_nodeWidget->setNode(infos->node);
+}
+
+void SceneLayerInfos::onRevertPrefab(SceneNode * parent)
+{
+
+}
+
+void SceneLayerInfos::onNameChanged(SceneNode * node)
+{
+    auto it = std::find_if(m_itemsinfos.begin(), m_itemsinfos.end(), [node](const auto & it){return it.node == node;});
+    if(it != m_itemsinfos.end())
+        it->item->setText(0, node->name.isEmpty() ? noName : node->name);
 }

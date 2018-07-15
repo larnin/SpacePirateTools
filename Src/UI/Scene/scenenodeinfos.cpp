@@ -1,4 +1,5 @@
 #include "scenenodeinfos.h"
+#include "ProjectInfos/projectinfos.h"
 #include "UI/linewidget.h"
 #include <QHBoxLayout>
 #include <QScrollArea>
@@ -44,6 +45,7 @@ SceneNodeInfos::SceneNodeInfos(QWidget *parent)
 
     connect(m_revertPrefabButton, SIGNAL(clicked(bool)), this, SLOT(onRevertPrefabClick()));
     connect(m_revertObjectButton, SIGNAL(clicked(bool)), this, SLOT(onRevertObjectClick()));
+    connect(m_nameWidget, SIGNAL(editingFinished()), this, SLOT(onNameChanged()));
 }
 
 void SceneNodeInfos::setNode(SceneNode * node)
@@ -113,10 +115,28 @@ void SceneNodeInfos::updateName()
 
 void SceneNodeInfos::onRevertObjectClick()
 {
-    //todo
+    if(!ProjectInfos::instance().fileExist(m_node->objectName, AssetType::Object))
+    {
+        m_node->objectName = "";
+        updateName();
+        return;
+    }
+
+    m_node->revertObject(m_node->objectName);
+    setNode(m_node);
 }
 
 void SceneNodeInfos::onRevertPrefabClick()
 {
-    emit requestRevert(m_node);
+    if(!m_node->prefabName.isEmpty())
+        emit requestRevert(m_node);
+}
+
+void SceneNodeInfos::onNameChanged()
+{
+    if(m_node == nullptr)
+        return;
+
+    m_node->name = m_nameWidget->text();
+    emit nameChanged(m_node);
 }

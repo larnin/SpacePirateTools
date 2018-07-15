@@ -24,6 +24,8 @@ public:
 public slots:
     void onRightClick(QPoint point);
     void onElementSelect(QTreeWidgetItem * item);
+    void onRevertPrefab(SceneNode * parent);
+    void onNameChanged(SceneNode * node);
 
 private:
     void updateTree();

@@ -20,9 +20,11 @@ public slots:
     void setNode(SceneNode * node);
     void onRevertObjectClick();
     void onRevertPrefabClick();
+    void onNameChanged();
 
 signals:
     void requestRevert(SceneNode * n);
+    void nameChanged(SceneNode * n);
 
 private:
     void updatePropertiesList();

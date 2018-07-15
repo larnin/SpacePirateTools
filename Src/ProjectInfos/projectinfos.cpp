@@ -48,7 +48,7 @@ std::vector<QString> ProjectInfos::fileInfos(AssetType type) const
 
     return validFiles;
 }
-
+#include <iostream>
 bool ProjectInfos::fileExist(const QString & name, AssetType type) const
 {
     auto list = fileInfos(type);

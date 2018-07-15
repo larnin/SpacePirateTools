@@ -20,7 +20,7 @@ SceneNode::SceneNode(const QJsonObject & obj)
 
 void SceneNode::revertObject(const QString & modelName)
 {
-    if(ProjectInfos::instance().fileExist(modelName, AssetType::Object))
+    if(!ProjectInfos::instance().fileExist(modelName, AssetType::Object))
         return;
 
     SceneNode tempNode("Temp", modelName);
