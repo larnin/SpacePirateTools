@@ -58,10 +58,12 @@ void SceneLayer::load(const QJsonObject & obj)
         auto parent = index[1].toInt();
 
         if(current >= 0 && parent >= 0 && current < int(size()) && parent < int(size()) && current != parent)
+        {
             (*this)[current]->parent = (*this)[parent].get();
+            (*this)[parent]->childrens.push_back((*this)[current].get());
+        }
     }
 }
-
 
 unsigned int SceneLayer::indexOf(SceneNode * node) const
 {

@@ -93,12 +93,12 @@ void SceneNodeInfos::updateButtonsState()
         m_prefabLabel->setText("none");
         return;
     }
-    m_revertObjectButton->setEnabled(true);
     m_revertObjectButton->setEnabled(!m_node->objectName.isEmpty());
+    m_revertPrefabButton->setEnabled(!m_node->prefabName.isEmpty());
     m_objectLabel->setEnabled(true);
     m_prefabLabel->setEnabled(!m_node->prefabName.isEmpty());
     m_objectLabel->setText(m_node->objectName);
-    m_prefabLabel->setText(!m_node->prefabName.isEmpty() ? "none" : m_node->prefabName);
+    m_prefabLabel->setText(m_node->prefabName.isEmpty() ? "none" : m_node->prefabName);
 }
 
 void SceneNodeInfos::updateName()

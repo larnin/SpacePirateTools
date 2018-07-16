@@ -22,7 +22,7 @@ public:
     void loadObject(const QString & _objectName);
 
     SceneNode * parent;
-    std::vector<SceneNode> * childrens;
+    std::vector<SceneNode*> childrens;
 
     ObjectData object;
 

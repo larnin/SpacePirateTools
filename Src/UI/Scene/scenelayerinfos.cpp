@@ -1,13 +1,13 @@
 #include "scenelayerinfos.h"
 #include "addnodedialog.h"
+#include "Scene/scenedata.h"
+#include "ProjectInfos/projectinfos.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QMenu>
 #include <vector>
 #include <iostream>
 #include <algorithm>
-
-constexpr char* noName = "[NoName]";
 
 SceneLayerInfos::SceneLayerInfos(SceneNodeInfos *nodeWidget, QWidget *parent)
     : QWidget(parent)
@@ -79,7 +79,7 @@ void SceneLayerInfos::updateTree()
             if(obj->parent == nullptr)
             {
                 items[i] = new QTreeWidgetItem(m_objects);
-                items[i]->setText(0, obj->name.isEmpty() ? noName : obj->name);
+                items[i]->setText(0, formatedName(obj.get()));
                 m_itemsinfos.push_back({items[i], obj.get()});
                 continue;
             }
@@ -90,7 +90,7 @@ void SceneLayerInfos::updateTree()
                 continue;
             }
             items[i] = new QTreeWidgetItem(items[parentIndex]);
-            items[i]->setText(0, obj->name.isEmpty() ? noName : obj->name);
+            items[i]->setText(0, formatedName(obj.get()));
             m_itemsinfos.push_back({items[i], obj.get()});
         }
     }
@@ -154,6 +154,18 @@ void SceneLayerInfos::addElement(QTreeWidgetItem * parent)
         return;
     }
 
+    auto prefabInfos = SceneData(ProjectInfos::instance().fullFileName(asset.assetName, AssetType::Scene)).asPrefab();
+    if(prefabInfos.empty())
+        return;
+
+    std::cout << "S " <<  prefabInfos.size() << std::endl;
+
+    prefabInfos.front()->parent = parentNode;
+    prefabInfos.front()->prefabName = asset.assetName;
+    prefabInfos.front()->name = asset.name;
+    for(auto & node : prefabInfos)
+        m_layer->emplace_back(std::move(node));
+    updateTree();
 }
 
 void SceneLayerInfos::onElementSelect(QTreeWidgetItem *item)
@@ -175,5 +187,17 @@ void SceneLayerInfos::onNameChanged(SceneNode * node)
 {
     auto it = std::find_if(m_itemsinfos.begin(), m_itemsinfos.end(), [node](const auto & it){return it.node == node;});
     if(it != m_itemsinfos.end())
-        it->item->setText(0, node->name.isEmpty() ? noName : node->name);
+        it->item->setText(0, formatedName(node));
+}
+
+
+QString SceneLayerInfos::formatedName(SceneNode * node) const
+{
+    QString name;
+    if(node->name.isEmpty())
+        name = "[noName]";
+    else name = node->name;
+    if(!node->prefabName.isEmpty())
+        name = "[p]" + name;
+    return name;
 }

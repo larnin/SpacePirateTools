@@ -29,8 +29,12 @@ public:
 
     sf::Color backgroundColor;
 
+    std::vector<std::unique_ptr<SceneNode>> asPrefab();
+
 private:
     void load(const QString & fileName);
+
+    void addNodeAndChildrens(SceneNode * node, SceneLayer & layer, std::vector<std::unique_ptr<SceneNode>> & vect);
 };
 
 #endif // SCENEDATA_H
