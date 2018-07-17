@@ -58,21 +58,17 @@ void SceneData::load(const QString & fileName)
     for(const auto & l : obj["layers"].toArray())
         emplace_back(l.toObject());
 }
-#include <iostream>
+
 std::vector<std::unique_ptr<SceneNode>> SceneData::asPrefab()
 {
-    std::cout << "1" << std::endl;
     if(empty())
         return {};
-std::cout << "2" << std::endl;
     auto & layer = (*this)[0];
     if(layer.empty())
         return {};
-std::cout << "3" << std::endl;
     auto parent = std::find_if(layer.begin(), layer.end(), [](const auto & node){return node->parent == nullptr;});
     if(parent == layer.end())
         return {};
-std::cout << "4 " + (*parent)->name.toStdString() << std::endl;
     std::vector<std::unique_ptr<SceneNode>> vect;
     addNodeAndChildrens(parent->get(), layer, vect);
     return vect;
@@ -80,7 +76,6 @@ std::cout << "4 " + (*parent)->name.toStdString() << std::endl;
 
 void SceneData::addNodeAndChildrens(SceneNode * node, SceneLayer & layer, std::vector<std::unique_ptr<SceneNode>> & vect)
 {
-    std::cout << node->name.toStdString() << " " << node->childrens.size() << std::endl;
     auto index = layer.indexOf(node);
     if(index >= layer.size())
             return;

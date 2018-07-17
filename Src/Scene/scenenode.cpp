@@ -23,15 +23,19 @@ void SceneNode::revertObject(const QString & modelName)
     if(!ProjectInfos::instance().fileExist(modelName, AssetType::Object))
         return;
 
-    SceneNode tempNode("Temp", modelName);
+    SceneNode temp("Temp", modelName);
+    revertObject(temp);
+}
 
+void SceneNode::revertObject(SceneNode & node)
+{
     //remove everything else the Transform at index 0
     for(unsigned int i(0) ; i < object.size() ; i++)
         object.pop_back();
 
     //temp node vampirisation
-    for(unsigned int i(1) ; i < tempNode.object.size() ; i++)
-        object.emplace_back(std::move(tempNode.object[i]));
+    for(unsigned int i(1) ; i < node.object.size() ; i++)
+        object.emplace_back(std::move(node.object[i]));
 }
 
 QJsonObject SceneNode::save() const

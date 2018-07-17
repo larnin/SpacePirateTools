@@ -5,9 +5,11 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QMenu>
+#include <QMessageBox>
 #include <vector>
-#include <iostream>
 #include <algorithm>
+#include <functional>
+#include <iostream>
 
 SceneLayerInfos::SceneLayerInfos(SceneNodeInfos *nodeWidget, QWidget *parent)
     : QWidget(parent)
@@ -158,8 +160,6 @@ void SceneLayerInfos::addElement(QTreeWidgetItem * parent)
     if(prefabInfos.empty())
         return;
 
-    std::cout << "S " <<  prefabInfos.size() << std::endl;
-
     prefabInfos.front()->parent = parentNode;
     prefabInfos.front()->prefabName = asset.assetName;
     prefabInfos.front()->name = asset.name;
@@ -178,9 +178,55 @@ void SceneLayerInfos::onElementSelect(QTreeWidgetItem *item)
         m_nodeWidget->setNode(infos->node);
 }
 
+void removeIterativeNode(SceneLayer & layer, SceneNode * node)
+{
+    for(auto n : node->childrens)
+        removeIterativeNode(layer, n);
+
+    auto index = layer.indexOf(node);
+    if(index >= layer.size())
+        return;
+    layer[index].reset();
+}
+
 void SceneLayerInfos::onRevertPrefab(SceneNode * parent)
 {
+    auto answer = QMessageBox::question(this, "Reinitialiser " + parent->name + " ?", "Etes vous sur de vouloir réinitialiser " + parent->name + " vers " + parent->prefabName + " ?\n" + "Toute sa hierarchie enfant sera perdue.");
+    if(answer != QMessageBox::Yes)
+        return;
 
+    auto prefabInfos = SceneData(ProjectInfos::instance().fullFileName(parent->prefabName, AssetType::Scene)).asPrefab();
+    if(prefabInfos.empty())
+    {
+        parent->prefabName = "";
+        if(m_nodeWidget != nullptr)
+            m_nodeWidget->setNode(parent);
+        updateTree();
+        return;
+    }
+
+    for(auto n : parent->childrens)
+        removeIterativeNode(*m_layer, n);
+
+    m_layer->erase(std::remove_if(m_layer->begin(), m_layer->end(), [](const auto & node){return !node;}), m_layer->end());
+
+    parent->revertObject(*(prefabInfos[0]));
+    parent->childrens.clear();
+
+    for(unsigned int i(1) ; i < prefabInfos.size() ; i++)
+    {
+        auto & n(prefabInfos[i]);
+        if(n->parent == prefabInfos[0].get())
+        {
+            n->parent = parent;
+            parent->childrens.push_back(n.get());
+        }
+        m_layer->push_back(std::move(n));
+    }
+
+    if(m_nodeWidget != nullptr)
+        m_nodeWidget->setNode(parent);
+    updateTree();
 }
 
 void SceneLayerInfos::onNameChanged(SceneNode * node)
@@ -189,7 +235,6 @@ void SceneLayerInfos::onNameChanged(SceneNode * node)
     if(it != m_itemsinfos.end())
         it->item->setText(0, formatedName(node));
 }
-
 
 QString SceneLayerInfos::formatedName(SceneNode * node) const
 {

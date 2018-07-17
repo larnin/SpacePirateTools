@@ -13,6 +13,7 @@ public:
     SceneNode(const QJsonObject & obj);
 
     void revertObject(const QString & modelName);
+    void revertObject(SceneNode & node);
 
     QJsonObject save() const;
 
