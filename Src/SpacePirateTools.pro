@@ -231,7 +231,8 @@ HEADERS += \
     UI/Scene/scenelayersinfos.h \
     UI/Scene/scenelayerinfos.h \
     UI/Scene/scenenodeinfos.h \
-    UI/Scene/addnodedialog.h
+    UI/Scene/addnodedialog.h \
+    Events/Args/closeressourceevent.h
 
 CONFIG += c++14
 

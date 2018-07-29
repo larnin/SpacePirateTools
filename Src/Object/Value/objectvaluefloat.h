@@ -8,6 +8,9 @@ class ObjectValueFloat : public ObjectValueBase
 public:
     ObjectValueFloat();
     ObjectValueFloat(const QJsonObject & obj);
+    ObjectValueFloat(const ObjectValueFloat &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueFloat>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

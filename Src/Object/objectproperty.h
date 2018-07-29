@@ -35,6 +35,8 @@ public:
     ObjectProperty(ObjectProperty &&) = default;
     ObjectProperty & operator=(ObjectProperty &&) = default;
 
+    std::unique_ptr<ObjectProperty> clone() const;
+
     QString name;
     std::vector<std::unique_ptr<ObjectValueBase>> values;
     InspectorVisibility inspectorVisibility;

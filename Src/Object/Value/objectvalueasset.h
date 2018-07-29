@@ -10,6 +10,9 @@ class ObjectValueAsset : public ObjectValueBase
 public:
     ObjectValueAsset(AssetType type);
     ObjectValueAsset(const QJsonObject & obj);
+    ObjectValueAsset(const ObjectValueAsset &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueAsset>(*this); }
 
     inline AssetType getAssetType() const { return m_type; }
 

@@ -8,6 +8,9 @@ class ObjectValueRigidbody : public ObjectValueBase
 public:
     ObjectValueRigidbody();
     ObjectValueRigidbody(const QJsonObject & obj);
+    ObjectValueRigidbody(const ObjectValueRigidbody &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueRigidbody>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

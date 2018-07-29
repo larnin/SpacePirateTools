@@ -2,10 +2,14 @@
 #include "addnodedialog.h"
 #include "Scene/scenedata.h"
 #include "ProjectInfos/projectinfos.h"
+#include "Events/Event.h"
+#include "Events/Args/addedfileevent.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QMenu>
 #include <QMessageBox>
+#include <QInputDialog>
+#include <QFile>
 #include <vector>
 #include <algorithm>
 #include <functional>
@@ -107,12 +111,18 @@ void SceneLayerInfos::onRightClick(QPoint point)
 
     QMenu menu;
     QAction *aDel(nullptr);
+    QAction *aNewObject(nullptr);
+    QAction *aNewPrefab(nullptr);
     QAction *aAddHere(menu.addAction("Ajouter ici"));
     QAction *addRoot(menu.addAction("Ajouter racine"));
 
     auto item = m_objects->currentItem();
     if(item != nullptr)
+    {
         aDel = menu.addAction("Supprimer");
+        aNewObject = menu.addAction("Vers nouvel objet");
+        aNewPrefab = menu.addAction("Vers nouveau prefab");
+    }
 
     QAction* action = menu.exec(globalPos);
     if(action == nullptr)
@@ -126,11 +136,40 @@ void SceneLayerInfos::onRightClick(QPoint point)
 
     if(action == addRoot)
         addElement(nullptr);
+
+    if(action == aNewObject)
+        createObject(item);
+
+    if(action == aNewPrefab)
+        createPrefab(item);
+}
+
+void removeRecursive(SceneLayer & layer, SceneNode * node)
+{
+    for(auto item : node->childrens)
+        removeRecursive(layer, item);
+
+    if(node->parent != nullptr)
+    {
+        auto& pChilds = node->parent->childrens;
+        pChilds.erase(std::remove_if(pChilds.begin(), pChilds.end(), [node](const auto & n){return n == node;}), pChilds.end());
+    }
+
+    auto index = layer.indexOf(node);
+    if(index < layer.size())
+        layer[index].reset();
 }
 
 void SceneLayerInfos::removeElement(QTreeWidgetItem * widget)
 {
+    auto item = std::find_if(m_itemsinfos.begin(), m_itemsinfos.end(), [widget](const auto it){return it.item == widget;});
+    if(item ==  m_itemsinfos.end())
+        return;
 
+    removeRecursive(*m_layer, item->node);
+    m_layer->erase(std::remove_if(m_layer->begin(), m_layer->end(), [](const auto & n){return !n;}), m_layer->end());
+
+    updateTree();
 }
 
 void SceneLayerInfos::addElement(QTreeWidgetItem * parent)
@@ -168,6 +207,113 @@ void SceneLayerInfos::addElement(QTreeWidgetItem * parent)
     updateTree();
 }
 
+void SceneLayerInfos::createObject(QTreeWidgetItem * widget)
+{
+    auto infos = std::find_if(m_itemsinfos.begin(), m_itemsinfos.end(), [widget](const auto it){return it.item == widget;});
+    if(infos == m_itemsinfos.end())
+        return;
+
+    bool ok;
+    QString name = QInputDialog::getText(this, "Nouvel objet", "Indiquez le nom du nouvel objet", QLineEdit::Normal, infos->node->objectName, &ok);
+    if(name.isEmpty())
+        return;
+
+    QString extension = assetTypeExtension(AssetType::Object);
+    if(!name.endsWith(extension))
+    {
+        if(!name.endsWith('.'))
+            name += '.';
+        name += extension;
+    }
+
+    auto fullName = ProjectInfos::instance().fullFileName(name, AssetType::Object);
+    if(QFile::exists(fullName))
+    {
+        auto answer = QMessageBox::question(this, "Ecraser " + name, "L'objet " + name + " existe déja.\nVoulez vous l'écraser ?");
+        if(answer != QMessageBox::Yes)
+            return;
+    }
+    else
+    {
+        QFile file(fullName);
+        if(!file.open(QIODevice::WriteOnly))
+        {
+            QMessageBox::critical(this, "Erreur creation", "Impossible de créer la ressource demandée");
+            return;
+        }
+    }
+
+    infos->node->objectName = name;
+    infos->node->object.save(fullName);
+
+    if(m_nodeWidget != nullptr)
+        m_nodeWidget->updateFields();
+
+    Event<AddedFileEvent>::send({fullName});
+}
+
+void cloneIterative(SceneLayer & layer, SceneNode * node, SceneNode * parent)
+{
+    layer.push_back(node->clone());
+    SceneNode * pn = layer.back().get();
+    pn->parent = parent;
+    if(parent != nullptr)
+        parent->childrens.push_back(pn);
+    for(const auto & n : node->childrens)
+        cloneIterative(layer, n, pn);
+}
+
+void SceneLayerInfos::createPrefab(QTreeWidgetItem * widget)
+{
+    auto infos = std::find_if(m_itemsinfos.begin(), m_itemsinfos.end(), [widget](const auto it){return it.item == widget;});
+    if(infos == m_itemsinfos.end())
+        return;
+
+    bool ok;
+    QString name = QInputDialog::getText(this, "Nouveau prefab", "Indiquez le nom du nouveau prefab", QLineEdit::Normal, infos->node->prefabName, &ok);
+    if(name.isEmpty())
+        return;
+
+    QString extension = assetTypeExtension(AssetType::Scene);
+    if(!name.endsWith(extension))
+    {
+        if(!name.endsWith('.'))
+            name += '.';
+        name += extension;
+    }
+
+    auto fullName = ProjectInfos::instance().fullFileName(name, AssetType::Scene);
+    if(QFile::exists(fullName))
+    {
+        auto answer = QMessageBox::question(this, "Ecraser " + name, "Le prefab " + name + " existe déja.\nVoulez vous l'écraser ?");
+        if(answer != QMessageBox::Yes)
+            return;
+    }
+    else
+    {
+        QFile file(fullName);
+        if(!file.open(QIODevice::WriteOnly))
+        {
+            QMessageBox::critical(this, "Erreur creation", "Impossible de créer la ressource demandée");
+            return;
+        }
+    }
+
+    SceneData prefab;
+    prefab.push_back(SceneLayer("Prefab"));
+    auto & prefabLayer = prefab.front();
+    infos->node->prefabName = "";
+    cloneIterative(prefabLayer, infos->node, nullptr);
+    infos->node->prefabName = name;
+
+    prefab.save(fullName);
+
+    if(m_nodeWidget != nullptr)
+        m_nodeWidget->updateFields();
+
+    Event<AddedFileEvent>::send({fullName});
+}
+
 void SceneLayerInfos::onElementSelect(QTreeWidgetItem *item)
 {
     auto infos = std::find_if(m_itemsinfos.begin(), m_itemsinfos.end(), [item](const auto it){return it.item == item;});
@@ -176,17 +322,6 @@ void SceneLayerInfos::onElementSelect(QTreeWidgetItem *item)
 
     if(m_nodeWidget != nullptr)
         m_nodeWidget->setNode(infos->node);
-}
-
-void removeIterativeNode(SceneLayer & layer, SceneNode * node)
-{
-    for(auto n : node->childrens)
-        removeIterativeNode(layer, n);
-
-    auto index = layer.indexOf(node);
-    if(index >= layer.size())
-        return;
-    layer[index].reset();
 }
 
 void SceneLayerInfos::onRevertPrefab(SceneNode * parent)
@@ -206,7 +341,7 @@ void SceneLayerInfos::onRevertPrefab(SceneNode * parent)
     }
 
     for(auto n : parent->childrens)
-        removeIterativeNode(*m_layer, n);
+        removeRecursive(*m_layer, n);
 
     m_layer->erase(std::remove_if(m_layer->begin(), m_layer->end(), [](const auto & node){return !node;}), m_layer->end());
 

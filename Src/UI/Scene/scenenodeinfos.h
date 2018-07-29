@@ -18,6 +18,7 @@ public:
 
 public slots:
     void setNode(SceneNode * node);
+    void updateFields();
     void onRevertObjectClick();
     void onRevertPrefabClick();
     void onNameChanged();

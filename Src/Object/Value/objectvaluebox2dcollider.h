@@ -9,6 +9,9 @@ class ObjectValueBox2DCollider : public ObjectValueBase
 public:
     ObjectValueBox2DCollider();
     ObjectValueBox2DCollider(const QJsonObject & obj);
+    ObjectValueBox2DCollider(const ObjectValueBox2DCollider &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueBox2DCollider>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

@@ -9,6 +9,9 @@ class ObjectValueText : public ObjectValueBase
 public:
     ObjectValueText();
     ObjectValueText(const QJsonObject & obj);
+    ObjectValueText(const ObjectValueText &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueText>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

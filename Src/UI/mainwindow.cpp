@@ -32,7 +32,8 @@ const QString defaultName = "Best editor ever";
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , m_openRessourceHolder(Event<OpenRessourceEvent>::connect([this](const auto & e){onOpenRessource(e);}))
+    , m_openRessourceHolder(Event<OpenRessourceEvent>::connect([this](const auto & e){onOpenRessource(e.ressourceDirName, e.assetType);}))
+    , m_closeRessourceHolder(Event<CloseRessourceEvent>::connect([this](const auto & e){onCloseRessource(e.ressourceDirName);}))
 {
     createMenus();
     createDocks();
@@ -209,16 +210,17 @@ void MainWindow::openProject(const QString & dir)
         Event<ProjectLoadedEvent>::send({});
 }
 
-
-void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
+void MainWindow::onOpenRessource(const QString & ressourceDirName, AssetType assetType)
 {
     clearDocks();
 
-    setWindowTitle(e.ressourceDirName);
+    setWindowTitle(ressourceDirName);
 
-    auto fullName = ProjectInfos::instance().projectDirectory() + "/" + e.ressourceDirName;
+    auto fullName = ProjectInfos::instance().projectDirectory() + "/" + ressourceDirName;
 
-    switch(e.assetType)
+    m_currentRessource = ressourceDirName;
+
+    switch(assetType)
     {
     case AssetType::Animation:
         openAnimation(fullName);
@@ -245,6 +247,12 @@ void MainWindow::onOpenRessource(const OpenRessourceEvent & e)
         closeCurrentWidget();
         break;
     }
+}
+
+void MainWindow::onCloseRessource(const QString & ressourceDirName)
+{
+    if(m_currentRessource == ressourceDirName)
+        closeCurrentWidget();
 }
 
 void MainWindow::closeCurrentWidget()

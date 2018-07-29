@@ -1,10 +1,7 @@
 #include "fileexplorer.h"
 #include "ProjectInfos/assettype.h"
-#include "ProjectInfos/projectinfos.h"
 #include "Events/Args/openressourceevent.h"
-#include "Events/Args/renamedfileevent.h"
-#include "Events/Args/removedfileevent.h"
-#include "Events/Args/addedfileevent.h"
+#include "Events/Args/closeressourceevent.h"
 #include "enumiterators.h"
 #include <QVBoxLayout>
 #include <QMessageBox>
@@ -16,6 +13,9 @@
 FileExplorer::FileExplorer(QWidget *parent)
     : QWidget(parent)
     , m_projectLoadedHolder(Event<ProjectLoadedEvent>::connect([this](const auto & v){onProjectLoaded(v);}))
+    , m_addedFileHolder(Event<AddedFileEvent>::connect([this](const auto &){onFileChange();}))
+    , m_removedFileHolder(Event<RemovedFileEvent>::connect([this](const auto &){onFileChange();}))
+    , m_renamedFileHolder(Event<RenamedFileEvent>::connect([this](const auto &){onFileChange();}))
 {
     m_tree = new QTreeWidget();
     m_tree->setHeaderHidden(true);
@@ -77,6 +77,12 @@ void FileExplorer::onItemDoubleClicked(QTreeWidgetItem *item, int column)
 
 void FileExplorer::onProjectLoaded(const ProjectLoadedEvent &)
 {
+    updateTree();
+}
+
+void FileExplorer::onFileChange()
+{
+    ProjectInfos::instance().reloadFileList();
     updateTree();
 }
 
@@ -150,9 +156,6 @@ void FileExplorer::rename(QTreeWidgetItem *item)
         return;
     }
 
-    ProjectInfos::instance().reloadFileList();
-    updateTree();
-
     Event<RenamedFileEvent>::send(RenamedFileEvent{oldName, newName});
 }
 
@@ -166,10 +169,8 @@ void FileExplorer::del(QTreeWidgetItem *item)
 
     QFile::remove(ProjectInfos::instance().projectDirectory() + "/" + fullName);
 
-    ProjectInfos::instance().reloadFileList();
-    updateTree();
-
     Event<RemovedFileEvent>::send({fullName});
+    Event<CloseRessourceEvent>::send({getType(item), fullName});
 }
 
 void FileExplorer::add(AssetType type)
@@ -202,9 +203,6 @@ void FileExplorer::add(AssetType type)
         return;
     }
     file.close();
-
-    ProjectInfos::instance().reloadFileList();
-    updateTree();
 
     Event<AddedFileEvent>::send({fullName});
     Event<OpenRessourceEvent>::send({type, fullName});
@@ -249,9 +247,6 @@ void FileExplorer::import()
         QMessageBox::critical(this, "Erreur importer", "une erreur est survenue lors de l'importation de la ressource.");
         return;
     }
-
-    ProjectInfos::instance().reloadFileList();
-    updateTree();
 
     Event<AddedFileEvent>::send({fullName});
     if(assetCanBeCreated(assetType))

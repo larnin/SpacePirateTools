@@ -56,6 +56,11 @@ void SceneNodeInfos::setNode(SceneNode * node)
     updateName();
 }
 
+void SceneNodeInfos::updateFields()
+{
+    setNode(m_node);
+}
+
 void SceneNodeInfos::updatePropertiesList()
 {
     clearPropertiesList();

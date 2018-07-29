@@ -9,6 +9,9 @@ class ObjectValueCircleCollider : public ObjectValueBase
 public:
     ObjectValueCircleCollider();
     ObjectValueCircleCollider(const QJsonObject & obj);
+    ObjectValueCircleCollider(const ObjectValueCircleCollider &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueCircleCollider>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

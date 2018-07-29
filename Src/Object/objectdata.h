@@ -14,6 +14,10 @@ public:
     ObjectData();
     ObjectData(const QString & fileName);
     ObjectData(const QJsonObject & obj);
+    ObjectData(const ObjectData & data);
+    ObjectData & operator=(const ObjectData & data) = delete;
+    ObjectData(ObjectData &&) = default;
+    ObjectData & operator =(ObjectData &&) = default;
 
     using std::vector<std::unique_ptr<ObjectProperty>>::push_back;
     using std::vector<std::unique_ptr<ObjectProperty>>::pop_back;

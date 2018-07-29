@@ -17,6 +17,22 @@ SceneNode::SceneNode(const QJsonObject & obj)
     prefabName = obj["prefabName"].toString();
 }
 
+SceneNode::SceneNode(const ObjectData & _object)
+    : parent(nullptr)
+    , object(_object)
+{
+
+}
+
+std::unique_ptr<SceneNode> SceneNode::clone() const
+{
+    std::unique_ptr<SceneNode> node(std::make_unique<SceneNode>(object));
+    node->name = name;
+    node->objectName = objectName;
+    node->prefabName = prefabName;
+
+    return node;
+}
 
 void SceneNode::revertObject(const QString & modelName)
 {
@@ -70,6 +86,6 @@ ObjectValueTransform SceneNode::getTransform() const
 void SceneNode::loadObject(const QString & _objectName)
 {
     objectName = _objectName;
-    auto fullName = ProjectInfos::instance().projectDirectory() + "/" + assetTypeToString(AssetType::Object) + "/" + objectName;
+    auto fullName = ProjectInfos::instance().fullFileName(objectName, AssetType::Object);
     object = ObjectData(fullName);
 }

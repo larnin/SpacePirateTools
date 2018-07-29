@@ -9,6 +9,9 @@ class ObjectValueColor : public ObjectValueBase
 public:
     ObjectValueColor();
     ObjectValueColor(const QJsonObject & obj);
+    ObjectValueColor(const ObjectValueColor &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueColor>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

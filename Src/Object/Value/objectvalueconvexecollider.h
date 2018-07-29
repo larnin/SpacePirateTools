@@ -10,6 +10,9 @@ class ObjectValueConvexeCollider : public ObjectValueBase
 public:
     ObjectValueConvexeCollider();
     ObjectValueConvexeCollider(const QJsonObject & obj);
+    ObjectValueConvexeCollider(const ObjectValueConvexeCollider &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueConvexeCollider>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

@@ -1,11 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "Events/Event.h"
+#include "Events/Args/openressourceevent.h"
+#include "Events/Args/closeressourceevent.h"
 #include <QDockWidget>
 #include <QMainWindow>
 #include <vector>
-#include "Events/Event.h"
-#include "Events/Args/openressourceevent.h"
 
 class MainWindow : public QMainWindow
 {
@@ -47,7 +48,8 @@ private:
     void openObject(const QString & filename);
     void openTilemap(const QString & filename);
 
-    void onOpenRessource(const OpenRessourceEvent & e);
+    void onOpenRessource(const QString & ressourceDirName, AssetType assetType);
+    void onCloseRessource(const QString & ressourceDirName);
     void clearDocks();
 
 
@@ -55,6 +57,10 @@ private:
     std::vector<QDockWidget*> m_assetDocks;
 
     EventHolder<OpenRessourceEvent> m_openRessourceHolder;
+    EventHolder<CloseRessourceEvent> m_closeRessourceHolder;
+
+
+    QString m_currentRessource;
 };
 
 #endif // MAINWINDOW_H

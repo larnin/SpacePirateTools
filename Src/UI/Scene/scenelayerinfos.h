@@ -31,6 +31,8 @@ private:
     void updateTree();
     void removeElement(QTreeWidgetItem *widget);
     void addElement(QTreeWidgetItem * parent);
+    void createObject(QTreeWidgetItem * widget);
+    void createPrefab(QTreeWidgetItem * widget);
     QString formatedName(SceneNode * node) const;
 
     SceneNodeInfos* m_nodeWidget;

@@ -34,3 +34,17 @@ QString sceneVisibilityToString(SceneVisibility v)
     assert(false);
     return "";
 }
+
+std::unique_ptr<ObjectProperty> ObjectProperty::clone() const
+{
+    std::unique_ptr<ObjectProperty> property(std::make_unique<ObjectProperty>());
+    property->name = name;
+    property->inspectorVisibility = inspectorVisibility;
+    property->sceneVisibility = sceneVisibility;
+    property->fixedSize = fixedSize;
+
+    for(const auto & v : values)
+        property->values.push_back(v->clone());
+
+    return property;
+}

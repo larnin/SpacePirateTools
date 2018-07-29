@@ -33,6 +33,8 @@ void AnimationData::save(const QString & fileName) const
      obj.insert("frames", frames);
 
      QFile file(fileName);
+     if(!file.exists())
+         return;
      if(!file.open(QIODevice::WriteOnly))
          return;
      file.write(QJsonDocument(obj).toJson(QJsonDocument::Compact));

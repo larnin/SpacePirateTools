@@ -35,8 +35,10 @@ class ObjectValueBase
 {
 public:
     ObjectValueBase(ValueType type);
+    ObjectValueBase(const ObjectValueBase &) = default;
     virtual QString toString() const = 0;
     virtual QWidget* createUi() = 0;
+    virtual std::unique_ptr<ObjectValueBase> clone() const = 0;
 
     QJsonObject save() const;
     inline ValueType type() const { return m_valueType; }

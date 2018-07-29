@@ -2,8 +2,12 @@
 #define FILEEXPLORER_H
 
 #include "ProjectInfos/assettype.h"
+#include "ProjectInfos/projectinfos.h"
 #include "Events/Event.h"
 #include "Events/Args/projectloadedevent.h"
+#include "Events/Args/renamedfileevent.h"
+#include "Events/Args/removedfileevent.h"
+#include "Events/Args/addedfileevent.h"
 #include <QWidget>
 #include <QTreeWidget>
 #include <QString>
@@ -29,6 +33,7 @@ public slots:
 private:
     void updateTree();
     void onProjectLoaded(const ProjectLoadedEvent &);
+    void onFileChange();
 
     void rename(QTreeWidgetItem *item);
     void del(QTreeWidgetItem *item);
@@ -38,6 +43,9 @@ private:
     QTreeWidget* m_tree;
 
     EventHolder<ProjectLoadedEvent> m_projectLoadedHolder;
+    EventHolder<AddedFileEvent> m_addedFileHolder;
+    EventHolder<RemovedFileEvent> m_removedFileHolder;
+    EventHolder<RenamedFileEvent> m_renamedFileHolder;
 };
 
 #endif // FILEEXPLORER_H

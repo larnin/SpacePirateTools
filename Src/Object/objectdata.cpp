@@ -42,9 +42,19 @@ ObjectData::ObjectData(const QJsonObject & obj)
     checkObjectIntegrity();
 }
 
+
+ObjectData::ObjectData(const ObjectData & data)
+    : std::vector<std::unique_ptr<ObjectProperty>>()
+{
+    for(const auto & p : data)
+        push_back(p->clone());
+}
+
 void ObjectData::save(const QString & fileName) const
 {
     QFile file(fileName);
+    if(!file.exists())
+        return;
     if(!file.open(QIODevice::WriteOnly))
         return;
     file.write(QJsonDocument(save()).toJson(QJsonDocument::Compact));

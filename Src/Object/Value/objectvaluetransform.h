@@ -9,6 +9,9 @@ class ObjectValueTransform : public ObjectValueBase
 public:
     ObjectValueTransform();
     ObjectValueTransform(const QJsonObject & obj);
+    ObjectValueTransform(const ObjectValueTransform &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueTransform>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

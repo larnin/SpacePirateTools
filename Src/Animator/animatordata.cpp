@@ -27,6 +27,8 @@ void AnimatorData::save(const QString & fileName) const
     obj.insert("transitions", transitionsArray);
 
     QFile file(fileName);
+    if(!file.exists())
+        return;
     if(!file.open(QIODevice::WriteOnly))
         return;
     file.write(QJsonDocument(obj).toJson(QJsonDocument::Compact));

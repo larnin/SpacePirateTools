@@ -9,6 +9,9 @@ class ObjectValueSpriteRenderer : public ObjectValueBase
 public:
     ObjectValueSpriteRenderer();
     ObjectValueSpriteRenderer(const QJsonObject & obj);
+    ObjectValueSpriteRenderer(const ObjectValueSpriteRenderer &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueSpriteRenderer>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

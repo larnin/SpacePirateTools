@@ -9,6 +9,9 @@ class ObjectValueVector2f : public ObjectValueBase
 public:
     ObjectValueVector2f();
     ObjectValueVector2f(const QJsonObject & obj);
+    ObjectValueVector2f(const ObjectValueVector2f &) = default;
+
+    std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueVector2f>(*this); }
 
     QString toString() const override;
     QWidget* createUi() override;

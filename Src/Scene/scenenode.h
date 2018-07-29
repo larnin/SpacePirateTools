@@ -11,6 +11,9 @@ class SceneNode
 public:
     SceneNode(const QString & _name, const QString & _objectName);
     SceneNode(const QJsonObject & obj);
+    SceneNode(const ObjectData & _object);
+
+    std::unique_ptr<SceneNode> clone() const;
 
     void revertObject(const QString & modelName);
     void revertObject(SceneNode & node);
@@ -31,6 +34,8 @@ public:
 
     QString objectName;
     QString prefabName;
+
+private:
 };
 
 #endif // SCENENODE_H
