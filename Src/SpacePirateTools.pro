@@ -113,7 +113,9 @@ SOURCES += \
     UI/Scene/scenelayersinfos.cpp \
     UI/Scene/scenelayerinfos.cpp \
     UI/Scene/scenenodeinfos.cpp \
-    UI/Scene/addnodedialog.cpp
+    UI/Scene/addnodedialog.cpp \
+    UI/Scene/selectionmodewidget.cpp \
+    UI/Scene/centralscenewidget.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -232,7 +234,9 @@ HEADERS += \
     UI/Scene/scenelayerinfos.h \
     UI/Scene/scenenodeinfos.h \
     UI/Scene/addnodedialog.h \
-    Events/Args/closeressourceevent.h
+    Events/Args/closeressourceevent.h \
+    UI/Scene/selectionmodewidget.h \
+    UI/Scene/centralscenewidget.h
 
 CONFIG += c++14
 

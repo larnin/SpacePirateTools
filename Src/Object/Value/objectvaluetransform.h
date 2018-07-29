@@ -2,6 +2,7 @@
 #define OBJECTVALUETRANSFORM_H
 
 #include "objectvaluebase.h"
+#include <SFML/Graphics/Transform.hpp>
 #include <SFML/System/Vector2.hpp>
 
 class ObjectValueTransform : public ObjectValueBase
@@ -15,6 +16,8 @@ public:
 
     QString toString() const override;
     QWidget* createUi() override;
+
+    sf::Transform getSFMLLocalTransform() const;
 
     sf::Vector2f position;
     sf::Vector2f scale;

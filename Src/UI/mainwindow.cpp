@@ -22,6 +22,7 @@
 #include "UI/Scene/scenelayersinfos.h"
 #include "UI/Scene/scenelayerinfos.h"
 #include "UI/Scene/scenenodeinfos.h"
+#include "UI/Scene/centralscenewidget.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QFileDialog>
@@ -304,7 +305,9 @@ void MainWindow::openScene(const QString & filename)
     SceneNodeInfos *node = new SceneNodeInfos();
     SceneLayerInfos *layer = new SceneLayerInfos(node);
     SceneLayersinfos *layers = new SceneLayersinfos(filename, layer);
+    CentralSceneWidget *centralScene = new CentralSceneWidget(layers->getSceneData());
 
+    setCentralWidget(centralScene);
     m_assetDocks.push_back(new Dock<SceneLayersinfos>(layers, "Layers", false));
     addDockWidget(Qt::LeftDockWidgetArea, m_assetDocks.back());
     m_assetDocks.push_back(new Dock<SceneLayerInfos>(layer, "Layer", false));

@@ -40,3 +40,9 @@ void ObjectValueTransform::onSave(QJsonObject & obj) const
     obj.insert("sy", scale.y);
     obj.insert("rot", rotation);
 }
+
+sf::Transform ObjectValueTransform::getSFMLLocalTransform() const
+{
+    sf::Transform t;
+    t.translate(position).scale(scale).rotate(rotation);
+}
