@@ -42,6 +42,9 @@ void CentralSceneWidget::OnUpdate()
     drawCurrentLayerPositions();
     drawVisiblelayers();
     drawCurrentLayerGizmos();
+
+    if(m_sceneTool)
+        RenderWindow::draw(*m_sceneTool);
 }
 
 void CentralSceneWidget::wheelEvent(QWheelEvent * event)
@@ -56,31 +59,40 @@ void CentralSceneWidget::wheelEvent(QWheelEvent * event)
 
 void CentralSceneWidget::mouseMoveEvent(QMouseEvent * event)
 {
-    float z(zoom());
-    sf::Vector2i newPos(event->x(), event->y());
-    auto delta = newPos - m_mouseOldPos;
-    m_mouseOldPos = newPos;
-
-    if(m_dragScreen)
+    if(!m_sceneTool || !m_sceneTool->mouseMoveEvent(event))
     {
-        m_center -= sf::Vector2f(delta) / z;
-        rebuildView();
-        return;
+        float z(zoom());
+        sf::Vector2i newPos(event->x(), event->y());
+        auto delta = newPos - m_mouseOldPos;
+        m_mouseOldPos = newPos;
+
+        if(m_dragScreen)
+        {
+            m_center -= sf::Vector2f(delta) / z;
+            rebuildView();
+            return;
+        }
     }
 }
 
 void CentralSceneWidget::mousePressEvent(QMouseEvent * event)
 {
-    m_mouseOldPos = sf::Vector2i(event->x(), event->y());
-    m_mouseStartPos = m_mouseOldPos;
+    if(!m_sceneTool || !m_sceneTool->mousePressEvent(event))
+    {
+        m_mouseOldPos = sf::Vector2i(event->x(), event->y());
+        m_mouseStartPos = m_mouseOldPos;
 
-    if(event->button() == Qt::MiddleButton)
-        m_dragScreen = true;
+        if(event->button() == Qt::MiddleButton)
+            m_dragScreen = true;
+    }
 }
 
-void CentralSceneWidget::mouseReleaseEvent(QMouseEvent *)
+void CentralSceneWidget::mouseReleaseEvent(QMouseEvent * event)
 {
-    m_dragScreen = false;
+    if(!m_sceneTool || !m_sceneTool->mouseReleaseEvent(event))
+    {
+        m_dragScreen = false;
+    }
 }
 
 void CentralSceneWidget::resizeEvent(QResizeEvent * event)

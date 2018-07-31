@@ -4,6 +4,8 @@
 #include "Scene/scenedata.h"
 #include "UI/qsfmlcanvas.h"
 #include "selectionmodewidget.h"
+#include "SceneTools/scenetoolsbase.h"
+#include <memory>
 
 class CentralSceneWidget : public QSFMLCanvas
 {
@@ -27,7 +29,7 @@ protected:
     void wheelEvent(QWheelEvent * event) override;
     void mouseMoveEvent(QMouseEvent * event) override;
     void mousePressEvent(QMouseEvent * event) override;
-    void mouseReleaseEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
     void resizeEvent(QResizeEvent * event) override;
     void keyPressEvent(QKeyEvent * event) override;
 
@@ -54,6 +56,8 @@ private:
 
     int m_currentLayerIndex;
     int m_currentNodeIndex;
+
+    std::unique_ptr<SceneToolsBase> m_sceneTool;
 };
 
 #endif // CENTRALSCENEWIDGET_H

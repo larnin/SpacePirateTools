@@ -8,7 +8,8 @@ enum class SelectionState
 {
     Move,
     Scale,
-    Rotate
+    Rotate,
+    Custom
 };
 
 class SelectionModeWidget : public QWidget
