@@ -13,9 +13,13 @@ public:
 
 public slots:
     void onChangeSelectionState(SelectionState state);
+    void onChangeLayer(int layerIndex);
+    void onChangeNode(int nodeIndex);
 
 signals:
     void selectionStateChanged(SelectionState);
+    void currentNodeChanged(int);
+    void currentNodeMoved();
 
 protected:
     void OnUpdate() override;
@@ -32,6 +36,10 @@ private:
     float zoom();
     void rebuildView();
 
+    void drawCurrentLayerPositions();
+    void drawVisiblelayers();
+    void drawCurrentLayerGizmos();
+
     SceneData & m_data;
 
     SelectionModeWidget * m_selectionWidget;
@@ -43,6 +51,9 @@ private:
     sf::Vector2f m_center;
 
     SelectionState m_selectionState;
+
+    int m_currentLayerIndex;
+    int m_currentNodeIndex;
 };
 
 #endif // CENTRALSCENEWIDGET_H

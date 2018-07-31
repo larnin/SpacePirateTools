@@ -26,6 +26,10 @@ public slots:
     void onElementSelect(QTreeWidgetItem * item);
     void onRevertPrefab(SceneNode * parent);
     void onNameChanged(SceneNode * node);
+    void onCurrentNodeChanged(int index);
+
+signals:
+    void currentNodeChanged(int index);
 
 private:
     void updateTree();

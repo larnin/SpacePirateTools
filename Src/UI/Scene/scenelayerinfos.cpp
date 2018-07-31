@@ -322,6 +322,19 @@ void SceneLayerInfos::onElementSelect(QTreeWidgetItem *item)
 
     if(m_nodeWidget != nullptr)
         m_nodeWidget->setNode(infos->node);
+
+    emit currentNodeChanged(std::distance(m_itemsinfos.begin(), infos));
+}
+
+void SceneLayerInfos::onCurrentNodeChanged(int index)
+{
+    if(index < 0 || index > static_cast<int>(m_itemsinfos.size()))
+    {
+        m_objects->setCurrentItem(nullptr);
+        return;
+    }
+
+    m_objects->setCurrentItem(m_itemsinfos[index].item);
 }
 
 void SceneLayerInfos::onRevertPrefab(SceneNode * parent)

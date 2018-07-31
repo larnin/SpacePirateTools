@@ -70,17 +70,22 @@ ObjectValueTransform SceneNode::getLocalTransform() const
     return object.transform();
 }
 
-ObjectValueTransform SceneNode::getTransform() const
+sf::Transform SceneNode::getSFMLLocalTransform() const
+{
+    return getLocalTransform().getSFMLLocalTransform();
+}
+
+sf::Transform SceneNode::getSFMLTransform() const
 {
     if(parent == nullptr)
-        return object.transform();
+        return  getSFMLLocalTransform();
 
-    auto parentTransform = parent->getTransform();
-    auto transform = object.transform();
+    return parent->getSFMLTransform() * getSFMLLocalTransform();
+}
 
-    //todo child transform transformed with parent transform
-
-    return transform;
+sf::Vector2f SceneNode::getPosition() const
+{
+    return getSFMLTransform().transformPoint(0, 0);
 }
 
 void SceneNode::loadObject(const QString & _objectName)

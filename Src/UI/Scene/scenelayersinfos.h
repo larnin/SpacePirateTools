@@ -25,6 +25,9 @@ public slots:
     void updateGizmos(unsigned int index, bool value);
     void updateVisibility(unsigned int index, bool value);
 
+signals:
+    void currentLayerChanged(int);
+
 private:
     void initializeWidgets();
     void onSave(const SaveEvent &);

@@ -123,6 +123,8 @@ void SceneLayersinfos::onLayerIndexChange(int index)
             m_layerInfosWidget->setCurrentLayer(&m_datas[m_currentIndex]);
         else m_layerInfosWidget->setCurrentLayer(nullptr);
     }
+
+    emit currentLayerChanged(index);
 }
 
 void SceneLayersinfos::onLayerRightClick(QPoint point)

@@ -44,5 +44,6 @@ void ObjectValueTransform::onSave(QJsonObject & obj) const
 sf::Transform ObjectValueTransform::getSFMLLocalTransform() const
 {
     sf::Transform t;
-    t.translate(position).scale(scale).rotate(rotation);
+    t.translate(position).rotate(rotation).scale(scale);
+    return t;
 }

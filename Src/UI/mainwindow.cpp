@@ -307,6 +307,11 @@ void MainWindow::openScene(const QString & filename)
     SceneLayersinfos *layers = new SceneLayersinfos(filename, layer);
     CentralSceneWidget *centralScene = new CentralSceneWidget(layers->getSceneData());
 
+    connect(layers, SIGNAL(currentLayerChanged(int)), centralScene, SLOT(onChangeLayer(int)));
+    connect(layer, SIGNAL(currentNodeChanged(int)), centralScene, SLOT(onChangeNode(int)));
+    connect(centralScene, SIGNAL(currentNodeChanged(int)), layer, SLOT(onCurrentNodeChanged(int)));
+    connect(centralScene, SIGNAL(currentNodeMoved()), node, SLOT(updateFields()));
+
     setCentralWidget(centralScene);
     m_assetDocks.push_back(new Dock<SceneLayersinfos>(layers, "Layers", false));
     addDockWidget(Qt::LeftDockWidgetArea, m_assetDocks.back());

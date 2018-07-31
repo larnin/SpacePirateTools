@@ -1,4 +1,6 @@
 #include "centralscenewidget.h"
+#include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -15,6 +17,8 @@ CentralSceneWidget::CentralSceneWidget(SceneData &data, QWidget *parent)
     , m_zoomLevel(defaultZoomLevel)
     , m_center(0, 0)
     , m_selectionState(SelectionState::Move)
+    , m_currentLayerIndex(-1)
+    , m_currentNodeIndex(-1)
 {
     m_selectionWidget = new SelectionModeWidget();
     QHBoxLayout * hLayout = new QHBoxLayout();
@@ -35,7 +39,9 @@ void CentralSceneWidget::OnUpdate()
 {
     RenderWindow::clear(m_data.backgroundColor);
 
-    //do stuff
+    drawCurrentLayerPositions();
+    drawVisiblelayers();
+    drawCurrentLayerGizmos();
 }
 
 void CentralSceneWidget::wheelEvent(QWheelEvent * event)
@@ -143,3 +149,59 @@ void CentralSceneWidget::onChangeSelectionState(SelectionState state)
     m_selectionState = state;
 }
 
+void CentralSceneWidget::onChangeLayer(int layerIndex)
+{
+    m_currentLayerIndex = layerIndex;
+}
+
+void CentralSceneWidget::onChangeNode(int nodeIndex)
+{
+    m_currentNodeIndex = nodeIndex;
+}
+
+void CentralSceneWidget::drawCurrentLayerPositions()
+{
+    const sf::Color crossColor(100, 100, 100, 150);
+    const int crossSize = 5;
+
+    if(m_currentLayerIndex < 0 || m_currentLayerIndex >= static_cast<int>(m_data.size()))
+        return;
+
+    sf::VertexArray array(sf::PrimitiveType::Lines, 4);
+    array[0].position = sf::Vector2f(-crossSize, 0);
+    array[1].position = sf::Vector2f(crossSize, 0);
+    array[2].position = sf::Vector2f(0, -crossSize);
+    array[3].position = sf::Vector2f(0, crossSize);
+    for(unsigned int i(0) ; i < 4 ; i++)
+        array[i].color = crossColor;
+
+    sf::RenderStates states;
+    SceneLayer & layer = m_data[m_currentLayerIndex];
+
+    for(const auto & n : layer)
+    {
+        states.transform = n->getSFMLTransform();
+        sf::RenderWindow::draw(array, states);
+    }
+}
+
+void CentralSceneWidget::drawVisiblelayers()
+{
+    for(const auto & l : m_data)
+    {
+        if(l.hidden)
+            continue;
+        //draw layer
+    }
+}
+
+void CentralSceneWidget::drawCurrentLayerGizmos()
+{
+    if(m_currentLayerIndex < 0 || m_currentLayerIndex >= static_cast<int>(m_data.size()))
+        return;
+
+    SceneLayer & layer = m_data[m_currentLayerIndex];
+    if(!layer.showGizmos)
+        return;
+    //draw gizmos
+}
