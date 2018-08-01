@@ -20,9 +20,11 @@ public:
 
     QJsonObject save() const;
 
-    ObjectValueTransform getLocalTransform() const;
+    const ObjectValueTransform &getLocalTransform() const;
+    ObjectValueTransform &getLocalTransform();
     sf::Transform getSFMLLocalTransform() const;
     sf::Transform getSFMLTransform() const;
+    sf::Transform getSFMLParentTransform() const;
     sf::Vector2f getPosition() const;
 
 

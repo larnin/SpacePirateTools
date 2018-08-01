@@ -65,7 +65,12 @@ QJsonObject SceneNode::save() const
     return obj;
 }
 
-ObjectValueTransform SceneNode::getLocalTransform() const
+const ObjectValueTransform & SceneNode::getLocalTransform() const
+{
+    return object.transform();
+}
+
+ObjectValueTransform & SceneNode::getLocalTransform()
 {
     return object.transform();
 }
@@ -81,6 +86,16 @@ sf::Transform SceneNode::getSFMLTransform() const
         return  getSFMLLocalTransform();
 
     return parent->getSFMLTransform() * getSFMLLocalTransform();
+}
+
+sf::Transform SceneNode::getSFMLParentTransform() const
+{
+    if(parent == nullptr)
+    {
+        return sf::Transform::Identity;
+    }
+
+    return parent->getSFMLTransform();
 }
 
 sf::Vector2f SceneNode::getPosition() const

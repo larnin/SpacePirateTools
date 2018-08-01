@@ -5,6 +5,13 @@
 
 class SceneToolTransform : public SceneToolBase
 {
+    enum class DirectionState
+    {
+        Full,
+        Horizontal,
+        Vertical
+    };
+
 public:
     SceneToolTransform(SceneNode * node);
 
@@ -17,8 +24,11 @@ protected:
 
 private:
     bool m_pressed;
+    DirectionState m_directionState;
     sf::Vector2f m_mouseStartPos;
     sf::Vector2f m_mouseOffset;
+    sf::Transform m_baseTransform;
+    sf::Vector2f m_basePos;
 };
 
 #endif // SCENETOOLTRANSFORM_H

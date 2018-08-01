@@ -59,6 +59,7 @@ private:
 
     int m_currentLayerIndex;
     int m_currentNodeIndex;
+    bool m_mouseMoved;
 
     std::unique_ptr<SceneToolBase> m_sceneTool;
 };

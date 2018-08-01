@@ -3,6 +3,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 const sf::Color horizontalColor(sf::Color::Red);
 const sf::Color verticalColor(sf::Color::Green);
@@ -14,22 +15,61 @@ constexpr float squareSize = 5;
 
 SceneToolTransform::SceneToolTransform(SceneNode *node)
     : SceneToolBase(node)
+    , m_pressed(false)
 {
 
 }
 
 bool SceneToolTransform::mouseMoveEvent(QMouseEvent * event)
 {
+    if(!m_pressed)
+        return false;
+
+    m_mouseOffset = sf::Vector2f(event->x(), event->y()) - m_mouseStartPos;
+    auto offset = m_baseTransform.transformPoint(m_mouseOffset) - m_baseTransform.transformPoint({0, 0});
+    if(m_directionState == DirectionState::Horizontal)
+        offset.y = 0;
+    if(m_directionState == DirectionState::Vertical)
+        offset.x = 0;
+    m_node->getLocalTransform().position = m_basePos + offset;
+
     return false;
 }
 
 bool SceneToolTransform::mousePressEvent(QMouseEvent * event)
 {
+    if(event->button() != Qt::LeftButton)
+        return false;
+
+    m_mouseStartPos = sf::Vector2f(event->x(), event->y());
+    m_baseTransform = m_node->getSFMLParentTransform().getInverse();
+
+    m_basePos = m_node->getLocalTransform().position;
+
+    auto pos = m_node->getSFMLParentTransform().translate(m_basePos).transformPoint({0,0});
+    auto rot = -angle(m_baseTransform.transformPoint({1, 0}) - m_baseTransform.transformPoint({0, 0}));
+    sf::Transform t;
+    t.translate(pos).rotate(toDeg(rot));
+
+    auto localMousePos = t.getInverse().transformPoint(m_mouseStartPos);
+    if(sf::FloatRect(0, 0, squareSize, squareSize).contains(localMousePos))
+        m_directionState = DirectionState::Full;
+    else if(sf::FloatRect(0, -arrowSize2, arrowSize, 2*arrowSize2).contains(localMousePos))
+        m_directionState = DirectionState::Horizontal;
+    else if(sf::FloatRect(-arrowSize2, 0, 2*arrowSize2, arrowSize).contains(localMousePos))
+        m_directionState = DirectionState::Vertical;
+    else return false;
+
+    m_pressed = true;
+
     return false;
 }
 
 bool SceneToolTransform::mouseReleaseEvent(QMouseEvent * event)
 {
+    if(event->button() != Qt::LeftButton)
+        return false;
+    m_pressed = false;
     return false;
 }
 
@@ -91,7 +131,7 @@ void SceneToolTransform::draw(sf::RenderTarget &target, sf::RenderStates) const
     for(int i(16) ; i < 20 ; i++)
         line[i].color = surfaceBorderColor;
 
-    auto transform = m_node->getSFMLTransform();
+    auto transform = m_node->getSFMLParentTransform().translate(m_node->getLocalTransform().position);
 
     auto pos = transform.transformPoint({0,0});
     auto rot = angle(transform.transformPoint({1, 0}) - pos);

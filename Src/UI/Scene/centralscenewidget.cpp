@@ -21,6 +21,7 @@ CentralSceneWidget::CentralSceneWidget(SceneData &data, QWidget *parent)
     , m_selectionState(SelectionState::Move)
     , m_currentLayerIndex(-1)
     , m_currentNodeIndex(-1)
+    , m_mouseMoved(false)
 {
     m_selectionWidget = new SelectionModeWidget();
     QHBoxLayout * hLayout = new QHBoxLayout();
@@ -61,7 +62,11 @@ void CentralSceneWidget::wheelEvent(QWheelEvent * event)
 
 void CentralSceneWidget::mouseMoveEvent(QMouseEvent * event)
 {
-    if(!m_sceneTool || !m_sceneTool->mouseMoveEvent(event))
+    auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+    QMouseEvent toolEvent(*event);
+    toolEvent.setLocalPos(QPointF(pos.x, pos.y));
+
+    if(!m_sceneTool || !m_sceneTool->mouseMoveEvent(&toolEvent))
     {
         float z(zoom());
         sf::Vector2i newPos(event->x(), event->y());
@@ -74,28 +79,43 @@ void CentralSceneWidget::mouseMoveEvent(QMouseEvent * event)
             rebuildView();
             return;
         }
+
+        m_mouseMoved = true;
     }
+
+    if(m_sceneTool)
+        emit currentNodeMoved();
 }
 
 void CentralSceneWidget::mousePressEvent(QMouseEvent * event)
 {
-    if(!m_sceneTool || !m_sceneTool->mousePressEvent(event))
+    auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+    QMouseEvent toolEvent(*event);
+    toolEvent.setLocalPos(QPointF(pos.x, pos.y));
+
+    if(!m_sceneTool || !m_sceneTool->mousePressEvent(&toolEvent))
     {
         m_mouseOldPos = sf::Vector2i(event->x(), event->y());
         m_mouseStartPos = m_mouseOldPos;
 
         if(event->button() == Qt::MiddleButton)
             m_dragScreen = true;
+
+        m_mouseMoved = false;
     }
 }
 
 void CentralSceneWidget::mouseReleaseEvent(QMouseEvent * event)
 {
-    if(!m_sceneTool || !m_sceneTool->mouseReleaseEvent(event))
+    auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->x(), event->y()));
+    QMouseEvent toolEvent(*event);
+    toolEvent.setLocalPos(QPointF(pos.x, pos.y));
+
+    if(!m_sceneTool || !m_sceneTool->mouseReleaseEvent(&toolEvent))
     {
         m_dragScreen = false;
 
-        if(event->button() == Qt::LeftButton)
+        if(event->button() == Qt::LeftButton && !m_mouseMoved)
         {
             int oldNode = m_currentNodeIndex;
             m_currentNodeIndex = getNextSelectableNode();
