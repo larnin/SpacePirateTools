@@ -4,7 +4,7 @@
 #include "Scene/scenedata.h"
 #include "UI/qsfmlcanvas.h"
 #include "selectionmodewidget.h"
-#include "SceneTools/scenetoolsbase.h"
+#include "SceneTools/scenetoolbase.h"
 #include <memory>
 
 class CentralSceneWidget : public QSFMLCanvas
@@ -42,6 +42,9 @@ private:
     void drawVisiblelayers();
     void drawCurrentLayerGizmos();
 
+    int getNextSelectableNode();
+    void setToolCurrentNode();
+
     SceneData & m_data;
 
     SelectionModeWidget * m_selectionWidget;
@@ -57,7 +60,7 @@ private:
     int m_currentLayerIndex;
     int m_currentNodeIndex;
 
-    std::unique_ptr<SceneToolsBase> m_sceneTool;
+    std::unique_ptr<SceneToolBase> m_sceneTool;
 };
 
 #endif // CENTRALSCENEWIDGET_H

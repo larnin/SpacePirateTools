@@ -116,7 +116,8 @@ SOURCES += \
     UI/Scene/addnodedialog.cpp \
     UI/Scene/selectionmodewidget.cpp \
     UI/Scene/centralscenewidget.cpp \
-    UI/Scene/SceneTools/scenetoolsbase.cpp
+    UI/Scene/SceneTools/scenetooltransform.cpp \
+    UI/Scene/SceneTools/scenetoolbase.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -238,7 +239,8 @@ HEADERS += \
     Events/Args/closeressourceevent.h \
     UI/Scene/selectionmodewidget.h \
     UI/Scene/centralscenewidget.h \
-    UI/Scene/SceneTools/scenetoolsbase.h
+    UI/Scene/SceneTools/scenetooltransform.h \
+    UI/Scene/SceneTools/scenetoolbase.h
 
 CONFIG += c++14
 

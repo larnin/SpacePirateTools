@@ -64,4 +64,15 @@ inline bool isRight(const sf::Vector2f &p1, const sf::Vector2f &p2, const sf::Ve
     return dot(p2 - p1, ortho(pos - p2)) < 0;
 }
 
+constexpr float radToDeg = 180.0f / 3.14159f;
+inline float toDeg(float a)
+{
+    return a * radToDeg;
+}
+
+inline float toRad(float a)
+{
+    return a / radToDeg;
+}
+
 #endif // VECT2CONVERT_H

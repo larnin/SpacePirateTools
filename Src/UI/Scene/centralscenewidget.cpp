@@ -1,4 +1,6 @@
 #include "centralscenewidget.h"
+#include "vect2convert.h"
+#include "SceneTools/scenetooltransform.h"
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <QWheelEvent>
@@ -92,6 +94,17 @@ void CentralSceneWidget::mouseReleaseEvent(QMouseEvent * event)
     if(!m_sceneTool || !m_sceneTool->mouseReleaseEvent(event))
     {
         m_dragScreen = false;
+
+        if(event->button() == Qt::LeftButton)
+        {
+            int oldNode = m_currentNodeIndex;
+            m_currentNodeIndex = getNextSelectableNode();
+            if(oldNode != m_currentNodeIndex)
+            {
+                emit currentNodeChanged(m_currentNodeIndex);
+                setToolCurrentNode();
+            }
+        }
     }
 }
 
@@ -169,6 +182,7 @@ void CentralSceneWidget::onChangeLayer(int layerIndex)
 void CentralSceneWidget::onChangeNode(int nodeIndex)
 {
     m_currentNodeIndex = nodeIndex;
+    setToolCurrentNode();
 }
 
 void CentralSceneWidget::drawCurrentLayerPositions()
@@ -216,4 +230,55 @@ void CentralSceneWidget::drawCurrentLayerGizmos()
     if(!layer.showGizmos)
         return;
     //draw gizmos
+}
+
+int CentralSceneWidget::getNextSelectableNode()
+{
+    constexpr float maxRadiusSqr = 50 * 50;
+
+    if(m_currentLayerIndex < 0 || m_currentLayerIndex >= static_cast<int>(m_data.size()))
+        return -1;
+
+    SceneLayer & layer = m_data[m_currentLayerIndex];
+
+    std::vector<unsigned int> m_validIndexs;
+    for(unsigned int i(0) ; i < layer.size() ; i++)
+    {
+        auto nodePos = layer[i]->getPosition();
+        auto screenNodePos = RenderWindow::mapCoordsToPixel(nodePos);
+
+        if(normSqr(sf::Vector2f(m_mouseOldPos - screenNodePos)) < maxRadiusSqr)
+            m_validIndexs.push_back(i);
+    }
+
+    if(m_validIndexs.empty())
+        return -1;
+
+    for(auto i : m_validIndexs)
+        if(static_cast<int>(i) > m_currentNodeIndex)
+            return i;
+    return m_validIndexs[0];
+}
+
+void CentralSceneWidget::setToolCurrentNode()
+{
+    if(m_sceneTool)
+        m_sceneTool.reset();
+
+    if(m_currentLayerIndex < 0 || m_currentLayerIndex >= static_cast<int>(m_data.size()))
+        return;
+
+    SceneLayer & layer = m_data[m_currentLayerIndex];
+
+    if(m_currentNodeIndex < 0 || m_currentNodeIndex >= static_cast<int>(layer.size()))
+        return;
+
+    switch(m_selectionState)
+    {
+    case SelectionState::Move:
+        m_sceneTool = std::make_unique<SceneToolTransform>(layer[m_currentNodeIndex].get());
+        break;
+    default:
+        break;
+    }
 }
