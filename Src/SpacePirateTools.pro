@@ -117,7 +117,9 @@ SOURCES += \
     UI/Scene/selectionmodewidget.cpp \
     UI/Scene/centralscenewidget.cpp \
     UI/Scene/SceneTools/scenetooltransform.cpp \
-    UI/Scene/SceneTools/scenetoolbase.cpp
+    UI/Scene/SceneTools/scenetoolbase.cpp \
+    UI/Scene/SceneTools/scenetoolscale.cpp \
+    UI/Scene/SceneTools/scenetoolrotate.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -240,7 +242,9 @@ HEADERS += \
     UI/Scene/selectionmodewidget.h \
     UI/Scene/centralscenewidget.h \
     UI/Scene/SceneTools/scenetooltransform.h \
-    UI/Scene/SceneTools/scenetoolbase.h
+    UI/Scene/SceneTools/scenetoolbase.h \
+    UI/Scene/SceneTools/scenetoolscale.h \
+    UI/Scene/SceneTools/scenetoolrotate.h
 
 CONFIG += c++14
 

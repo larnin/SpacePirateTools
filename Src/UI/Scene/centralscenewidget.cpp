@@ -1,6 +1,8 @@
 #include "centralscenewidget.h"
 #include "vect2convert.h"
 #include "SceneTools/scenetooltransform.h"
+#include "SceneTools/scenetoolscale.h"
+#include "SceneTools/scenetoolrotate.h"
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <QWheelEvent>
@@ -192,11 +194,14 @@ void CentralSceneWidget::rebuildView()
 void CentralSceneWidget::onChangeSelectionState(SelectionState state)
 {
     m_selectionState = state;
+    setToolCurrentNode();
 }
 
 void CentralSceneWidget::onChangeLayer(int layerIndex)
 {
     m_currentLayerIndex = layerIndex;
+    m_currentNodeIndex = -1;
+    setToolCurrentNode();
 }
 
 void CentralSceneWidget::onChangeNode(int nodeIndex)
@@ -298,6 +303,11 @@ void CentralSceneWidget::setToolCurrentNode()
     case SelectionState::Move:
         m_sceneTool = std::make_unique<SceneToolTransform>(layer[m_currentNodeIndex].get());
         break;
+    case SelectionState::Scale:
+        m_sceneTool = std::make_unique<SceneToolScale>(layer[m_currentNodeIndex].get());
+        break;
+    case SelectionState::Rotate:
+        m_sceneTool = std::make_unique<SceneToolRotate>(layer[m_currentNodeIndex].get());
     default:
         break;
     }
