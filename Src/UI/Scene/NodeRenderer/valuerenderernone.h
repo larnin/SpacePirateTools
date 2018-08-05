@@ -12,6 +12,7 @@ public:
 
     void draw(sf::RenderTarget &) const override {}
     void drawGizmos(sf::RenderTarget &) const override{}
+    void update() override {}
 };
 
 #endif // VALUERENDERERNONE_H

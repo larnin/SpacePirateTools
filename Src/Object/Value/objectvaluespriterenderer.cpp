@@ -1,6 +1,6 @@
 #include "objectvaluespriterenderer.h"
 #include "UI/Object/Value/spriterenderervaluewidget.h"
-#include "UI/Scene/NodeRenderer/valuerenderernone.h"
+#include "UI/Scene/NodeRenderer/valuerenderersprite.h"
 
 ObjectValueSpriteRenderer::ObjectValueSpriteRenderer()
     : ObjectValueBase(ValueType::SpriteRenderer)
@@ -16,6 +16,8 @@ ObjectValueSpriteRenderer::ObjectValueSpriteRenderer(const QJsonObject & obj)
     textureRect.top = obj["t"].toInt();
     textureRect.height = obj["h"].toInt();
     textureRect.width = obj["w"].toInt();
+    offset.x = obj["x"].toDouble();
+    offset.y = obj["y"].toDouble();
 }
 
 QString ObjectValueSpriteRenderer::toString() const
@@ -35,9 +37,11 @@ void ObjectValueSpriteRenderer::onSave(QJsonObject & obj) const
     obj.insert("t", textureRect.top);
     obj.insert("h", textureRect.height);
     obj.insert("w", textureRect.width);
+    obj.insert("x", offset.x);
+    obj.insert("y", offset.y);
 }
 
 std::unique_ptr<ValueRendererBase> ObjectValueSpriteRenderer::renderer(SceneNode* node)
 {
-    return std::make_unique<ValueRendererNone>(node, this);
+    return std::make_unique<ValueRendererSprite>(node, this);
 }

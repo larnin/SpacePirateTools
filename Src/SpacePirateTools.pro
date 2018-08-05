@@ -121,7 +121,8 @@ SOURCES += \
     UI/Scene/SceneTools/scenetoolscale.cpp \
     UI/Scene/SceneTools/scenetoolrotate.cpp \
     UI/Scene/NodeRenderer/valuerendererbase.cpp \
-    UI/Scene/NodeRenderer/rendersystem.cpp
+    UI/Scene/NodeRenderer/rendersystem.cpp \
+    UI/Scene/NodeRenderer/valuerenderersprite.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -250,7 +251,8 @@ HEADERS += \
     UI/Scene/NodeRenderer/valuerendererbase.h \
     UI/Scene/NodeRenderer/rendersystem.h \
     maperase.h \
-    UI/Scene/NodeRenderer/valuerenderernone.h
+    UI/Scene/NodeRenderer/valuerenderernone.h \
+    UI/Scene/NodeRenderer/valuerenderersprite.h
 
 CONFIG += c++14
 

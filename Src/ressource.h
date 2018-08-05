@@ -103,6 +103,11 @@ public:
         return false;
     }
 
+    void clear()
+    {
+        freeMyRessource();
+    }
+
 private:
 
     void freeMyRessource()

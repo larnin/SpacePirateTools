@@ -13,6 +13,7 @@ public:
 
     virtual void draw(sf::RenderTarget & target) const = 0;
     virtual void drawGizmos(sf::RenderTarget & target) const = 0;
+    virtual void update() = 0;
 
     SceneNode* getNode() const {return m_node;}
     ObjectValueBase* getValue() const {return m_value;}

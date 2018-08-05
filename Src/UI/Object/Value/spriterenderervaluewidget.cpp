@@ -1,6 +1,7 @@
 #include "spriterenderervaluewidget.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QGroupBox>
 #include <QLabel>
 
 SpriteRendererValueWidget::SpriteRendererValueWidget(ObjectValueSpriteRenderer &spriteRenderer, QWidget *parent)
@@ -21,6 +22,18 @@ SpriteRendererValueWidget::SpriteRendererValueWidget(ObjectValueSpriteRenderer &
     m_height->setRange(1, 1000000);
     m_height->setValue(m_spriteRenderer.textureRect.height);
 
+    m_offsetX = new QDoubleSpinBox();
+    m_offsetX->setRange(-100000, 100000);
+    m_offsetX->setDecimals(2);
+    m_offsetX->setSingleStep(1);
+    m_offsetX->setValue(m_spriteRenderer.offset.x);
+
+    m_offsetY = new QDoubleSpinBox();
+    m_offsetY->setRange(-100000, 100000);
+    m_offsetY->setDecimals(2);
+    m_offsetY->setSingleStep(1);
+    m_offsetY->setValue(m_spriteRenderer.offset.y);
+
     QHBoxLayout * posLayout = new QHBoxLayout();
     posLayout->addWidget(new QLabel("Position : "));
     posLayout->addWidget(new QLabel("X"));
@@ -37,9 +50,22 @@ SpriteRendererValueWidget::SpriteRendererValueWidget(ObjectValueSpriteRenderer &
     sizeLayout->addWidget(new QLabel("Y"));
     sizeLayout->addWidget(m_height, 1);
 
+    QGroupBox * rectBox = new QGroupBox("Texture rect");
+    QVBoxLayout * rectLayout = new QVBoxLayout();
+    rectLayout->addLayout(posLayout);
+    rectLayout->addLayout(sizeLayout);
+    rectBox->setLayout(rectLayout);
+
+    QHBoxLayout * offsetLayout = new QHBoxLayout();
+    offsetLayout->addWidget(new QLabel("Offset : "));
+    offsetLayout->addWidget(new QLabel("X"));
+    offsetLayout->addWidget(m_offsetX, 1);
+    offsetLayout->addWidget(new QLabel("Y"));
+    offsetLayout->addWidget(m_offsetY, 1);
+
     QVBoxLayout * layout = new QVBoxLayout();
-    layout->addLayout(posLayout);
-    layout->addLayout(sizeLayout);
+    layout->addWidget(rectBox);
+    layout->addLayout(offsetLayout);
 
     setLayout(layout);
 
@@ -47,6 +73,8 @@ SpriteRendererValueWidget::SpriteRendererValueWidget(ObjectValueSpriteRenderer &
     connect(m_left, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
     connect(m_width, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
     connect(m_height, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
+    connect(m_offsetX, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
+    connect(m_offsetY, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
 }
 
 
@@ -56,4 +84,6 @@ void SpriteRendererValueWidget::onValueChanged()
     m_spriteRenderer.textureRect.left = m_left->value();
     m_spriteRenderer.textureRect.width = m_width->value();
     m_spriteRenderer.textureRect.height = m_height->value();
+    m_spriteRenderer.offset.x = m_offsetX->value();
+    m_spriteRenderer.offset.y = m_offsetY->value();
 }

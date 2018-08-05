@@ -19,6 +19,7 @@ public:
     QWidget* createUi() override;
 
     sf::IntRect textureRect;
+    sf::Vector2f offset;
 
 protected:
     void onSave(QJsonObject & obj) const override;

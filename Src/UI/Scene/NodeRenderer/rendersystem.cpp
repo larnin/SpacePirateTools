@@ -17,6 +17,11 @@ void RenderSystem::update()
         for(auto & n : l.second)
             updateNode(n.first, n.second);
     }
+
+    for(const auto & l : m_renderables)
+        for(const auto & n : l.second)
+            for(const auto & v : n.second)
+                v->update();
 }
 
 void RenderSystem::draw(sf::RenderTarget &target) const

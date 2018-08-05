@@ -9,5 +9,5 @@ ValueRendererBase::ValueRendererBase(SceneNode *node, ObjectValueBase *value)
 
 sf::Transform ValueRendererBase::getTransform() const
 {
-    return m_node->getSFMLLocalTransform().translate(m_node->getLocalTransform().position);
+    return m_node->getSFMLLocalTransform();
 }

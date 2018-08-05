@@ -4,6 +4,7 @@
 #include "Object/Value/objectvaluespriterenderer.h"
 #include <QWidget>
 #include <QSpinBox>
+#include <QDoubleSpinBox>
 
 class SpriteRendererValueWidget : public QWidget
 {
@@ -21,6 +22,9 @@ private:
     QSpinBox * m_left;
     QSpinBox * m_width;
     QSpinBox * m_height;
+
+    QDoubleSpinBox * m_offsetX;
+    QDoubleSpinBox * m_offsetY;
 };
 
 #endif // SPRITERENDERERVALUEWIDGET_H
