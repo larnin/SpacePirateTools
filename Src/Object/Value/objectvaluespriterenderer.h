@@ -2,7 +2,7 @@
 #define OBJECTVALUESPRITERENDERER_H
 
 #include "objectvaluebase.h"
-#include "SFML/Graphics/Rect.hpp"
+#include <SFML/Graphics/Rect.hpp>
 
 class ObjectValueSpriteRenderer : public ObjectValueBase
 {
@@ -12,6 +12,8 @@ public:
     ObjectValueSpriteRenderer(const ObjectValueSpriteRenderer &) = default;
 
     std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueSpriteRenderer>(*this); }
+
+    std::unique_ptr<ValueRendererBase> renderer(SceneNode* node) override;
 
     QString toString() const override;
     QWidget* createUi() override;

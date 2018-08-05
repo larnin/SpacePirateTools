@@ -2,8 +2,8 @@
 #define OBJECTVALUEASSET_H
 
 #include "objectvaluebase.h"
+#include "ProjectInfos/assettype.h"
 #include <QString>
-#include <ProjectInfos/assettype.h>
 
 class ObjectValueAsset : public ObjectValueBase
 {
@@ -13,6 +13,8 @@ public:
     ObjectValueAsset(const ObjectValueAsset &) = default;
 
     std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueAsset>(*this); }
+
+    std::unique_ptr<ValueRendererBase> renderer(SceneNode* node) override;
 
     inline AssetType getAssetType() const { return m_type; }
 

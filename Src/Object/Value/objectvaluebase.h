@@ -6,6 +6,9 @@
 #include <QJsonObject>
 #include <memory>
 
+class ValueRendererBase;
+class SceneNode;
+
 enum class ValueType
 {
     Transform = -1,
@@ -39,6 +42,7 @@ public:
     virtual QString toString() const = 0;
     virtual QWidget* createUi() = 0;
     virtual std::unique_ptr<ObjectValueBase> clone() const = 0;
+    virtual std::unique_ptr<ValueRendererBase> renderer(SceneNode* node) = 0;
 
     QJsonObject save() const;
     inline ValueType type() const { return m_valueType; }

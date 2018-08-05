@@ -13,6 +13,8 @@ public:
 
     std::unique_ptr<ObjectValueBase> clone() const override { return std::make_unique<ObjectValueBox2DCollider>(*this); }
 
+    std::unique_ptr<ValueRendererBase> renderer(SceneNode* node) override;
+
     QString toString() const override;
     QWidget* createUi() override;
 

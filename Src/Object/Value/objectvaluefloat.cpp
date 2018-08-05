@@ -1,5 +1,6 @@
 #include "objectvaluefloat.h"
 #include "UI/Object/Value/floatvaluewidget.h"
+#include "UI/Scene/NodeRenderer/valuerenderernone.h"
 
 ObjectValueFloat::ObjectValueFloat()
     : ObjectValueBase(ValueType::Float)
@@ -27,4 +28,9 @@ QWidget* ObjectValueFloat::createUi()
 void ObjectValueFloat::onSave(QJsonObject & obj) const
 {
     obj.insert("value", value);
+}
+
+std::unique_ptr<ValueRendererBase> ObjectValueFloat::renderer(SceneNode* node)
+{
+    return std::make_unique<ValueRendererNone>(node, this);
 }

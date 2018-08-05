@@ -1,5 +1,6 @@
 #include "objectvaluecirclecollider.h"
 #include "UI/Object/Value/circlecollidervaluewidget.h"
+#include "UI/Scene/NodeRenderer/valuerenderernone.h"
 
 ObjectValueCircleCollider::ObjectValueCircleCollider()
     : ObjectValueBase(ValueType::CircleCollider)
@@ -33,4 +34,9 @@ void ObjectValueCircleCollider::onSave(QJsonObject & obj) const
     obj.insert("cx", center.x);
     obj.insert("cy", center.y);
     obj.insert("s", size);
+}
+
+std::unique_ptr<ValueRendererBase> ObjectValueCircleCollider::renderer(SceneNode* node)
+{
+    return std::make_unique<ValueRendererNone>(node, this);
 }

@@ -145,3 +145,25 @@ void ObjectData::checkObjectIntegrity()
     if(empty() || (*this)[0]->values.empty() || (*this)[0]->values[0]->type() != ValueType::Transform)
         insert(begin(), createDefaultTransform());
 }
+
+
+ObjectValueBase* ObjectData::getFirstValueOfType(ValueType type)
+{
+    for(const auto & p : *this)
+        for(const auto & v : p->values)
+            if(v->type() == type)
+                return v.get();
+
+    return nullptr;
+}
+
+std::vector<ObjectValueBase*> ObjectData::getAllValueOfType(ValueType type)
+{
+    std::vector<ObjectValueBase*> properties;
+
+    for(const auto & p : *this)
+        for(const auto & v : p->values)
+            if(v->type() == type)
+                properties.push_back(v.get());
+    return properties;
+}

@@ -21,7 +21,7 @@ void SceneData::save(const QString & fileName) const
 
     QJsonArray layers;
     for(const auto & l : *this)
-        layers.append(l.save());
+        layers.append(l->save());
     obj.insert("layers", layers);
 
     QFile file(fileName);
@@ -58,14 +58,14 @@ void SceneData::load(const QString & fileName)
     backgroundColor.b = obj["b"].toInt();
 
     for(const auto & l : obj["layers"].toArray())
-        emplace_back(l.toObject());
+        emplace_back(std::make_unique<SceneLayer>(l.toObject()));
 }
 
 std::vector<std::unique_ptr<SceneNode>> SceneData::asPrefab()
 {
     if(empty())
         return {};
-    auto & layer = (*this)[0];
+    auto & layer = *((*this)[0].get());
     if(layer.empty())
         return {};
     auto parent = std::find_if(layer.begin(), layer.end(), [](const auto & node){return node->parent == nullptr;});

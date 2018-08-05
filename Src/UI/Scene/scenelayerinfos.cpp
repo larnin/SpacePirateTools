@@ -300,8 +300,8 @@ void SceneLayerInfos::createPrefab(QTreeWidgetItem * widget)
     }
 
     SceneData prefab;
-    prefab.push_back(SceneLayer("Prefab"));
-    auto & prefabLayer = prefab.front();
+    prefab.push_back(std::make_unique<SceneLayer>("Prefab"));
+    auto & prefabLayer = *(prefab.front().get());
     infos->node->prefabName = "";
     cloneIterative(prefabLayer, infos->node, nullptr);
     infos->node->prefabName = name;

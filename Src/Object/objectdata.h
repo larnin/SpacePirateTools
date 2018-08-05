@@ -39,6 +39,45 @@ public:
     ObjectValueTransform & transform();
     ObjectValueTransform const & transform() const;
 
+    template <typename T>
+    T* getFirstValueOfType()
+    {
+        static_assert(std::is_base_of<ObjectValueBase, T>::value, "T is not an ObjectProperty");
+
+        for(const auto & p : *this)
+        {
+            for(const auto & v : p->values)
+            {
+                auto ptr = dynamic_cast<T*>(v.get());
+                if(ptr != nullptr)
+                    return ptr;
+            }
+        }
+        return nullptr;
+    }
+
+    template <typename T>
+    std::vector<T*> getAllValueOfType()
+    {
+        static_assert(std::is_base_of<ObjectValueBase, T>::value, "T is not an ObjectProperty");
+
+        std::vector<T*> properties;
+
+        for(const auto & p : *this)
+        {
+            for(const auto & v : p->values)
+            {
+                auto ptr = dynamic_cast<T*>(v.get());
+                if(ptr != nullptr)
+                    properties.push_back(ptr);
+            }
+        }
+        return properties;
+    }
+
+    ObjectValueBase* getFirstValueOfType(ValueType type);
+    std::vector<ObjectValueBase*> getAllValueOfType(ValueType type);
+
 private:
     void load(const QJsonObject & obj);
     std::unique_ptr<ObjectProperty> createDefaultTransform();

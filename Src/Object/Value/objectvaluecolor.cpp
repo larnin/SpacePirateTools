@@ -1,5 +1,6 @@
 #include "objectvaluecolor.h"
 #include "UI/Object/Value/colorvaluewidget.h"
+#include "UI/Scene/NodeRenderer/valuerenderernone.h"
 
 ObjectValueColor::ObjectValueColor()
     : ObjectValueBase(ValueType::Color)
@@ -33,4 +34,9 @@ void ObjectValueColor::onSave(QJsonObject & obj) const
     obj.insert("g", color.g);
     obj.insert("b", color.b);
     obj.insert("a", color.a);
+}
+
+std::unique_ptr<ValueRendererBase> ObjectValueColor::renderer(SceneNode* node)
+{
+    return std::make_unique<ValueRendererNone>(node, this);
 }

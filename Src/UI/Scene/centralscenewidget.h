@@ -5,6 +5,7 @@
 #include "UI/qsfmlcanvas.h"
 #include "selectionmodewidget.h"
 #include "SceneTools/scenetoolbase.h"
+#include "NodeRenderer/rendersystem.h"
 #include <memory>
 
 class CentralSceneWidget : public QSFMLCanvas
@@ -62,6 +63,8 @@ private:
     bool m_mouseMoved;
 
     std::unique_ptr<SceneToolBase> m_sceneTool;
+
+    RenderSystem m_render;
 };
 
 #endif // CENTRALSCENEWIDGET_H

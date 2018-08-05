@@ -1,5 +1,6 @@
 #include "objectvaluevector2i.h"
 #include "UI/Object/Value/vector2ivaluewidget.h"
+#include "UI/Scene/NodeRenderer/valuerenderernone.h"
 
 ObjectValueVector2i::ObjectValueVector2i()
     : ObjectValueBase(ValueType::Vector2i)
@@ -29,4 +30,9 @@ void ObjectValueVector2i::onSave(QJsonObject & obj) const
 {
     obj.insert("x", value.x);
     obj.insert("y", value.y);
+}
+
+std::unique_ptr<ValueRendererBase> ObjectValueVector2i::renderer(SceneNode* node)
+{
+    return std::make_unique<ValueRendererNone>(node, this);
 }

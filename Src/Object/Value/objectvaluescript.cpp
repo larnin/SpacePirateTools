@@ -1,5 +1,6 @@
 #include "objectvaluescript.h"
 #include "UI/Object/Value/scriptvaluewidget.h"
+#include "UI/Scene/NodeRenderer/valuerenderernone.h"
 
 ObjectValueScript::ObjectValueScript()
     : ObjectValueBase(ValueType::Script)
@@ -26,4 +27,9 @@ QWidget* ObjectValueScript::createUi()
 void ObjectValueScript::onSave(QJsonObject & obj) const
 {
     obj.insert("s", scriptName);
+}
+
+std::unique_ptr<ValueRendererBase> ObjectValueScript::renderer(SceneNode* node)
+{
+    return std::make_unique<ValueRendererNone>(node, this);
 }

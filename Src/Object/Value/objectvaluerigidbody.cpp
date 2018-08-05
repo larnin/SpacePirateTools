@@ -1,5 +1,6 @@
 #include "objectvaluerigidbody.h"
 #include "UI/Object/Value/rigidbodyvaluewidget.h"
+#include "UI/Scene/NodeRenderer/valuerenderernone.h"
 
 ObjectValueRigidbody::ObjectValueRigidbody()
     : ObjectValueBase(ValueType::Rigidbody)
@@ -27,4 +28,9 @@ QWidget* ObjectValueRigidbody::createUi()
 void ObjectValueRigidbody::onSave(QJsonObject & obj) const
 {
     obj.insert("mass", mass);
+}
+
+std::unique_ptr<ValueRendererBase> ObjectValueRigidbody::renderer(SceneNode* node)
+{
+    return std::make_unique<ValueRendererNone>(node, this);
 }

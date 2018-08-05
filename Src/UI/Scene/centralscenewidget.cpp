@@ -24,6 +24,7 @@ CentralSceneWidget::CentralSceneWidget(SceneData &data, QWidget *parent)
     , m_currentLayerIndex(-1)
     , m_currentNodeIndex(-1)
     , m_mouseMoved(false)
+    , m_render(data)
 {
     m_selectionWidget = new SelectionModeWidget();
     QHBoxLayout * hLayout = new QHBoxLayout();
@@ -44,9 +45,14 @@ void CentralSceneWidget::OnUpdate()
 {
     RenderWindow::clear(m_data.backgroundColor);
 
+    m_render.update();
+
     drawCurrentLayerPositions();
     drawVisiblelayers();
     drawCurrentLayerGizmos();
+
+    m_render.draw(*this);
+    m_render.drawGizmos(*this);
 
     if(m_sceneTool)
         RenderWindow::draw(*m_sceneTool);
@@ -227,7 +233,7 @@ void CentralSceneWidget::drawCurrentLayerPositions()
         array[i].color = crossColor;
 
     sf::RenderStates states;
-    SceneLayer & layer = m_data[m_currentLayerIndex];
+    SceneLayer & layer = *m_data[m_currentLayerIndex];
 
     for(const auto & n : layer)
     {
@@ -240,7 +246,7 @@ void CentralSceneWidget::drawVisiblelayers()
 {
     for(const auto & l : m_data)
     {
-        if(l.hidden)
+        if(l->hidden)
             continue;
         //draw layer
     }
@@ -251,7 +257,7 @@ void CentralSceneWidget::drawCurrentLayerGizmos()
     if(m_currentLayerIndex < 0 || m_currentLayerIndex >= static_cast<int>(m_data.size()))
         return;
 
-    SceneLayer & layer = m_data[m_currentLayerIndex];
+    SceneLayer & layer = *m_data[m_currentLayerIndex];
     if(!layer.showGizmos)
         return;
     //draw gizmos
@@ -264,7 +270,7 @@ int CentralSceneWidget::getNextSelectableNode()
     if(m_currentLayerIndex < 0 || m_currentLayerIndex >= static_cast<int>(m_data.size()))
         return -1;
 
-    SceneLayer & layer = m_data[m_currentLayerIndex];
+    SceneLayer & layer = *m_data[m_currentLayerIndex];
 
     std::vector<unsigned int> m_validIndexs;
     for(unsigned int i(0) ; i < layer.size() ; i++)
@@ -293,7 +299,7 @@ void CentralSceneWidget::setToolCurrentNode()
     if(m_currentLayerIndex < 0 || m_currentLayerIndex >= static_cast<int>(m_data.size()))
         return;
 
-    SceneLayer & layer = m_data[m_currentLayerIndex];
+    SceneLayer & layer = *m_data[m_currentLayerIndex];
 
     if(m_currentNodeIndex < 0 || m_currentNodeIndex >= static_cast<int>(layer.size()))
         return;

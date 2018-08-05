@@ -66,18 +66,18 @@ void SceneLayersinfos::updateLayerList()
    for(unsigned int i(0) ; i < m_datas.size() ; i++)
    {
        const auto & layer = m_datas[i];
-       m_layers->addItem(layer.name);
+       m_layers->addItem(layer->name);
        auto item = m_layers->item(m_layers->count() - 1);
 
        QWidget* widget = new QWidget();
        QPushButton* showButton = new QPushButton(QIcon("Img/View.png"), "");
        showButton->setFixedSize(24, 24);
        showButton->setCheckable(true);
-       showButton->setChecked(!layer.hidden);
+       showButton->setChecked(!layer->hidden);
        QPushButton* gizmoButton = new QPushButton(QIcon("Img/Gizmos.png"), "");
        gizmoButton->setFixedSize(24, 24);
        gizmoButton->setCheckable(true);
-       gizmoButton->setChecked(layer.showGizmos);
+       gizmoButton->setChecked(layer->showGizmos);
        QHBoxLayout* layout = new QHBoxLayout();
        layout->addStretch(1);
        layout->addWidget(showButton);
@@ -120,7 +120,7 @@ void SceneLayersinfos::onLayerIndexChange(int index)
     if(m_layerInfosWidget != nullptr)
     {
         if(m_currentIndex >= 0 && m_currentIndex <= int(m_datas.size()))
-            m_layerInfosWidget->setCurrentLayer(&m_datas[m_currentIndex]);
+            m_layerInfosWidget->setCurrentLayer(m_datas[m_currentIndex].get());
         else m_layerInfosWidget->setCurrentLayer(nullptr);
     }
 
@@ -173,7 +173,7 @@ void SceneLayersinfos::updateGizmos(unsigned int index, bool value)
     if(m_datas.size() <= index)
             return;
 
-    m_datas[index].showGizmos = value;
+    m_datas[index]->showGizmos = value;
 }
 
 void SceneLayersinfos::updateVisibility(unsigned int index, bool value)
@@ -181,7 +181,7 @@ void SceneLayersinfos::updateVisibility(unsigned int index, bool value)
     if(m_datas.size() <= index)
             return;
 
-    m_datas[index].hidden = !value;
+    m_datas[index]->hidden = !value;
 }
 
 void SceneLayersinfos::addLayer()
@@ -192,7 +192,7 @@ void SceneLayersinfos::addLayer()
     if(!ok)
         return;
 
-    m_datas.emplace_back(layerName);
+    m_datas.emplace_back(std::make_unique<SceneLayer>(layerName));
     updateLayerList();
 }
 
@@ -228,11 +228,11 @@ void SceneLayersinfos::renameLayer(unsigned int index)
 {
     auto & l = m_datas[index];
     bool ok = true;
-    auto name = QInputDialog::getText(this, "Renommer un layer", "Indiquez le nouveau nom du layer", QLineEdit::Normal, l.name, &ok);
+    auto name = QInputDialog::getText(this, "Renommer un layer", "Indiquez le nouveau nom du layer", QLineEdit::Normal, l->name, &ok);
 
     if(ok)
     {
-        l.name = name;
+        l->name = name;
         updateLayerList();
     }
 }

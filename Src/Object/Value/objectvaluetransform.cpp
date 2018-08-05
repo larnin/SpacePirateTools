@@ -1,5 +1,6 @@
 #include "objectvaluetransform.h"
 #include "UI/Object/Value/transformvaluewidget.h"
+#include "UI/Scene/NodeRenderer/valuerenderernone.h"
 
 ObjectValueTransform::ObjectValueTransform()
     : ObjectValueBase(ValueType::Transform)
@@ -46,4 +47,9 @@ sf::Transform ObjectValueTransform::getSFMLLocalTransform() const
     sf::Transform t;
     t.translate(position).rotate(rotation).scale(scale);
     return t;
+}
+
+std::unique_ptr<ValueRendererBase> ObjectValueTransform::renderer(SceneNode* node)
+{
+    return std::make_unique<ValueRendererNone>(node, this);
 }

@@ -1,5 +1,6 @@
 #include "objectvalueint.h"
 #include "UI/Object/Value/intvaluewidget.h"
+#include "UI/Scene/NodeRenderer/valuerenderernone.h"
 
 ObjectValueInt::ObjectValueInt()
     : ObjectValueBase(ValueType::Int)
@@ -27,4 +28,9 @@ QWidget* ObjectValueInt::createUi()
 void ObjectValueInt::onSave(QJsonObject & obj) const
 {
     obj.insert("value", value);
+}
+
+std::unique_ptr<ValueRendererBase> ObjectValueInt::renderer(SceneNode* node)
+{
+    return std::make_unique<ValueRendererNone>(node, this);
 }

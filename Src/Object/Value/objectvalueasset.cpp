@@ -1,5 +1,6 @@
 #include "objectvalueasset.h"
 #include "UI/Object/Value/assetvaluewidget.h"
+#include "UI/Scene/NodeRenderer/valuerenderernone.h"
 #include <cassert>
 
 ObjectValueAsset::ObjectValueAsset(AssetType type)
@@ -73,4 +74,9 @@ AssetType ObjectValueAsset::valueToAssetType(ValueType type)
 
     assert(false);
     return AssetType::Max;
+}
+
+std::unique_ptr<ValueRendererBase> ObjectValueAsset::renderer(SceneNode* node)
+{
+    return std::make_unique<ValueRendererNone>(node, this);
 }
