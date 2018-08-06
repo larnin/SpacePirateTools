@@ -122,7 +122,9 @@ SOURCES += \
     UI/Scene/SceneTools/scenetoolrotate.cpp \
     UI/Scene/NodeRenderer/valuerendererbase.cpp \
     UI/Scene/NodeRenderer/rendersystem.cpp \
-    UI/Scene/NodeRenderer/valuerenderersprite.cpp
+    UI/Scene/NodeRenderer/valuerenderersprite.cpp \
+    UI/Scene/NodeRenderer/valuerendererbox2dcollider.cpp \
+    UI/Scene/NodeRenderer/valuerenderercirclecollider.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -252,7 +254,9 @@ HEADERS += \
     UI/Scene/NodeRenderer/rendersystem.h \
     maperase.h \
     UI/Scene/NodeRenderer/valuerenderernone.h \
-    UI/Scene/NodeRenderer/valuerenderersprite.h
+    UI/Scene/NodeRenderer/valuerenderersprite.h \
+    UI/Scene/NodeRenderer/valuerendererbox2dcollider.h \
+    UI/Scene/NodeRenderer/valuerenderercirclecollider.h
 
 CONFIG += c++14
 

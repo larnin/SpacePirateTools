@@ -1,6 +1,6 @@
 #include "objectvaluebox2dcollider.h"
 #include "UI/Object/Value/box2dcollidervaluewidget.h"
-#include "UI/Scene/NodeRenderer/valuerenderernone.h"
+#include "UI/Scene/NodeRenderer/valuerendererbox2dcollider.h"
 
 ObjectValueBox2DCollider::ObjectValueBox2DCollider()
     : ObjectValueBase(ValueType::Box2DCollider)
@@ -40,5 +40,5 @@ void ObjectValueBox2DCollider::onSave(QJsonObject & obj) const
 
 std::unique_ptr<ValueRendererBase> ObjectValueBox2DCollider::renderer(SceneNode* node)
 {
-    return std::make_unique<ValueRendererNone>(node, this);
+    return std::make_unique<ValueRendererBox2DCollider>(node, this);
 }

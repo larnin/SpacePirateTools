@@ -45,7 +45,9 @@ void ValueRendererSprite::update()
         if(a->assetName != m_textureName)
         {
             m_textureName = a->assetName;
-            m_texture.load(ProjectInfos::instance().fullFileName(m_textureName, AssetType::Image).toStdString());
+            if(a->assetName.isEmpty())
+                m_texture.clear();
+            else m_texture.load(ProjectInfos::instance().fullFileName(m_textureName, AssetType::Image).toStdString());
         }
 
         return;
