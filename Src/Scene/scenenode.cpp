@@ -46,7 +46,8 @@ void SceneNode::revertObject(const QString & modelName)
 void SceneNode::revertObject(SceneNode & node)
 {
     //remove everything else the Transform at index 0
-    for(unsigned int i(0) ; i < object.size() ; i++)
+    auto size = object.size();
+    for(unsigned int i(1) ; i < size ; i++)
         object.pop_back();
 
     //temp node vampirisation
