@@ -96,7 +96,7 @@ void BaseMapTool::onSelectionEnd()
 
     m_onSelection = false;
 
-    for(const auto b : m_blocks)
+    for(const auto & b : m_blocks)
         m_data.tiles(b.pos) = b.tile;
 
     m_blocks.clear();

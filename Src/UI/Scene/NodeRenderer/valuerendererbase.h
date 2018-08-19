@@ -10,6 +10,7 @@ class ValueRendererBase
 {
 public:
     ValueRendererBase(SceneNode * node, ObjectValueBase * value);
+    virtual ~ValueRendererBase() = default;
 
     virtual void draw(sf::RenderTarget & target) const = 0;
     virtual void drawGizmos(sf::RenderTarget & target) const = 0;

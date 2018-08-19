@@ -11,7 +11,7 @@ BrushTiled::BrushTiled(const QJsonObject & obj, const QString & _name, BrushType
     auto tIt = obj.find("tiles");
     if(tIt != obj.end() && tIt->isArray())
     {
-        for(const auto & value : tIt->toArray())
+        for(const auto value : tIt->toArray())
         {
             auto tObj = value.toObject();
             tiles.emplace_back(static_cast<TileShape>(tObj["s"].toInt()), TileCollider(tObj["c"].toInt()), tObj["id"].toInt());
@@ -37,11 +37,11 @@ BrushTiled::BrushTiled(const QString & _name, BrushType type)
 void BrushTiled::onSave(QJsonObject & obj) const
 {
     QJsonArray array;
-    for(const auto t : m_tiles)
+    for(const auto & t : m_tiles)
     {
         QJsonObject tObj;
-        tObj.insert("id", int(t.id));
-        tObj.insert("c", int(t.collider.toInt()));
+        tObj.insert("id", static_cast<int>(t.id));
+        tObj.insert("c", static_cast<int>(t.collider.toInt()));
         tObj.insert("s", static_cast<int>(t.shape));
         array.append(tObj);
     }

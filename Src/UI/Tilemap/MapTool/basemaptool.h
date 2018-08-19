@@ -3,7 +3,7 @@
 
 #include "Tilemap/tilemapdata.h"
 #include "ressource.h"
-#include <sfml/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Drawable.hpp>
 #include <QMouseEvent>
 #include <QKeyEvent>
 
@@ -17,7 +17,6 @@ class BaseMapTool : public sf::Drawable
 
 public:
     BaseMapTool(TilemapData & data, bool selectionTool = false);
-    virtual ~BaseMapTool() = default;
 
     inline void setTexture(const Texture & t){m_texture = t;}
     inline bool isSelectionTool() const { return m_selectionTool; }

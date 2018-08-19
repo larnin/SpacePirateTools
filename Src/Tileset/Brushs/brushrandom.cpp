@@ -11,7 +11,7 @@ BrushRandom::BrushRandom(const QJsonObject & obj, const QString & _name)
     auto itTiles = obj.find("tiles");
     if(itTiles != obj.end() && itTiles->isArray())
     {
-        for(const auto & obj : itTiles->toArray())
+        for(const auto obj : itTiles->toArray())
         {
             auto tile = obj.toObject();
             push_back({static_cast<unsigned int>(tile["id"].toInt()), static_cast<float>(tile["p"].toDouble())});

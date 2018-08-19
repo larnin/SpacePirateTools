@@ -11,7 +11,7 @@ class FlowLayout : public QLayout
 public:
     explicit FlowLayout(QWidget *parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);
     explicit FlowLayout(int margin = -1, int hSpacing = -1, int vSpacing = -1);
-    ~FlowLayout();
+    virtual ~FlowLayout() override;
 
     void addItem(QLayoutItem *item) override;
     void addWidget(QWidget *widget, Qt::Alignment alignment = Qt::Alignment());

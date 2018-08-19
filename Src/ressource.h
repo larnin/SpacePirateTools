@@ -50,7 +50,7 @@ public:
         freeMyRessource();
     }
 
-    Ressource clone(const Ressource & r)
+    Ressource clone()
     {
         return Ressource(*m_ressource);
     }

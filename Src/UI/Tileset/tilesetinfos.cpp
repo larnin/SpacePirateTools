@@ -80,7 +80,7 @@ void TilesetInfos::updateImageList()
     m_texture->clear();
 
     m_texture->addItem("None");
-    for(const auto i : ProjectInfos::instance().fileInfos(AssetType::Image))
+    for(const auto & i : ProjectInfos::instance().fileInfos(AssetType::Image))
         m_texture->addItem(i);
 
     m_texture->setCurrentText(m_datas.imageName);

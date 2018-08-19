@@ -15,9 +15,9 @@ void SceneData::save(const QString & fileName) const
 {
     QJsonObject obj;
 
-    obj.insert("r", (int)backgroundColor.r);
-    obj.insert("g", (int)backgroundColor.g);
-    obj.insert("b", (int)backgroundColor.b);
+    obj.insert("r", static_cast<int>(backgroundColor.r));
+    obj.insert("g", static_cast<int>(backgroundColor.g));
+    obj.insert("b", static_cast<int>(backgroundColor.b));
 
     QJsonArray layers;
     for(const auto & l : *this)
@@ -57,7 +57,7 @@ void SceneData::load(const QString & fileName)
     backgroundColor.g = obj["g"].toInt();
     backgroundColor.b = obj["b"].toInt();
 
-    for(const auto & l : obj["layers"].toArray())
+    for(const auto l : obj["layers"].toArray())
         emplace_back(std::make_unique<SceneLayer>(l.toObject()));
 }
 

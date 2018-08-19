@@ -144,6 +144,8 @@ void SceneLayerInfos::onRightClick(QPoint point)
         createPrefab(item);
 }
 
+namespace
+{
 void removeRecursive(SceneLayer & layer, SceneNode * node)
 {
     for(auto item : node->childrens)
@@ -158,6 +160,7 @@ void removeRecursive(SceneLayer & layer, SceneNode * node)
     auto index = layer.indexOf(node);
     if(index < layer.size())
         layer[index].reset();
+}
 }
 
 void SceneLayerInfos::removeElement(QTreeWidgetItem * widget)
@@ -252,6 +255,8 @@ void SceneLayerInfos::createObject(QTreeWidgetItem * widget)
     Event<AddedFileEvent>::send({fullName});
 }
 
+namespace
+{
 void cloneIterative(SceneLayer & layer, SceneNode * node, SceneNode * parent)
 {
     layer.push_back(node->clone());
@@ -261,6 +266,7 @@ void cloneIterative(SceneLayer & layer, SceneNode * node, SceneNode * parent)
         parent->childrens.push_back(pn);
     for(const auto & n : node->childrens)
         cloneIterative(layer, n, pn);
+}
 }
 
 void SceneLayerInfos::createPrefab(QTreeWidgetItem * widget)

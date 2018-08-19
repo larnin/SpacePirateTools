@@ -59,7 +59,7 @@ void TilesetData::load(const QString & fileName)
     if(brushIt == obj.end() || !brushIt->isArray())
         return;
 
-    for(const auto & b : brushIt->toArray())
+    for(const auto b : brushIt->toArray())
     {
         auto ptr = BrushBase::loadBrush(b.toObject());
         if(!ptr)

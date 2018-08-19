@@ -226,7 +226,7 @@ void TilemapInfos::updateImageList()
     m_texture->clear();
 
     m_texture->addItem("None");
-    for(const auto i : ProjectInfos::instance().fileInfos(AssetType::Image))
+    for(const auto & i : ProjectInfos::instance().fileInfos(AssetType::Image))
         m_texture->addItem(i);
 
     m_texture->setCurrentText(m_data.textureName);
@@ -249,7 +249,7 @@ void TilemapInfos::updateBrushList()
     m_brushs->clear();
 
     m_brushs->addItem("None");
-    for(const auto i : ProjectInfos::instance().fileInfos(AssetType::Tileset))
+    for(const auto & i : ProjectInfos::instance().fileInfos(AssetType::Tileset))
         m_brushs->addItem(i);
 
     m_brushs->setCurrentText(m_data.brushName);

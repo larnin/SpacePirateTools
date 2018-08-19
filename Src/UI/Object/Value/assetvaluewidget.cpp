@@ -29,7 +29,7 @@ void AssetValueWidget::updateCombobox()
     m_value->clear();
 
     m_value->addItem("None");
-    for(const auto i : ProjectInfos::instance().fileInfos(m_asset.getAssetType()))
+    for(const auto & i : ProjectInfos::instance().fileInfos(m_asset.getAssetType()))
         m_value->addItem(i);
 
     m_value->setCurrentText(m_asset.assetName);

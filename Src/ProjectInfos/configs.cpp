@@ -68,7 +68,7 @@ void Configs::load()
 
     auto projects = obj.find("LastProjects");
     if(projects != obj.end() && projects->isArray())
-        for(const auto & item : projects->toArray())
+        for(const auto item : projects->toArray())
             m_datas.lastProjects.push_back(item.toString());
 
     auto animColor = obj.find("AnimationBackgroundColor");

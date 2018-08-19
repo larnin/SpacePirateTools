@@ -15,7 +15,7 @@ BrushPatern::BrushPatern(const QJsonObject & obj, const QString & _name)
         QJsonArray array = tileIt->toArray();
         if(array.size() == int(m_size.x * m_size.y))
         {
-            for(const auto & v : array)
+            for(const auto v : array)
             {
                 auto obj = v.toObject();
                 m_tiles.emplace_back(TileCollider(obj["c"].toInt()), obj["id"].toInt());

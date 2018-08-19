@@ -128,7 +128,7 @@ void AnimatorInfos::updateStateList()
     m_states->blockSignals(true);
     m_states->clear();
 
-    for(const auto s : m_datas.states)
+    for(const auto & s : m_datas.states)
         m_states->addItem(s.stateName.isEmpty() ? s.animation : s.stateName);
 
     if(m_currentStateIndex >= 0 && m_currentStateIndex < m_states->count())

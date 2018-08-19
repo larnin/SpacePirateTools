@@ -1,6 +1,8 @@
 #ifndef ENUMCLASSHASH_H
 #define ENUMCLASSHASH_H
 
+#include <cstddef> //size_t
+
 struct EnumClassHash
 {
     template <typename T>

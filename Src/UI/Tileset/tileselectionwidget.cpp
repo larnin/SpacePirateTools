@@ -71,7 +71,7 @@ int TileSelectionWidget::index() const
     auto textureSize = textureTileSize();
     if(relativePos.x < 0 || relativePos.y < 0 || relativePos.x >= textureSize.x || relativePos.y >= textureSize.y)
         return -1;
-    return (int)relativePos.x + (int)relativePos.y * textureSize.x;
+    return static_cast<int>(relativePos.x) + static_cast<int>(relativePos.y) * textureSize.x;
 }
 
 sf::Vector2u TileSelectionWidget::textureTileSize() const

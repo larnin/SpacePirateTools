@@ -49,8 +49,8 @@ BrushWindowPatern::BrushWindowPatern(BrushPatern * brush, QWidget * parent)
 
     setLayout(layout);
 
-    connect(m_sizeX, &QSpinBox::editingFinished, this, &onSizeValueChanged);
-    connect(m_sizeY, &QSpinBox::editingFinished, this, &onSizeValueChanged);
+    connect(m_sizeX, &QSpinBox::editingFinished, this, &BrushWindowPatern::onSizeValueChanged);
+    connect(m_sizeY, &QSpinBox::editingFinished, this, &BrushWindowPatern::onSizeValueChanged);
 }
 
 void BrushWindowPatern::onLeftClick(unsigned int x, unsigned int y)

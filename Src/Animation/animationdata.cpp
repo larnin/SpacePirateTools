@@ -68,7 +68,7 @@ void AnimationData::load(const QString & fileName)
     if(frames == obj.end() || !frames->isArray())
         return;
 
-    for(const auto & fObj : frames->toArray())
+    for(const auto fObj : frames->toArray())
     {
         if(!fObj.isObject())
             continue;

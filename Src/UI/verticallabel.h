@@ -8,8 +8,8 @@ class VerticalLabel : public QLabel
     Q_OBJECT
 
 public:
-    explicit VerticalLabel(QWidget *parent=0);
-    explicit VerticalLabel(const QString &text, QWidget *parent=0);
+    explicit VerticalLabel(QWidget *parent = nullptr);
+    explicit VerticalLabel(const QString &text, QWidget *parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent*);

@@ -12,7 +12,7 @@ ObjectValueConvexeCollider::ObjectValueConvexeCollider()
 ObjectValueConvexeCollider::ObjectValueConvexeCollider(const QJsonObject & obj)
     : ObjectValueConvexeCollider()
 {
-    for(const auto & p : obj["points"].toArray())
+    for(const auto p : obj["points"].toArray())
     {
         auto pObj = p.toObject();
         points.push_back(sf::Vector2f(pObj["x"].toDouble(), pObj["y"].toDouble()));

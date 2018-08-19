@@ -49,7 +49,7 @@ std::unique_ptr<ObjectProperty> AddPropertyDialog::get() const
     p->sceneVisibility = SceneVisibility::All;
     p->fixedSize = true;
 
-    return std::move(p);
+    return p;
 }
 
 std::unique_ptr<ObjectProperty> AddPropertyDialog::getProperty(QWidget* parent, bool *ok)

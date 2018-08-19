@@ -10,7 +10,6 @@ class QSFMLCanvas : public QWidget, public sf::RenderWindow
     Q_OBJECT
 public:
     explicit QSFMLCanvas(unsigned int FrameTime = 20, QWidget *parent = nullptr);
-    virtual ~QSFMLCanvas() = default;
 
 protected:
     virtual void showEvent(QShowEvent*) override;

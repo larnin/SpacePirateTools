@@ -51,7 +51,7 @@ void AddNodeDialog::updateAssetBox()
 {
     m_assetBox->clear();
 
-    for(const auto i : ProjectInfos::instance().fileInfos(isPrefabType() ? AssetType::Scene : AssetType::Object))
+    for(const auto & i : ProjectInfos::instance().fileInfos(isPrefabType() ? AssetType::Scene : AssetType::Object))
         m_assetBox->addItem(i);
 }
 void AddNodeDialog::updateTypeBox()

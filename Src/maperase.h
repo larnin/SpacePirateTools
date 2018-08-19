@@ -4,6 +4,7 @@
 #include <map>
 #include <unordered_map>
 #include <vector>
+#include <algorithm>
 
 template <class Key, class T, class Compare, class Alloc, class Predicate>
 void erase_if(std::map<Key,T,Compare,Alloc>& c, Predicate pred)

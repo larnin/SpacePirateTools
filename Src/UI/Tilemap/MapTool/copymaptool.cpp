@@ -10,16 +10,16 @@ CopyMapTool::CopyMapTool(TilemapData & data)
     , m_copyHolder(Event<CopyEvent>::connect([this](const auto & e){onCopy(e);}))
     , m_cutHolder(Event<CutEvent>::connect([this](const auto & e){onCut(e);}))
     , m_haveSelected(false)
-    , m_onSelection(false)
+    , m_onCopySelection(false)
 {
 
 }
 
 void CopyMapTool::onAddTile(const sf::Vector2u & pos)
 {
-    if(!m_onSelection)
+    if(!m_onCopySelection)
     {
-        m_onSelection = true;
+        m_onCopySelection = true;
         m_startPos = pos;
     }
     m_endPos = pos;
@@ -35,7 +35,7 @@ void CopyMapTool::drawCursor(sf::RenderTarget &target, const sf::Vector2u & pos)
     sf::RectangleShape shape(sf::Vector2f(size, size));
     shape.setFillColor(sf::Color(255, 255, 150, a));
 
-    if(m_haveSelected || m_onSelection)
+    if(m_haveSelected || m_onCopySelection)
     {
         sf::Vector2u pos(std::min(m_startPos.x, m_endPos.x), std::min(m_startPos.y, m_endPos.y));
         sf::Vector2u s(std::abs(int(m_endPos.x) - int(m_startPos.x)) + 1, std::abs(int(m_endPos.y) - int(m_startPos.y)) + 1);
@@ -49,13 +49,13 @@ void CopyMapTool::drawCursor(sf::RenderTarget &target, const sf::Vector2u & pos)
 
 void CopyMapTool::beforeSelectionEnd()
 {
-    m_onSelection = false;
+    m_onCopySelection = false;
     m_haveSelected = true;
 }
 
 void CopyMapTool::onCopy(const CopyEvent &)
 {
-    if(m_onSelection || !m_haveSelected)
+    if(m_onCopySelection || !m_haveSelected)
         return;
 
     m_copyBuffer.clear();
@@ -70,7 +70,7 @@ void CopyMapTool::onCopy(const CopyEvent &)
 
 void CopyMapTool::onCut(const CutEvent &)
 {
-    if(m_onSelection || !m_haveSelected)
+    if(m_onCopySelection || !m_haveSelected)
         return;
 
     m_copyBuffer.clear();

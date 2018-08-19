@@ -31,7 +31,7 @@ private:
     EventHolder<CutEvent> m_cutHolder;
 
     bool m_haveSelected;
-    bool m_onSelection;
+    bool m_onCopySelection;
     sf::Vector2u m_startPos;
     sf::Vector2u m_endPos;
 

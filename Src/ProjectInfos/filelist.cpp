@@ -23,12 +23,15 @@ const std::vector<QString> & FileList::files(const QString & key) const
     return value->second;
 }
 
+namespace
+{
 std::vector<QString> fileList(const QDir & directory)
 {
     std::vector<QString> files;
     for(const auto & e : directory.entryInfoList(QDir::Files))
         files.push_back(e.fileName());
     return files;
+}
 }
 
 void FileList::createListFile(const QString &directory)

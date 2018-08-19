@@ -48,10 +48,10 @@ void SceneLayer::load(const QJsonObject & obj)
 {
     name = obj["name"].toString();
 
-    for(const auto & jsonNode : obj["nodes"].toArray())
+    for(const auto jsonNode : obj["nodes"].toArray())
         push_back(std::make_unique<SceneNode>(jsonNode.toObject()));
 
-    for(const auto & jsonIndex : obj["indexs"].toArray())
+    for(const auto jsonIndex : obj["indexs"].toArray())
     {
         auto index = jsonIndex.toArray();
         auto current = index[0].toInt();

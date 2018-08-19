@@ -18,7 +18,7 @@ TileSelectionDialog::TileSelectionDialog(Texture texture, unsigned int delta, un
 
     setLayout(layout);
 
-    connect(m_tileWidget, &TileSelectionWidget::onTileSelect, this, onTileSelect);
+    connect(m_tileWidget, &TileSelectionWidget::onTileSelect, this, &TileSelectionDialog::onTileSelect);
 }
 
 unsigned int TileSelectionDialog::getTileID(Texture texture, unsigned int delta, unsigned int size, QWidget* parent, bool *ok)

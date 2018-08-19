@@ -92,14 +92,14 @@ void ObjectData::load(const QJsonObject &obj)
     auto propertiesObj = obj.find("properties");
     if(propertiesObj != obj.end() && propertiesObj->isArray())
     {
-        for(const auto & v : propertiesObj->toArray())
+        for(const auto v : propertiesObj->toArray())
         {
             auto p = v.toObject();
 
             auto prop = std::make_unique<ObjectProperty>();
             prop->name = p["name"].toString();
             auto values = p["values"].toArray();
-            for(const auto & v : values)
+            for(const auto v : values)
                 prop->values.push_back(ObjectValueBase::loadValue(v.toObject()));
             prop->inspectorVisibility = static_cast<InspectorVisibility>(p["iv"].toInt());
             prop->sceneVisibility = static_cast<SceneVisibility>(p["sv"].toInt());
@@ -135,7 +135,7 @@ std::unique_ptr<ObjectProperty> ObjectData::createDefaultTransform()
     property->sceneVisibility = SceneVisibility::All;
     property->fixedSize = true;
     property->values.push_back(ObjectValueBase::createValue(ValueType::Transform));
-    return std::move(property);
+    return property;
 }
 
 void ObjectData::checkObjectIntegrity()

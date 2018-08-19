@@ -52,7 +52,7 @@ void PasteMapTool::drawCursor(sf::RenderTarget &target, const sf::Vector2u & pos
     sf::Sprite sprite(*m_texture);
     sprite.setColor(sf::Color(255, 255, 255, a));
 
-    for(const auto t : m_value)
+    for(const auto & t : m_value)
     {
         sf::Vector2u tilePos(pos.x + t.pos.x - m_valueSize.x/2, pos.y + t.pos.y - m_valueSize.y/2);
 

@@ -117,7 +117,7 @@ void ProjectInfos::load()
 
     QJsonObject obj(doc.object());
 
-    for(const auto & c : obj["colliders"].toArray())
+    for(const auto c : obj["colliders"].toArray())
     {
         auto cObj = c.toObject();
         ColliderLayer layer;
@@ -125,7 +125,7 @@ void ProjectInfos::load()
         layer.color.g = cObj["g"].toInt();
         layer.color.b = cObj["b"].toInt();
         layer.name = cObj["name"].toString();
-        for(const auto & v : cObj["l"].toArray())
+        for(const auto v : cObj["l"].toArray())
             layer.layerCollisions.push_back(v.toInt());
         m_options.colliderLayers.push_back(layer);
     }
