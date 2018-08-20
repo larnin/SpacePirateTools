@@ -1,4 +1,5 @@
 #include "circlecollidervaluewidget.h"
+#include "fillcolliderlayercombobox.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -30,15 +31,25 @@ CircleColliderValueWidget::CircleColliderValueWidget(ObjectValueCircleCollider &
     sizeLayout->addWidget(new QLabel("Taille : "));
     sizeLayout->addWidget(m_size, 1);
 
+    m_collisionLayer = new QComboBox();
+    fillColliderLayerComboBox(m_collisionLayer);
+    m_collisionLayer->setCurrentIndex(m_collider.collisionLayer);
+
+    QHBoxLayout * layerLayout = new QHBoxLayout();
+    layerLayout->addWidget(new QLabel("Collision layer:"));
+    layerLayout->addWidget(m_collisionLayer, 1);
+
     QVBoxLayout * layout = new QVBoxLayout();
     layout->addLayout(centerLayout);
     layout->addLayout(sizeLayout);
+    layout->addLayout(layerLayout);
 
     setLayout(layout);
 
     connect(m_centerX, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
     connect(m_centerY, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
     connect(m_size, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
+    connect(m_collisionLayer, SIGNAL(currentIndexChanged(int)), this, SLOT(onValueChanged()));
 }
 
 void CircleColliderValueWidget::onValueChanged()
@@ -46,4 +57,5 @@ void CircleColliderValueWidget::onValueChanged()
     m_collider.center.x = m_centerX->value();
     m_collider.center.y = m_centerY->value();
     m_collider.size = m_size->value();
+    m_collider.collisionLayer = m_collisionLayer->currentIndex();
 }

@@ -256,7 +256,8 @@ HEADERS += \
     UI/Scene/NodeRenderer/valuerenderernone.h \
     UI/Scene/NodeRenderer/valuerenderersprite.h \
     UI/Scene/NodeRenderer/valuerendererbox2dcollider.h \
-    UI/Scene/NodeRenderer/valuerenderercirclecollider.h
+    UI/Scene/NodeRenderer/valuerenderercirclecollider.h \
+    UI/Object/Value/fillcolliderlayercombobox.h
 
 CONFIG += c++14
 

@@ -1,4 +1,5 @@
 #include "box2dcollidervaluewidget.h"
+#include "fillcolliderlayercombobox.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -37,9 +38,18 @@ Box2DColliderValueWidget::Box2DColliderValueWidget(ObjectValueBox2DCollider &col
     sizeLayout->addWidget(new QLabel("Y"));
     sizeLayout->addWidget(m_sizeY, 1);
 
+    m_collisionLayer = new QComboBox();
+    fillColliderLayerComboBox(m_collisionLayer);
+    m_collisionLayer->setCurrentIndex(m_collider.collisionLayer);
+
+    QHBoxLayout * layerLayout = new QHBoxLayout();
+    layerLayout->addWidget(new QLabel("Collision layer:"));
+    layerLayout->addWidget(m_collisionLayer, 1);
+
     QVBoxLayout * layout = new QVBoxLayout();
     layout->addLayout(centerLayout);
     layout->addLayout(sizeLayout);
+    layout->addLayout(layerLayout);
 
     setLayout(layout);
 
@@ -47,6 +57,7 @@ Box2DColliderValueWidget::Box2DColliderValueWidget(ObjectValueBox2DCollider &col
     connect(m_centerY, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
     connect(m_sizeX, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
     connect(m_sizeY, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
+    connect(m_collisionLayer, SIGNAL(currentIndexChanged(int)), this, SLOT(onValueChanged()));
 }
 
 void Box2DColliderValueWidget::onValueChanged()
@@ -55,4 +66,5 @@ void Box2DColliderValueWidget::onValueChanged()
     m_collider.center.y = m_centerY->value();
     m_collider.size.x = m_sizeX->value();
     m_collider.size.y = m_sizeY->value();
+    m_collider.collisionLayer = m_collisionLayer->currentIndex();
 }

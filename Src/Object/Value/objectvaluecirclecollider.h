@@ -20,6 +20,7 @@ public:
 
     sf::Vector2f center;
     float size;
+    unsigned int collisionLayer;
 
 protected:
     void onSave(QJsonObject & obj) const override;

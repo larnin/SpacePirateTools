@@ -4,6 +4,7 @@
 #include "Object/Value/objectvaluebox2dcollider.h"
 #include <QWidget>
 #include <QDoubleSpinBox>
+#include <QComboBox>
 
 class Box2DColliderValueWidget : public QWidget
 {
@@ -21,6 +22,7 @@ private:
     QDoubleSpinBox * m_centerY;
     QDoubleSpinBox * m_sizeX;
     QDoubleSpinBox * m_sizeY;
+    QComboBox * m_collisionLayer;
 };
 
 #endif // BOX2DCOLLIDERVALUEWIDGET_H

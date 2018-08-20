@@ -1,5 +1,6 @@
 #include "convexcollidervaluewidget.h"
 #include "UI/linewidget.h"
+#include "fillcolliderlayercombobox.h"
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QDoubleSpinBox>
@@ -15,10 +16,19 @@ ConvexColliderValueWidget::ConvexColliderValueWidget(ObjectValueConvexeCollider 
 
     m_widgetsLayout = new QVBoxLayout();
 
+    m_collisionLayer = new QComboBox();
+    fillColliderLayerComboBox(m_collisionLayer);
+    m_collisionLayer->setCurrentIndex(m_collider.collisionLayer);
+
+    QHBoxLayout * layerLayout = new QHBoxLayout();
+    layerLayout->addWidget(new QLabel("Collision layer:"));
+    layerLayout->addWidget(m_collisionLayer, 1);
+
     QVBoxLayout * layout = new QVBoxLayout();
     layout->addLayout(m_widgetsLayout);
     layout->addWidget(new LineWidget(LineOrientation::Horizontal));
     layout->addWidget(addButton);
+    layout->addLayout(layerLayout);
 
     setLayout(layout);
 
@@ -26,6 +36,7 @@ ConvexColliderValueWidget::ConvexColliderValueWidget(ObjectValueConvexeCollider 
         addWidget(v);
 
     connect(addButton, SIGNAL(clicked(bool)), this, SLOT(addWidget()));
+    connect(m_collisionLayer, SIGNAL(currentIndexChanged(int)), this, SLOT(onValueChanged()));
 }
 
 void ConvexColliderValueWidget::onXValueChange(QWidget * widget, float value)
@@ -105,4 +116,9 @@ unsigned int ConvexColliderValueWidget::indexOf(QWidget * widget)
     assert(it != m_widgets.end());
 
     return std::distance(m_widgets.begin(), it);
+}
+
+void ConvexColliderValueWidget::onValueChanged()
+{
+    m_collider.collisionLayer = m_collisionLayer->currentIndex();
 }

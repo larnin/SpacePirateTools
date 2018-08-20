@@ -1,8 +1,7 @@
 #include "valuerendererbox2dcollider.h"
+#include "ProjectInfos/projectinfos.h"
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
-
-const sf::Color lineColor = sf::Color::Green;
 
 ValueRendererBox2DCollider::ValueRendererBox2DCollider(SceneNode * node, ObjectValueBase * value)
     : ValueRendererBase(node, value)
@@ -28,6 +27,10 @@ void ValueRendererBox2DCollider::drawGizmos(sf::RenderTarget &target) const
     array[5] = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
     array[6] = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
     array[7] = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, m_collider->size.y /2 + m_collider->center.y);
+
+    auto lineColor = sf::Color::White;
+    if(ProjectInfos::instance().options().colliderLayers.size() > m_collider->collisionLayer)
+        lineColor = ProjectInfos::instance().options().colliderLayers[m_collider->collisionLayer].color;
 
     for(unsigned int i(0) ; i < array.getVertexCount() ; i++)
         array[i].color = lineColor;

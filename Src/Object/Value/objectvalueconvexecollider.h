@@ -20,6 +20,7 @@ public:
     QWidget* createUi() override;
 
     std::vector<sf::Vector2f> points;
+    unsigned int collisionLayer;
 
 protected:
     void onSave(QJsonObject & obj) const override;

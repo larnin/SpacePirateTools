@@ -4,6 +4,7 @@
 #include "Object/Value/objectvaluecirclecollider.h"
 #include <QWidget>
 #include <QDoubleSpinBox>
+#include <QComboBox>
 
 class CircleColliderValueWidget : public QWidget
 {
@@ -20,6 +21,7 @@ private:
     QDoubleSpinBox * m_centerX;
     QDoubleSpinBox * m_centerY;
     QDoubleSpinBox * m_size;
+    QComboBox * m_collisionLayer;
 };
 
 #endif // CIRCLECOLLIDERVALUEWIDGET_H
