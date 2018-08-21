@@ -1,6 +1,6 @@
 #include "objectvalueconvexecollider.h"
 #include "UI/Object/Value/convexcollidervaluewidget.h"
-#include "UI/Scene/NodeRenderer/valuerenderernone.h"
+#include "UI/Scene/NodeRenderer/valuerendererconvexecollider.h"
 #include <QJsonArray>
 
 ObjectValueConvexeCollider::ObjectValueConvexeCollider()
@@ -53,5 +53,5 @@ void ObjectValueConvexeCollider::onSave(QJsonObject & obj) const
 
 std::unique_ptr<ValueRendererBase> ObjectValueConvexeCollider::renderer(SceneNode* node)
 {
-    return std::make_unique<ValueRendererNone>(node, this);
+    return std::make_unique<ValueRendererConvexeCollider>(node, this);
 }

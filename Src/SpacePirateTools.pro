@@ -124,7 +124,8 @@ SOURCES += \
     UI/Scene/NodeRenderer/rendersystem.cpp \
     UI/Scene/NodeRenderer/valuerenderersprite.cpp \
     UI/Scene/NodeRenderer/valuerendererbox2dcollider.cpp \
-    UI/Scene/NodeRenderer/valuerenderercirclecollider.cpp
+    UI/Scene/NodeRenderer/valuerenderercirclecollider.cpp \
+    UI/Scene/NodeRenderer/valuerendererconvexecollider.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -257,7 +258,8 @@ HEADERS += \
     UI/Scene/NodeRenderer/valuerenderersprite.h \
     UI/Scene/NodeRenderer/valuerendererbox2dcollider.h \
     UI/Scene/NodeRenderer/valuerenderercirclecollider.h \
-    UI/Object/Value/fillcolliderlayercombobox.h
+    UI/Object/Value/fillcolliderlayercombobox.h \
+    UI/Scene/NodeRenderer/valuerendererconvexecollider.h
 
 CONFIG += c++14
 

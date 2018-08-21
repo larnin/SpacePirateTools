@@ -28,8 +28,8 @@ void ValueRendererCircleCollider::drawGizmos(sf::RenderTarget &target) const
         float a1 = pi * 2 *(i+1) / pointsCount;
         float a2 = pi * 2 * i / pointsCount;
 
-        array[2*i] = toVect(m_collider->size, a1) + m_collider->center;
-        array[2*i+1] = toVect(m_collider->size, a2) + m_collider->center;
+        array[2*i].position = toVect(m_collider->size, a1) + m_collider->center;
+        array[2*i+1].position = toVect(m_collider->size, a2) + m_collider->center;
     }
 
     auto lineColor = sf::Color::White;

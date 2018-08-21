@@ -19,14 +19,14 @@ void ValueRendererBox2DCollider::drawGizmos(sf::RenderTarget &target) const
 {
     sf::VertexArray array(sf::Lines, 8);
 
-    array[0] = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, m_collider->size.y /2 + m_collider->center.y);
-    array[1] = sf::Vector2f(-m_collider->size.x /2 + m_collider->center.x, m_collider->size.y /2 + m_collider->center.y);
-    array[2] = sf::Vector2f(-m_collider->size.x /2 + m_collider->center.x, m_collider->size.y /2 + m_collider->center.y);
-    array[3] = sf::Vector2f(-m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
-    array[4] = sf::Vector2f(-m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
-    array[5] = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
-    array[6] = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
-    array[7] = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, m_collider->size.y /2 + m_collider->center.y);
+    array[0].position = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, m_collider->size.y /2 + m_collider->center.y);
+    array[1].position = sf::Vector2f(-m_collider->size.x /2 + m_collider->center.x, m_collider->size.y /2 + m_collider->center.y);
+    array[2].position = sf::Vector2f(-m_collider->size.x /2 + m_collider->center.x, m_collider->size.y /2 + m_collider->center.y);
+    array[3].position = sf::Vector2f(-m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
+    array[4].position = sf::Vector2f(-m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
+    array[5].position = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
+    array[6].position = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, -m_collider->size.y /2 + m_collider->center.y);
+    array[7].position = sf::Vector2f(m_collider->size.x /2 + m_collider->center.x, m_collider->size.y /2 + m_collider->center.y);
 
     auto lineColor = sf::Color::White;
     if(ProjectInfos::instance().options().colliderLayers.size() > m_collider->collisionLayer)
