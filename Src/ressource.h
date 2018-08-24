@@ -57,6 +57,8 @@ public:
 
     void load(const std::string & fileName)
     {
+        freeMyRessource();
+
         m_fileName = fileName;
         auto it(m_ressources.find(m_fileName));
         if(it != m_ressources.end())
