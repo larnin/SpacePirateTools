@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QComboBox>
 
 class SpriteRendererValueWidget : public QWidget
 {
@@ -16,6 +17,8 @@ public slots:
     void onValueChanged();
 
 private:
+    void updateCombobox();
+
     ObjectValueSpriteRenderer & m_spriteRenderer;
 
     QSpinBox * m_top;
@@ -25,6 +28,8 @@ private:
 
     QDoubleSpinBox * m_offsetX;
     QDoubleSpinBox * m_offsetY;
+
+    QComboBox * m_texture;
 };
 
 #endif // SPRITERENDERERVALUEWIDGET_H

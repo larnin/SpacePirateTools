@@ -1,4 +1,5 @@
 #include "spriterenderervaluewidget.h"
+#include "ProjectInfos/projectinfos.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -34,6 +35,9 @@ SpriteRendererValueWidget::SpriteRendererValueWidget(ObjectValueSpriteRenderer &
     m_offsetY->setSingleStep(1);
     m_offsetY->setValue(m_spriteRenderer.offset.y);
 
+    m_texture = new QComboBox();
+    updateCombobox();
+
     QHBoxLayout * posLayout = new QHBoxLayout();
     posLayout->addWidget(new QLabel("Position : "));
     posLayout->addWidget(new QLabel("X"));
@@ -63,9 +67,14 @@ SpriteRendererValueWidget::SpriteRendererValueWidget(ObjectValueSpriteRenderer &
     offsetLayout->addWidget(new QLabel("Y"));
     offsetLayout->addWidget(m_offsetY, 1);
 
+    QHBoxLayout * textureLayout = new QHBoxLayout();
+    textureLayout->addWidget(new QLabel("Texture :"));
+    textureLayout->addWidget(m_texture, 1);
+
     QVBoxLayout * layout = new QVBoxLayout();
     layout->addWidget(rectBox);
     layout->addLayout(offsetLayout);
+    layout->addLayout(textureLayout);
 
     setLayout(layout);
 
@@ -75,6 +84,7 @@ SpriteRendererValueWidget::SpriteRendererValueWidget(ObjectValueSpriteRenderer &
     connect(m_height, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
     connect(m_offsetX, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
     connect(m_offsetY, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
+    connect(m_texture, SIGNAL(currentIndexChanged(int)), this, SLOT(onValueChanged()));
 }
 
 
@@ -86,4 +96,27 @@ void SpriteRendererValueWidget::onValueChanged()
     m_spriteRenderer.textureRect.height = m_height->value();
     m_spriteRenderer.offset.x = m_offsetX->value();
     m_spriteRenderer.offset.y = m_offsetY->value();
+
+    if(m_texture->currentIndex() <= 0)
+        m_spriteRenderer.textureName = "";
+    else m_spriteRenderer.textureName = m_texture->currentText();
+}
+
+void SpriteRendererValueWidget::updateCombobox()
+{
+    m_texture->blockSignals(true);
+
+    m_texture->clear();
+
+    m_texture->addItem("None");
+    for(const auto & i : ProjectInfos::instance().fileInfos(AssetType::Image))
+        m_texture->addItem(i);
+
+    m_texture->setCurrentText(m_spriteRenderer.textureName);
+    if(m_texture->currentIndex() < 0)
+    {
+        m_texture->setCurrentIndex(0);
+    }
+
+    m_texture->blockSignals(false);
 }

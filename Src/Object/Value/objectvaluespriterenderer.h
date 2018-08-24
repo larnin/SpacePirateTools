@@ -20,6 +20,7 @@ public:
 
     sf::IntRect textureRect;
     sf::Vector2f offset;
+    QString textureName;
 
 protected:
     void onSave(QJsonObject & obj) const override;

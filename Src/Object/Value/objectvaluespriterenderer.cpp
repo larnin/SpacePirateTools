@@ -18,6 +18,7 @@ ObjectValueSpriteRenderer::ObjectValueSpriteRenderer(const QJsonObject & obj)
     textureRect.width = obj["w"].toInt();
     offset.x = obj["x"].toDouble();
     offset.y = obj["y"].toDouble();
+    textureName = obj["texture"].toString();
 }
 
 QString ObjectValueSpriteRenderer::toString() const
@@ -39,6 +40,7 @@ void ObjectValueSpriteRenderer::onSave(QJsonObject & obj) const
     obj.insert("w", textureRect.width);
     obj.insert("x", offset.x);
     obj.insert("y", offset.y);
+    obj.insert("texture", textureName);
 }
 
 std::unique_ptr<ValueRendererBase> ObjectValueSpriteRenderer::renderer(SceneNode* node)

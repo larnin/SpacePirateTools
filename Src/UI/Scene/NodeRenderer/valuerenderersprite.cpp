@@ -29,30 +29,11 @@ void ValueRendererSprite::drawGizmos(sf::RenderTarget &) const
 
 void ValueRendererSprite::update()
 {
-    auto assets = getNode()->object.getAllValueOfType<ObjectValueAsset>();
-    if(assets.empty())
+    if(m_spriteRenderer->textureName != m_textureName)
     {
-        m_texture.clear();
-        m_textureName.clear();
-        return;
+        m_textureName = m_spriteRenderer->textureName;
+        if(m_spriteRenderer->textureName.isEmpty())
+            m_texture.clear();
+        else m_texture.load(ProjectInfos::instance().fullFileName(m_textureName, AssetType::Image).toStdString());
     }
-
-    for(const auto & a : assets)
-    {
-        if(a->getAssetType() != AssetType::Image)
-            continue;
-
-        if(a->assetName != m_textureName)
-        {
-            m_textureName = a->assetName;
-            if(a->assetName.isEmpty())
-                m_texture.clear();
-            else m_texture.load(ProjectInfos::instance().fullFileName(m_textureName, AssetType::Image).toStdString());
-        }
-
-        return;
-    }
-
-    m_texture.clear();
-    m_textureName.clear();
 }
