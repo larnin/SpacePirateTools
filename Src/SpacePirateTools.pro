@@ -125,7 +125,10 @@ SOURCES += \
     UI/Scene/NodeRenderer/valuerenderersprite.cpp \
     UI/Scene/NodeRenderer/valuerendererbox2dcollider.cpp \
     UI/Scene/NodeRenderer/valuerenderercirclecollider.cpp \
-    UI/Scene/NodeRenderer/valuerendererconvexecollider.cpp
+    UI/Scene/NodeRenderer/valuerendererconvexecollider.cpp \
+    Object/Value/objectvaluecamera.cpp \
+    UI/Object/Value/cameravaluewidget.cpp \
+    UI/checkedcombobox.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -259,7 +262,10 @@ HEADERS += \
     UI/Scene/NodeRenderer/valuerendererbox2dcollider.h \
     UI/Scene/NodeRenderer/valuerenderercirclecollider.h \
     UI/Object/Value/fillcolliderlayercombobox.h \
-    UI/Scene/NodeRenderer/valuerendererconvexecollider.h
+    UI/Scene/NodeRenderer/valuerendererconvexecollider.h \
+    Object/Value/objectvaluecamera.h \
+    UI/Object/Value/cameravaluewidget.h \
+    UI/checkedcombobox.h
 
 CONFIG += c++14
 

@@ -29,7 +29,8 @@ enum class ValueType
     Vector2i,
     Color,
     Text,
-    Max = Text,
+    Camera,
+    Max = Camera,
 };
 
 QString valueTypeToString(ValueType type);

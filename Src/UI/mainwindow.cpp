@@ -214,6 +214,7 @@ void MainWindow::openProject(const QString & dir)
 void MainWindow::onOpenRessource(const QString & ressourceDirName, AssetType assetType)
 {
     clearDocks();
+    closeCurrentWidget();
 
     setWindowTitle(ressourceDirName);
 
@@ -245,7 +246,6 @@ void MainWindow::onOpenRessource(const QString & ressourceDirName, AssetType ass
         openTilemap(fullName);
         break;
     default:
-        closeCurrentWidget();
         break;
     }
 }

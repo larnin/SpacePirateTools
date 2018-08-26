@@ -13,6 +13,7 @@
 #include "objectvaluevector2i.h"
 #include "objectvaluecolor.h"
 #include "objectvaluetext.h"
+#include "objectvaluecamera.h"
 #include <cassert>
 
 QString valueTypeToString(ValueType type)
@@ -55,6 +56,8 @@ QString valueTypeToString(ValueType type)
         return "Color";
     case ValueType::Text:
         return "Texte";
+    case ValueType::Camera:
+        return "Camera";
     }
     assert(false);
     return "";
@@ -116,6 +119,8 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
         return std::make_unique<ObjectValueColor>();
     case ValueType::Text:
         return std::make_unique<ObjectValueText>();
+    case ValueType::Camera:
+        return std::make_unique<ObjectValueCamera>();
     }
 
     assert(false);
@@ -160,6 +165,8 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
         return std::make_unique<ObjectValueColor>(obj);
     case ValueType::Text:
         return std::make_unique<ObjectValueText>(obj);
+    case ValueType::Camera:
+        return std::make_unique<ObjectValueCamera>(obj);
     }
 
     assert(false);

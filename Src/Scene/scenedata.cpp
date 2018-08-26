@@ -5,10 +5,26 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <algorithm>
+#include <cassert>
+
+SceneData* SceneData::m_currentScene = nullptr;
+
+SceneData::SceneData()
+{
+    assert(m_currentScene == nullptr);
+    m_currentScene = this;
+}
 
 SceneData::SceneData(const QString & fileName)
 {
     load(fileName);
+    assert(m_currentScene == nullptr);
+    m_currentScene = this;
+}
+
+SceneData::~SceneData()
+{
+    m_currentScene = nullptr;
 }
 
 void SceneData::save(const QString & fileName) const

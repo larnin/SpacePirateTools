@@ -10,8 +10,12 @@
 class SceneData : private std::vector<std::unique_ptr<SceneLayer>>
 {
 public:
-    SceneData() = default;
+    SceneData();
     SceneData(const QString & fileName);
+    SceneData(const SceneData &) = delete;
+    SceneData & operator=(const SceneData &) = delete;
+    ~SceneData();
+
     using std::vector<std::unique_ptr<SceneLayer>>::push_back;
     using std::vector<std::unique_ptr<SceneLayer>>::pop_back;
     using std::vector<std::unique_ptr<SceneLayer>>::begin;
@@ -32,10 +36,14 @@ public:
 
     std::vector<std::unique_ptr<SceneNode>> asPrefab();
 
+    static SceneData* currentScene(){return m_currentScene;}
+
 private:
     void load(const QString & fileName);
 
     void addNodeAndChildrens(SceneNode * node, SceneLayer & layer, std::vector<std::unique_ptr<SceneNode>> & vect);
+
+    static SceneData * m_currentScene;
 };
 
 #endif // SCENEDATA_H
