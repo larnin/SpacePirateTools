@@ -86,11 +86,8 @@ void CameraValueWidget::updateValueLabel()
     else m_valueLabel->setText("Zoom : ");
 }
 
-#include <iostream>
 void CameraValueWidget::onValueChanged()
 {
-    std::cout << "changed !" << std::endl;
-
     if(SceneData::currentScene() != nullptr)
         m_camera.layerMask = m_layers->checkStateBitSet();
     else

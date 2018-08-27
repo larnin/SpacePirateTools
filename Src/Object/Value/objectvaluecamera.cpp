@@ -1,5 +1,5 @@
 #include "objectvaluecamera.h"
-#include "UI/Scene/NodeRenderer/valuerenderernone.h"
+#include "UI/Scene/NodeRenderer/valuerenderercamera.h"
 #include "UI/Object/Value/cameravaluewidget.h"
 
 ObjectValueCamera::ObjectValueCamera()
@@ -21,7 +21,7 @@ ObjectValueCamera::ObjectValueCamera(const QJsonObject & obj)
 
 std::unique_ptr<ValueRendererBase> ObjectValueCamera::renderer(SceneNode* node)
 {
-    return std::make_unique<ValueRendererNone>(node, this);
+    return std::make_unique<ValueRendererCamera>(node, this);
 }
 
 QString ObjectValueCamera::toString() const
