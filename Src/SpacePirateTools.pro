@@ -129,7 +129,8 @@ SOURCES += \
     Object/Value/objectvaluecamera.cpp \
     UI/Object/Value/cameravaluewidget.cpp \
     UI/checkedcombobox.cpp \
-    UI/Scene/NodeRenderer/valuerenderercamera.cpp
+    UI/Scene/NodeRenderer/valuerenderercamera.cpp \
+    Object/Value/objectvaluetilemapcollider.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -267,7 +268,8 @@ HEADERS += \
     Object/Value/objectvaluecamera.h \
     UI/Object/Value/cameravaluewidget.h \
     UI/checkedcombobox.h \
-    UI/Scene/NodeRenderer/valuerenderercamera.h
+    UI/Scene/NodeRenderer/valuerenderercamera.h \
+    Object/Value/objectvaluetilemapcollider.h
 
 CONFIG += c++14
 
