@@ -2,6 +2,7 @@
 #define OBJECTVALUETILEMAPCOLLIDER_H
 
 #include "objectvaluebase.h"
+#include <SFML/System/Vector2.hpp>
 #include <QString>
 
 class ObjectValueTilemapCollider : public ObjectValueBase
@@ -20,6 +21,7 @@ public:
 
     QString tilemapName;
     unsigned int tileSize;
+    sf::Vector2f offset;
 
 protected:
     void onSave(QJsonObject & obj) const override;
