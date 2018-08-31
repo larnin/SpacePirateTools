@@ -31,7 +31,8 @@ enum class ValueType
     Text,
     Camera,
     TilemapCollider,
-    Max = TilemapCollider,
+    TilemapRenderer,
+    Max = TilemapRenderer,
 };
 
 QString valueTypeToString(ValueType type);

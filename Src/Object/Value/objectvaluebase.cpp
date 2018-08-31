@@ -15,6 +15,7 @@
 #include "objectvaluetext.h"
 #include "objectvaluecamera.h"
 #include "objectvaluetilemapcollider.h"
+#include "objectvaluetilemaprenderer.h"
 #include <cassert>
 
 QString valueTypeToString(ValueType type)
@@ -61,6 +62,8 @@ QString valueTypeToString(ValueType type)
         return "Camera";
     case ValueType::TilemapCollider:
         return "Tilemap Collider";
+    case ValueType::TilemapRenderer:
+        return "Tilemap Renderer";
     }
     assert(false);
     return "";
@@ -126,6 +129,8 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::createValue(ValueType type)
         return std::make_unique<ObjectValueCamera>();
     case ValueType::TilemapCollider:
         return std::make_unique<ObjectValueTilemapCollider>();
+    case ValueType::TilemapRenderer:
+        return std::make_unique<ObjectValueTilemapRenderer>();
     }
 
     assert(false);
@@ -174,6 +179,8 @@ std::unique_ptr<ObjectValueBase> ObjectValueBase::loadValue(const QJsonObject & 
         return std::make_unique<ObjectValueCamera>(obj);
     case ValueType::TilemapCollider:
         return std::make_unique<ObjectValueTilemapCollider>(obj);
+    case ValueType::TilemapRenderer:
+        return std::make_unique<ObjectValueTilemapRenderer>(obj);
     }
 
     assert(false);
