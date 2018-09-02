@@ -31,4 +31,24 @@ protected:
     void onSave(QJsonObject & obj) const override;
 };
 
+inline bool operator==(const ObjectValueTilemapRenderer & a, const ObjectValueTilemapRenderer & b)
+{
+    if(a.tilemapName != b.tilemapName)
+        return false;
+    if(a.textureName != b.textureName)
+        return false;
+    if(a.tileSize != b.tileSize)
+        return false;
+    if(a.tileDelta != b.tileDelta)
+        return false;
+    if(a.offset != b.offset)
+        return false;
+    return true;
+}
+
+inline bool operator!=(const ObjectValueTilemapRenderer & a, const ObjectValueTilemapRenderer & b)
+{
+    return !(a==b);
+}
+
 #endif // OBJECTVALUETILEMAPRENDERER_H

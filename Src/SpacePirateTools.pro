@@ -134,7 +134,8 @@ SOURCES += \
     UI/Object/Value/tilemapcollidervaluewidget.cpp \
     UI/Scene/NodeRenderer/valuerenderertilemapcollider.cpp \
     Object/Value/objectvaluetilemaprenderer.cpp \
-    UI/Object/Value/tilemaprenderervaluewidget.cpp
+    UI/Object/Value/tilemaprenderervaluewidget.cpp \
+    UI/Scene/NodeRenderer/valuerenderertilemaprenderer.cpp
 
 HEADERS += \
     UI/fileexplorer.h \
@@ -277,7 +278,8 @@ HEADERS += \
     UI/Object/Value/tilemapcollidervaluewidget.h \
     UI/Scene/NodeRenderer/valuerenderertilemapcollider.h \
     Object/Value/objectvaluetilemaprenderer.h \
-    UI/Object/Value/tilemaprenderervaluewidget.h
+    UI/Object/Value/tilemaprenderervaluewidget.h \
+    UI/Scene/NodeRenderer/valuerenderertilemaprenderer.h
 
 CONFIG += c++14
 

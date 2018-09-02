@@ -21,8 +21,9 @@ private:
     ObjectValueTilemapCollider * m_collider;
     std::unique_ptr<TilemapData> m_tilemap;
 
-    QString m_currentTilemapName;
     sf::VertexArray m_array;
+
+    ObjectValueTilemapCollider m_currentCollider;
 };
 
 #endif // VALUERENDERERTILEMAPCOLLIDER_H

@@ -25,19 +25,20 @@ void ValueRendererTilemapCollider::drawGizmos(sf::RenderTarget & target) const
 
 void ValueRendererTilemapCollider::update()
 {
-    if(m_collider->tilemapName != m_currentTilemapName)
+    if(*m_collider != m_currentCollider)
         loadTilemap();
 }
 
 void ValueRendererTilemapCollider::loadTilemap()
 {
-    m_currentTilemapName = m_collider->tilemapName;
+    if(m_collider->tilemapName != m_currentCollider.tilemapName)
+    {
+        if(!m_collider->tilemapName.isEmpty())
+            m_tilemap = std::make_unique<TilemapData>(ProjectInfos::instance().fullFileName(m_collider->tilemapName, AssetType::Tilemap));
+        else m_tilemap = {};
+    }
 
-    if(m_currentTilemapName.isEmpty())
-        return;
-
-    m_tilemap = std::make_unique<TilemapData>(ProjectInfos::instance().fullFileName(m_currentTilemapName, AssetType::Tilemap));
-
+    m_currentCollider = *m_collider;
     m_array.clear();
 
     if(!m_tilemap)

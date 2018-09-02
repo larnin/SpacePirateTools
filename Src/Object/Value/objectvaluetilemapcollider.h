@@ -27,4 +27,20 @@ protected:
     void onSave(QJsonObject & obj) const override;
 };
 
+inline bool operator ==(const ObjectValueTilemapCollider & a, const ObjectValueTilemapCollider & b)
+{
+    if(a.tilemapName != b.tilemapName)
+        return false;
+    if(a.tileSize != b.tileSize)
+        return false;
+    if(a.offset != b.offset)
+        return false;
+    return true;
+}
+
+inline bool operator !=(const ObjectValueTilemapCollider & a, const ObjectValueTilemapCollider & b)
+{
+    return ! (a==b);
+}
+
 #endif // OBJECTVALUETILEMAPCOLLIDER_H

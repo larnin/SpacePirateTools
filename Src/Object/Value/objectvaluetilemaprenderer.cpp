@@ -1,5 +1,5 @@
 #include "objectvaluetilemaprenderer.h"
-#include "UI/Scene/NodeRenderer/valuerenderernone.h"
+#include "UI/Scene/NodeRenderer/valuerenderertilemaprenderer.h"
 #include "UI/Object/Value/tilemaprenderervaluewidget.h"
 
 ObjectValueTilemapRenderer::ObjectValueTilemapRenderer()
@@ -23,7 +23,7 @@ ObjectValueTilemapRenderer::ObjectValueTilemapRenderer(const QJsonObject & obj)
 
 std::unique_ptr<ValueRendererBase> ObjectValueTilemapRenderer::renderer(SceneNode* node)
 {
-    return std::make_unique<ValueRendererNone>(node, this);
+    return std::make_unique<ValueRendererTilemapRenderer>(node, this);
 }
 
 QString ObjectValueTilemapRenderer::toString() const

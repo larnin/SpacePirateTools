@@ -17,8 +17,8 @@ public:
     void drawTiles(sf::RenderTarget & target) const;
     void drawColliders(sf::RenderTarget & target) const;
 
-private:
     static void drawQuad(sf::Vertex* quad, const sf::FloatRect & rect, const sf::FloatRect & texRect);
+private:
 
     TilemapData * m_data;
     Texture m_texture;
