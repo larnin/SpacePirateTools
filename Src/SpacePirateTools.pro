@@ -285,13 +285,9 @@ CONFIG += c++14
 
 # SFML
 DEFINES += SFML_STATIC
-LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
-INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
-DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
-
-LIBS += -L"C:/Users/Nicolas LAURENT/Desktop/Perso/SFML/SFML-2.4.2/lib"
-INCLUDEPATH += "C:/Users/Nicolas LAURENT/Desktop/Perso/SFML/SFML-2.4.2/include"
-DEPENDPATH += "C:/Users/Nicolas LAURENT/Desktop/Perso/SFML/SFML-2.4.2/include"
+LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4.2_(Qt)/lib
+INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4.2_(Qt)/include
+DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4.2_(Qt)/include
 
 CONFIG(release, debug|release): LIBS += -lsfml-graphics-s \
                                         -lsfml-window-s \

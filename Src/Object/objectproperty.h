@@ -38,10 +38,9 @@ public:
     std::unique_ptr<ObjectProperty> clone() const;
 
     QString name;
-    std::vector<std::unique_ptr<ObjectValueBase>> values;
+    std::unique_ptr<ObjectValueBase> value;
     InspectorVisibility inspectorVisibility;
     SceneVisibility sceneVisibility;
-    bool fixedSize;
 };
 
 #endif // OBJECTPROPERTY_H

@@ -26,20 +26,13 @@ signals:
 
 public slots:
     void onVisibilityChange();
-    void onAddElement();
-    void onFixedSizeChange();
-    void onDelete(QWidget * button);
-
 private:
-    void add(ObjectValueBase & value);
+    void set(ObjectValueBase & value);
 
     ObjectProperty & m_property;
     QComboBox * m_inspectorVisibility;
     QComboBox * m_sceneVisibility;
-    QCheckBox * m_fixedSize;
-    QPushButton * m_addElementButton;
-    QVBoxLayout * m_valuesLayout;
-    std::vector<ValueInfo> m_values;
+    ValueInfo m_value;
     bool m_forceEdition;
 };
 

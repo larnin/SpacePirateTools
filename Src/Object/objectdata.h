@@ -46,12 +46,9 @@ public:
 
         for(const auto & p : *this)
         {
-            for(const auto & v : p->values)
-            {
-                auto ptr = dynamic_cast<T*>(v.get());
-                if(ptr != nullptr)
-                    return ptr;
-            }
+            auto ptr = dynamic_cast<T*>(p->value.get());
+            if(ptr != nullptr)
+                return ptr;
         }
         return nullptr;
     }
@@ -65,12 +62,9 @@ public:
 
         for(const auto & p : *this)
         {
-            for(const auto & v : p->values)
-            {
-                auto ptr = dynamic_cast<T*>(v.get());
-                if(ptr != nullptr)
-                    properties.push_back(ptr);
-            }
+            auto ptr = dynamic_cast<T*>(p->value.get());
+            if(ptr != nullptr)
+                properties.push_back(ptr);
         }
         return properties;
     }

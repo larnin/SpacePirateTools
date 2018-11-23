@@ -79,15 +79,16 @@ void RenderSystem::updateNode(SceneNode* node, std::vector<std::unique_ptr<Value
         auto v = vr->getValue();
         for(const auto & p : node->object)
         {
-            bool found = std::find_if(p->values.begin(), p->values.end(), [v](const auto & value){return value.get() == v;}) != p->values.end();
-            if(found)
+            if(p->value.get() == v)
                 return false;
         }
         return true;
     });
 
     for(const auto & p : node->object)
-        for(const auto & v : p->values)
-            if(std::find_if(data.begin(), data.end(), [&v](const auto & d){return d->getValue() == v.get();}) == data.end())
-                data.push_back(v->renderer(node));
+    {
+        const auto & v = p->value;
+        if(std::find_if(data.begin(), data.end(), [&v](const auto & d){return d->getValue() == v.get();}) == data.end())
+            data.push_back(v->renderer(node));
+    }
 }
